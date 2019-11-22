@@ -196,7 +196,7 @@ function KwxGameOver:onCreate(pBuffer)
 	local uiText_time = ccui.Helper:seekWidgetByName(self.root, "Text_time")
 	-- local function onEventRefreshTime(sender, event)
 		local date = os.date("*t", os.time())
-		uiText_time:setString(string.format("%d-%02d-%02d  %02d:%02d:%02d", date.year, date.month, date.day, date.hour, date.min, date.sec))
+		uiText_time:setString(string.format("%d:%02d",date.hour, date.min))
 	-- 	uiText_time:runAction(cc.Sequence:create(cc.DelayTime:create(1), cc.CallFunc:create(onEventRefreshTime)))
 	-- end
 	-- onEventRefreshTime()

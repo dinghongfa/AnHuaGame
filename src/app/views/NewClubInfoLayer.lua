@@ -80,6 +80,7 @@ function NewClubInfoLayer:onConfig()
     self.clubData           = {}      --亲友圈大厅数据
     self.userOffice         = 2       --普通成员
     self.userFatigueValue   = 0       --用户疲劳值
+    self.curPlaywayIdx      = nil            
 end
 
 function NewClubInfoLayer:onEnter()
@@ -102,8 +103,8 @@ function NewClubInfoLayer:onEnter()
     EventMgr:registListener(EventType.RET_UPDATE_CLUB_PLAYER_INFO ,self,self.RET_UPDATE_CLUB_PLAYER_INFO)
     EventMgr:registListener(EventType.RET_SETTINGS_CLUB_MEMBER ,self,self.RET_SETTINGS_CLUB_MEMBER)
     EventMgr:registListener(EventType.SUB_CL_USER_INFO ,self,self.SUB_CL_USER_INFO)
-
-    EventMgr:registListener(EventType.RET_CLUB_CHAT_GET_UNREAD_MSG, self, self.RET_CLUB_CHAT_GET_UNREAD_MSG)  -- 返回未读聊天信息
+    EventMgr:registListener(EventType.RET_SETTINGS_CONFIG ,self,self.RET_SETTINGS_CONFIG)
+    EventMgr:registListener(EventType.RET_CLUB_CHAT_GET_UNREAD_MSG, self, self.RET_CLUB_CHAT_GET_UNREAD_MSG)
     cc.UserDefault:getInstance():setStringForKey("UserDefault_Operation","NewClubInfoLayer")
 end
 
@@ -127,7 +128,7 @@ function NewClubInfoLayer:onExit()
     EventMgr:unregistListener(EventType.RET_UPDATE_CLUB_PLAYER_INFO ,self,self.RET_UPDATE_CLUB_PLAYER_INFO)
     EventMgr:unregistListener(EventType.RET_SETTINGS_CLUB_MEMBER ,self,self.RET_SETTINGS_CLUB_MEMBER)
     EventMgr:unregistListener(EventType.SUB_CL_USER_INFO ,self,self.SUB_CL_USER_INFO)
-
+    EventMgr:unregistListener(EventType.RET_SETTINGS_CONFIG ,self,self.RET_SETTINGS_CONFIG)
     EventMgr:unregistListener(EventType.RET_CLUB_CHAT_GET_UNREAD_MSG, self, self.RET_CLUB_CHAT_GET_UNREAD_MSG)
     if self.clubData ~= nil then
         UserData.Guild:removeCloseClub(self.clubData.dwClubID)
@@ -142,7 +143,7 @@ function NewClubInfoLayer:onCreate(param)
 
     self.Chat = UserData.Chat -- 俱乐部聊天信息
 
-    self.Button_mp:setVisible(false)
+    self.Button_mp:setVisible(true)
     self.Panel_bg:setVisible(false)
     self.Panel_ui:setVisible(false)
     self.Image_checkRedPoint:setVisible(false)
@@ -202,6 +203,7 @@ function NewClubInfoLayer:onCreate(param)
         local box = require("app.MyApp"):create(clubData,isAdmin):createView('NewClubRecord')
         self:addChild(box)
     end
+    -- self.Button_mem:setVisible(false)
 end
 
 
@@ -212,6 +214,9 @@ end
 
 function NewClubInfoLayer:onShare()
     local data = clone(UserData.Share.tableShareParameter[2])
+    if not data then
+        return
+    end
     data.szShareTitle = string.format("亲友圈昵称:%s(亲友圈ID:%d)",self.clubData.szClubName,self.clubData.dwClubID)
     data.szShareContent = "好友邀请您加入亲友圈畅玩游戏,自动开房,点击加入>>>"
     data.szShareUrl = string.format(data.szShareUrl,self.clubData.dwClubID, UserData.User.userID)
@@ -227,6 +232,9 @@ end
 
 function NewClubInfoLayer:onModifyMp()
     local data = clone(UserData.Share.tableShareParameter[10])
+    if not data then
+        return
+    end
     data.szShareUrl = string.format(data.szShareUrl,UserData.User.userID)
     require("app.MyApp"):create(data):createView("ShareLayer")
     self.Panel_mp:setVisible(false)
@@ -280,20 +288,21 @@ function NewClubInfoLayer:onQuickStart()
         end
 
         if waynum == 1 then
+            self.curPlaywayIdx = 1
             for i,v in ipairs(tables) do
                 if v.data and v.data.dwTableID then
                     local data = v.data
                     local wKindID = math.floor(data.dwTableID/10000)
                     if (wKindID == 51 or wKindID == 53 or wKindID == 55 or wKindID == 56 or wKindID == 57 or wKindID == 58 or wKindID == 59) and data.tableParameter.bCanPlayingJoin == 1 and data.wCurrentChairCount < data.wChairCount  then
-                        require("common.SceneMgr"):switchTips(require("app.MyApp"):create(v.data.dwTableID):createView("InterfaceJoinRoomNode"))
+                        require("common.SceneMgr"):switchTips(require("app.MyApp"):create(v.data.dwTableID,self:getEnterTableFigueValue()):createView("InterfaceJoinRoomNode"))
                         return
                     elseif data.bIsGameStart == false and data.wCurrentChairCount < data.wChairCount then
-                        require("common.SceneMgr"):switchTips(require("app.MyApp"):create(v.data.dwTableID):createView("InterfaceJoinRoomNode"))
+                        require("common.SceneMgr"):switchTips(require("app.MyApp"):create(v.data.dwTableID,self:getEnterTableFigueValue()):createView("InterfaceJoinRoomNode"))
                         return
                     end
                 end
             end
-            require("common.SceneMgr"):switchTips(require("app.MyApp"):create(-2,self.clubData.dwPlayID[1],self.clubData.wKindID[1],self.clubData.wGameCount[1],self.clubData.dwClubID,self.clubData.tableParameter[1]):createView("InterfaceCreateRoomNode"))
+            require("common.SceneMgr"):switchTips(require("app.MyApp"):create(-2,self.clubData.dwPlayID[1],self.clubData.wKindID[1],self.clubData.wGameCount[1],self.clubData.dwClubID,self.clubData.tableParameter[1],self:getEnterTableFigueValue()):createView("InterfaceCreateRoomNode"))
             return
         end
 
@@ -327,23 +336,26 @@ function NewClubInfoLayer:onQuickStart()
                     if i <= waynum then
                         for _,v in ipairs(tables) do
                             if v.data and v.data.wTableSubType == self.clubData.dwPlayID[i] then
+                                self.curPlaywayIdx = i
                                 local data = v.data
                                 local wKindID = math.floor(data.dwTableID/10000)
                                 if (wKindID == 51 or wKindID == 53 or wKindID == 55 or wKindID == 56 or wKindID == 57 or wKindID == 58 or wKindID == 59) and data.tableParameter.bCanPlayingJoin == 1 and data.wCurrentChairCount < data.wChairCount  then
-                                    require("common.SceneMgr"):switchTips(require("app.MyApp"):create(v.data.dwTableID):createView("InterfaceJoinRoomNode"))
+                                    require("common.SceneMgr"):switchTips(require("app.MyApp"):create(v.data.dwTableID,self:getEnterTableFigueValue()):createView("InterfaceJoinRoomNode"))
                                     return
                                 elseif data.bIsGameStart == false and data.wCurrentChairCount < data.wChairCount then
-                                    require("common.SceneMgr"):switchTips(require("app.MyApp"):create(v.data.dwTableID):createView("InterfaceJoinRoomNode"))
+                                    require("common.SceneMgr"):switchTips(require("app.MyApp"):create(v.data.dwTableID,self:getEnterTableFigueValue()):createView("InterfaceJoinRoomNode"))
                                     return
                                 end
                             end
                         end
-                        require("common.SceneMgr"):switchTips(require("app.MyApp"):create(-2,self.clubData.dwPlayID[i],self.clubData.wKindID[i],self.clubData.wGameCount[i],self.clubData.dwClubID,self.clubData.tableParameter[i]):createView("InterfaceCreateRoomNode"))
+                        self.curPlaywayIdx = i
+                        require("common.SceneMgr"):switchTips(require("app.MyApp"):create(-2,self.clubData.dwPlayID[i],self.clubData.wKindID[i],self.clubData.wGameCount[i],self.clubData.dwClubID,self.clubData.tableParameter[i],self:getEnterTableFigueValue()):createView("InterfaceCreateRoomNode"))
                     else
                         for i,v in ipairs(tables) do
                             if v.data and v.data.dwTableID then
                                 if v.data.bIsGameStart == false and v.data.wCurrentChairCount < v.data.wChairCount then
-                                    require("common.SceneMgr"):switchTips(require("app.MyApp"):create(v.data.dwTableID):createView("InterfaceJoinRoomNode"))
+                                    self.curPlaywayIdx = i
+                                    require("common.SceneMgr"):switchTips(require("app.MyApp"):create(v.data.dwTableID,self:getEnterTableFigueValue()):createView("InterfaceJoinRoomNode"))
                                     return
                                 end
                             end
@@ -424,6 +436,9 @@ end
 
 function NewClubInfoLayer:onShareChat()
     local data = clone(UserData.Share.tableShareParameter[9])
+    if not data then
+        return
+    end
     data.szShareTitle = string.format(data.szShareTitle, self.clubData.szClubName)
     data.szShareContent = string.format("亲友圈ID：%d  群主：%s，点击进入聊天室", self.clubData.dwClubID, self.clubData.szNickName)
     local szParameter = string.format("{\"app_id\":%d,\"id\":%d,\"CT\":%d}", 10068, self.clubData.dwClubID, StaticData.Channels[CHANNEL_ID].ChannelType)
@@ -481,9 +496,20 @@ function NewClubInfoLayer:createClubTable()
 
             local panel = nil
             if playerNum > 4 then
-                panel = ccui.Helper:seekWidgetByName(item,"Panel_tbl6")
+                panel = ccui.Helper:seekWidgetByName(item,"Panel_tbl8")
             else
                 panel = ccui.Helper:seekWidgetByName(item,"Panel_normal")
+                local Image_tableType = ccui.Helper:seekWidgetByName(item,"Image_tableType")
+                if gameinfo.type == 1 then
+                    Image_tableType:setVisible(true)
+                    Image_tableType:loadTexture('kwxclub/zipai.png')
+                elseif gameinfo.type == 2 then
+                    Image_tableType:setVisible(true)
+                    Image_tableType:loadTexture('kwxclub/puke.png')
+                elseif gameinfo.type == 3 then
+                    Image_tableType:setVisible(true)
+                    Image_tableType:loadTexture('kwxclub/majiang.png')
+                end
             end
             panel:setVisible(true)
             
@@ -502,13 +528,15 @@ function NewClubInfoLayer:createClubTable()
             uiText_turnNum:setString(jushu .. '局')
             
             local Image_tableIdx = ccui.Helper:seekWidgetByName(item,"Image_tableIdx")
+            local BitmapFontLabel_tableIdx = ccui.Helper:seekWidgetByName(item,"BitmapFontLabel_tableIdx")
             Image_tableIdx:setVisible(true)
-            Image_tableIdx:loadTexture(string.format('kwxclub/club_%d.png', 100 + index))
+            BitmapFontLabel_tableIdx:setString(i)
 
             Common:addTouchEventListener(item,function(sender,event)
                 local isDisableCB = function()
                     if not self.clubData.bIsDisable then
-                        require("common.SceneMgr"):switchTips(require("app.MyApp"):create(-2,self.clubData.dwPlayID[i],v,jushu,self.clubData.dwClubID,parameter):createView("InterfaceCreateRoomNode"))
+                        self.curPlaywayIdx = i
+                        require("common.SceneMgr"):switchTips(require("app.MyApp"):create(-2,self.clubData.dwPlayID[i],v,jushu,self.clubData.dwClubID,parameter,self:getEnterTableFigueValue()):createView("InterfaceCreateRoomNode"))
                     else
                         require("common.MsgBoxLayer"):create(0,nil,'亲友圈打烊中')
                     end
@@ -609,7 +637,21 @@ function NewClubInfoLayer:updateClubInfo()
     Common:requestUserAvatar(self.clubData.dwUserID, self.clubData.szLogoInfo, self.Image_head, "clip")
     self.Text_clubName:setString(self.clubData.szClubName)
     self.Text_clubID:setString("圈ID:" .. self.clubData.dwClubID)
-    self.Text_clubPeople:setString("人数:" .. self.clubData.dwOnlinePlayerCount .. '/' .. self.clubData.dwClubPlayerCount)
+
+    if UserData.User.userID == self.clubData.dwUserID or self:isAdmin(UserData.User.userID)  then
+        self.Text_clubPeople:setString("人数:" .. self.clubData.dwOnlinePlayerCount .. '/' .. self.clubData.dwClubPlayerCount)
+    else
+        local onlineCount = self.clubData.dwOnlinePlayerCount
+        local allCount = self.clubData.dwClubPlayerCount
+        if onlineCount > 99 then
+            onlineCount = '99+'
+        end
+        if allCount > 99 then
+            allCount = '99+'
+        end
+        self.Text_clubPeople:setString("人数:" .. onlineCount .. '/' .. allCount)
+    end
+    
     self.Button_custom:setVisible(self.clubData.bHaveCustomizeRoom)
     if self.clubData.dwUserID ~= UserData.User.userID and not self:isAdmin(UserData.User.userID) then
     else
@@ -624,9 +666,9 @@ function NewClubInfoLayer:updateClubInfo()
         self.ScrollView_clubTbl:setVisible(false)
         self.Image_noSetWayFlag:setVisible(true)
         if UserData.User.userID == self.clubData.dwUserID or self:isAdmin(UserData.User.userID) then
-            self.Image_contextTips:loadTexture('newclub/newclub_m25.png')
+            self.Image_contextTips:loadTexture('kwxclub/newclub_m25.png')
         else
-            self.Image_contextTips:loadTexture('newclub/newclub_m24.png')
+            self.Image_contextTips:loadTexture('kwxclub/newclub_m24.png')
         end
     end
 
@@ -765,6 +807,7 @@ function NewClubInfoLayer:sortNewTable(dwTableID, playwaynum, posFlag)
                 if v.data.dwTableID == dwTableID then
                     idx = playwaynum + 1
                     isInsert = true
+                    v.sortIndex = #tableArr + 100
                 end
 
                 local row = idx % 2
@@ -776,6 +819,8 @@ function NewClubInfoLayer:sortNewTable(dwTableID, playwaynum, posFlag)
                 local y = 370 - (row - 1) * 260
                 v:setPosition(x, y)
                 v.data.pos = (col - 1) * 2 + row
+            else
+                v.sortIndex = -i
             end
         end
     elseif posFlag == 1 then
@@ -790,6 +835,7 @@ function NewClubInfoLayer:sortNewTable(dwTableID, playwaynum, posFlag)
                 if v.data.dwTableID == dwTableID then
                     idx = #tableArr
                     isInsert = true
+                    v.sortIndex = -(#tableArr + 100)
                 end
 
                 local row = idx % 2
@@ -801,9 +847,34 @@ function NewClubInfoLayer:sortNewTable(dwTableID, playwaynum, posFlag)
                 local y = 370 - (row - 1) * 260
 				v:setPosition(x, y)
                 v.data.pos = (col - 1) * 2 + row
+            else
+                v.sortIndex = -i
             end
         end
     end
+
+    -- local tableArr = self.ScrollView_clubTbl:getChildren()
+    -- local function comp(v1, v2)
+    --     v1.sortIndex = v1.sortIndex or 0
+    --     v2.sortIndex = v2.sortIndex or 0
+    --     if v1.sortIndex > v2.sortIndex then
+    --         return true
+    --     else
+    --         return false
+    --     end
+    -- end
+    -- table.sort(tableArr, comp)
+    -- for i,v in ipairs(tableArr) do
+    --     local row = i % 2
+    --     if row == 0 then
+    --         row = 2
+    --     end
+    --     local col = math.ceil(i / 2)
+    --     local x = 141 + (col - 1) * 330
+    --     local y = 370 - (row - 1) * 260
+    --     v:setPosition(x, y)
+    --     v.data.pos = (col - 1) * 2 + row
+    -- end
 end
 
 --桌子是否满人
@@ -846,10 +917,11 @@ function NewClubInfoLayer:refreshTableOneByOne(data)
         self.ScrollView_clubTbl:addChild(item)
         item:setName('club_table_' .. data.dwTableID)
         local Image_tableIdx = ccui.Helper:seekWidgetByName(item,"Image_tableIdx")
+        local BitmapFontLabel_tableIdx = ccui.Helper:seekWidgetByName(item,"BitmapFontLabel_tableIdx")
         local idx = self:getMoreTableIndex(data.wTableSubType)
         if idx then
             Image_tableIdx:setVisible(true)
-            Image_tableIdx:loadTexture(string.format('kwxclub/club_%d.png', 100 + idx))
+            BitmapFontLabel_tableIdx:setString(idx)
         else
             Image_tableIdx:setVisible(false)
         end
@@ -876,24 +948,25 @@ function NewClubInfoLayer:refreshTableOneByOne(data)
     end
 
     local playerNum = data.tableParameter.bPlayerCount
-    if  playerNum <= 4 then         --data.wTableSubType == 1 and
-        local path = string.format('kwxclub/newclub_z%d.png', playerNum)
-        item:loadTextures(path,path,path)
-        -- local Image_tableIdx = ccui.Helper:seekWidgetByName(item,"Image_tableIdx")
-        -- Image_tableIdx:setVisible(false)
-    elseif playerNum > 4 then
-        -- local path = 'newclub/newclub_tbl.png'
-        -- item:loadTextures(path,path,path)
-    else
-        local path = string.format('kwxclub/newclub_z%d.png', playerNum)
-        -- item:loadTextures(path,path,path)
-    end
-    
+    local path = string.format('kwxclub/newclub_z%d.png', playerNum)
+    item:loadTextures(path,path,path)
+        
     local itemNode = nil
     local headNum = 4
     if playerNum <= 4 then
         headNum = playerNum
         itemNode = ccui.Helper:seekWidgetByName(item,"Panel_normal")
+        local Image_tableType = ccui.Helper:seekWidgetByName(item,"Image_tableType")
+        if StaticData.Games[data.wKindID].type == 1 then
+            Image_tableType:setVisible(true)
+            Image_tableType:loadTexture('kwxclub/zipai.png')
+        elseif StaticData.Games[data.wKindID].type == 2 then
+            Image_tableType:setVisible(true)
+            Image_tableType:loadTexture('kwxclub/puke.png')
+        elseif StaticData.Games[data.wKindID].type == 3 then
+            Image_tableType:setVisible(true)
+            Image_tableType:loadTexture('kwxclub/majiang.png')
+        end
     else
         headNum = playerNum
         itemNode = ccui.Helper:seekWidgetByName(item,"Panel_tbl" .. playerNum)
@@ -919,7 +992,7 @@ function NewClubInfoLayer:refreshTableOneByOne(data)
     -- uiText_roomId:setString('房间号:' .. data.dwTableID)
     local uiText_turnNum = ccui.Helper:seekWidgetByName(itemNode,"Text_turnNum")
     uiText_turnNum:setVisible(true)
-    uiText_turnNum:setString(data.wCurrentGameCount .. '/' .. data.wGameCount)
+    uiText_turnNum:setString(data.wCurrentGameCount .. '/' .. data.wGameCount.."局")
 
     --字体大小调整
     -- uiText_wayName:setFontSize(22)
@@ -966,8 +1039,10 @@ function NewClubInfoLayer:refreshTableOneByOne(data)
             isAdmin = true
         end
 
+        self.curPlaywayIdx = idx
+
         if (CHANNEL_ID == 10 or CHANNEL_ID == 11) and not isAdmin then
-            require("common.SceneMgr"):switchTips(require("app.MyApp"):create(item.data.dwTableID):createView("InterfaceJoinRoomNode"))
+            require("common.SceneMgr"):switchTips(require("app.MyApp"):create(item.data.dwTableID,self:getEnterTableFigueValue()):createView("InterfaceJoinRoomNode"))
             return
         end
         require("app.MyApp"):create(function()
@@ -1166,9 +1241,22 @@ function NewClubInfoLayer:addOnceClubItem(data)
     Text_playWay:setColor(cc.c3b(114, 67, 13))
     Text_leader:setString(data.szClubName)
     Text_playWay:setString("圈ID:" .. data.dwClubID)
-    Text_memNum:setString("人数：" .. data.dwOnlinePlayerCount .. '/' .. data.dwClubPlayerCount)
-    self:setMemberMgrFlag(item, data)
 
+    if UserData.User.userID == self.clubData.dwUserID or self:isAdmin(UserData.User.userID)  then
+        Text_memNum:setString("人数：" .. data.dwOnlinePlayerCount .. '/' .. data.dwClubPlayerCount)
+    else
+        local onlineCount = data.dwOnlinePlayerCount
+        local allCount = data.dwClubPlayerCount
+        if onlineCount > 99 then
+            onlineCount = '99+'
+        end
+        if allCount > 99 then
+            allCount = '99+'
+        end
+        Text_memNum:setString("人数:" .. onlineCount .. '/' .. allCount)
+    end
+    
+    self:setMemberMgrFlag(item, data)
     item:setTouchEnabled(true)
     item:addClickEventListener(function(sender)
         if self.lastSelLight then
@@ -1190,10 +1278,10 @@ function NewClubInfoLayer:setMemberMgrFlag(item, data)
     local Image_adminIcon = self:seekWidgetByNameEx(item, "Image_adminIcon")
     if data.dwUserID == UserData.User.userID then
         Image_adminIcon:setVisible(true)
-        Image_adminIcon:loadTexture('newclub/newclub_m22.png')
+        Image_adminIcon:loadTexture('kwxclub/newclub_m22.png')
     elseif self:isAdmin(UserData.User.userID, data.dwAdministratorID) then
         Image_adminIcon:setVisible(true)
-        Image_adminIcon:loadTexture('newclub/newclub_m21.png')
+        Image_adminIcon:loadTexture('kwxclub/newclub_m21.png')
     else
         Image_adminIcon:setVisible(false)
     end
@@ -1264,6 +1352,22 @@ function NewClubInfoLayer:ReqRecordMsg()
     self.Chat:SendChatUnReadMsg()
 end
 
+function NewClubInfoLayer:getEnterTableFigueValue()
+    local maxValue = 0
+    local idx = self.curPlaywayIdx
+    if idx then
+        for k,v in pairs(self.clubData.dwPayCount[idx]) do
+            if maxValue < v then
+                maxValue = v
+            end
+        end
+        local value = self.clubData.lTableLimit[idx] + maxValue
+        return value
+    else
+        return 0
+    end
+end
+
 ------------------------------------------------------------------------
 --一个个返回有人桌子详情
 function NewClubInfoLayer:RET_GET_CLUB_TABLE(event)
@@ -1288,6 +1392,7 @@ function NewClubInfoLayer:RET_REFRESH_CLUB(event)
     UserData.Guild:saveLastUseClubRecord(self.clubData.dwClubID)
     cc.UserDefault:getInstance():setIntegerForKey("UserDefault_NewClubID", self.clubData.dwClubID)
     self:updateClubInfo()
+    UserData.Guild:getPartnerConfig(UserData.User.userID, self.clubData.dwClubID)
 end
 
 --返回刷新俱乐部玩法
@@ -1425,12 +1530,16 @@ function NewClubInfoLayer:RET_UPDATE_CLUB_PLAYER_INFO(event)
     self.Text_pilaozhi:setString('疲劳值:' .. data.lFatigueValue)
     self.userOffice = data.cbOffice
     self.userFatigueValue = data.lFatigueValue
+
+    -- if self.userOffice ~= 2 then
+    --     self.Button_mem:setVisible(true)
+    -- end
 end
 
 function NewClubInfoLayer:RET_SETTINGS_CLUB_MEMBER(event)
     local data = event._usedata
     Log.d(data)
-    if data.cbSettingsType == 6 and data.dwUserID == UserData.User.userID then
+    if (data.cbSettingsType == 6 or data.cbSettingsType == 8) and (data.dwUserID == UserData.User.userID) then
         --疲劳值
         self.userFatigueValue = data.lFatigueValue
         self.Text_pilaozhi:setString('疲劳值:' .. data.lFatigueValue)
@@ -1456,6 +1565,17 @@ end
 function NewClubInfoLayer:SUB_CL_USER_INFO(event)
     print('刷新名片：', UserData.User.szErWeiMaLogo)
     Common:requestErWeiMaPicture(UserData.User.szErWeiMaLogo, self.Image_mp)
+end
+
+function NewClubInfoLayer:RET_SETTINGS_CONFIG(event)
+    local data = event._usedata
+    Log.d(data)
+
+    if data.lRet ~= 0 then
+        --require("common.MsgBoxLayer"):create(0,nil,"获取合伙人配置信息失败！")
+        return
+    end
+    self:megerClubData(data)
 end
 
 return NewClubInfoLayer

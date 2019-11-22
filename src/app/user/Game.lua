@@ -434,21 +434,21 @@ function Game:overVoice()
     end
 end
 
---语音回调
-function cc.exports.voiceformSdkEventHandler(eventtype, response)
-	printInfo("voiceformSdkEventHandler:语音url地址回调")
-	local data = {}
-	data.eventtype = eventtype
-    data.response = response
-	if eventtype == 'UpLoad' then
-        cc.Director:getInstance():getRunningScene():runAction(cc.Sequence:create(cc.DelayTime:create(0),cc.CallFunc:create(function(sender,event) 
-             print('-->>>事件分发：12112311', eventtype, response)
-            local event = cc.EventCustom:new('VOICE_SDK_EVENT')
-            event._usedata = data
-            cc.Director:getInstance():getEventDispatcher():dispatchEvent(event)
-        end)))
-	end
-end
+-- --语音回调
+-- function cc.exports.voiceformSdkEventHandler(eventtype, response)
+-- 	printInfo("voiceformSdkEventHandler:语音url地址回调")
+-- 	local data = {}
+-- 	data.eventtype = eventtype
+--     data.response = response
+-- 	if eventtype == 'UpLoad' then
+--         cc.Director:getInstance():getRunningScene():runAction(cc.Sequence:create(cc.DelayTime:create(0),cc.CallFunc:create(function(sender,event) 
+--              print('-->>>事件分发：12112311', eventtype, response)
+--             local event = cc.EventCustom:new('VOICE_SDK_EVENT')
+--             event._usedata = data
+--             cc.Director:getInstance():getEventDispatcher():dispatchEvent(event)
+--         end)))
+-- 	end
+-- end
 
 function cc.exports.overVoice(parameters)
     print('fx-----cc.exports.overVoice------',parameters)

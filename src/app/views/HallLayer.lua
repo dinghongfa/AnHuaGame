@@ -21,7 +21,7 @@ function HallLayer:onEnter()
     EventMgr:registListener(EventType.RET_SPORTS_STATE,self,self.RET_SPORTS_STATE)
     EventMgr:registListener(EventType.RET_CLUB_CHAT_BACK_RECORD, self, self.RET_CLUB_CHAT_BACK_RECORD)
     EventMgr:registListener(EventType.RET_NOTICE_GAME_START, self, self.RET_NOTICE_GAME_START)
-    cc.Director:getInstance():getRunningScene():addChild(cc.CSLoader:createNode("EffectsLayer.csb"),0x10001,0x10001)
+    --cc.Director:getInstance():getRunningScene():addChild(cc.CSLoader:createNode("EffectsLayer.csb"),0x10001,0x10001)
     
     local OperationLayer = cc.UserDefault:getInstance():getStringForKey("UserDefault_Operation","")
     if OperationLayer == "NewClubInfoLayer" then
@@ -118,7 +118,7 @@ function HallLayer:onCreate(parames)
         Common:addTouchEventListener(uiButton_Goldgame_2,function()
             require("app.MyApp"):create(function() 
                 -- require("common.SceneMgr"):switchOperation(require("app.MyApp"):create(3):createView("GoldRoomCreateLayer"))
-                require("common.SceneMgr"):switchOperation(require("app.MyApp"):create(2):createView("RoomCreateLayer"))
+                require("common.SceneMgr"):switchOperation(require("app.MyApp"):create(3):createView("RoomCreateLayer"))
             end):createView("InterfaceCheckRoomNode")
         end)
     end 
@@ -128,7 +128,7 @@ function HallLayer:onCreate(parames)
         Common:addTouchEventListener(uiButton_Goldgame_3,function()
             require("app.MyApp"):create(function() 
                 -- require("common.SceneMgr"):switchOperation(require("app.MyApp"):create(2):createView("GoldRoomCreateLayer"))
-                require("common.SceneMgr"):switchOperation(require("app.MyApp"):create(3):createView("RoomCreateLayer"))
+                require("common.SceneMgr"):switchOperation(require("app.MyApp"):create(2):createView("RoomCreateLayer"))
             end):createView("InterfaceCheckRoomNode")
         end)
     end 
@@ -307,8 +307,8 @@ function HallLayer:onCreate(parames)
     uiImage_roomCard:addTouchEventListener(function(sender,event) 
         if event == ccui.TouchEventType.ended then 
             Common:palyButton() 
-            --require("app.views.AgentLayer"):create()
-            require("common.SceneMgr"):switchOperation(require("app.MyApp"):create(2):createView("NewXXMallLayer")) 
+            require("app.views.AgentLayer"):create()
+            --require("common.SceneMgr"):switchOperation(require("app.MyApp"):create(2):createView("NewXXMallLayer")) 
         end 
     end)
 
@@ -361,7 +361,10 @@ function HallLayer:onCreate(parames)
     local uiButton_setting = ccui.Helper:seekWidgetByName(self.root,"Button_setting")
     if uiButton_setting ~= nil then
         Common:addTouchEventListener(uiButton_setting,function()             
-            require("common.SceneMgr"):switchOperation(require("app.MyApp"):create(1):createView("SettingsLayer"))
+           require("common.SceneMgr"):switchOperation(require("app.MyApp"):create(1):createView("SettingsLayer"))
+           --local path = string.format("game.anhua.AHSetting", APPNAME, name)
+           --local box = require("app.MyApp"):create():createGame(path)
+           --self:addChild(box)
         end)
     end    
     --游戏规则

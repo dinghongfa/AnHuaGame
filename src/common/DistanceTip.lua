@@ -9,7 +9,10 @@ function DistanceTip:checkDis( wKindID )
     local isShowDisAlarm = false
 
     if StaticData.Games[wKindID].type == 1 then
-        GameCommon = require("game.paohuzi.GameCommon")
+        --GameCommon = require("game.paohuzi.GameCommon")
+        if wKindID == 69 then 
+            GameCommon = require("game.anhua.GameCommon")
+        end 
     elseif StaticData.Games[wKindID].type == 2 then
         GameCommon = require("game.puke.PDKGameCommon")   
         if wKindID == 84 then 

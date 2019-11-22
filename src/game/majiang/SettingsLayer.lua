@@ -41,7 +41,7 @@ end
 
 function SettingsLayer:onCreate()
     local visibleSize = cc.Director:getInstance():getVisibleSize()
-    local csb = cc.CSLoader:createNode("SettingsMaJangLayer.csb")
+    local csb = cc.CSLoader:createNode("AHSetting.csb")
     self:addChild(csb)
     self.root = csb:getChildByName("Panel_root")
     require("common.SceneMgr"):switchOperation(self)  
@@ -52,125 +52,125 @@ function SettingsLayer:onCreate()
         require("common.SceneMgr"):switchOperation()
     end,true)
 
-    self.Sound = UserData.Music:getVolumeSound()  --音效 
-    self.Music = UserData.Music:getVolumeMusic()  --音乐 
-    self.Voice = UserData.Music:getVolumeVoice()  --语音 
+    -- self.Sound = UserData.Music:getVolumeSound()  --音效 
+    -- self.Music = UserData.Music:getVolumeMusic()  --音乐 
+    -- self.Voice = UserData.Music:getVolumeVoice()  --语音 
 
-    self.isSound = cc.UserDefault:getInstance():getBoolForKey('MJisSound', true) 
-    self.isMusic = cc.UserDefault:getInstance():getBoolForKey('MJisMusic', true) 
-    self.isVoice = cc.UserDefault:getInstance():getBoolForKey('MJisVoice', true) 
+    -- self.isSound = cc.UserDefault:getInstance():getBoolForKey('MJisSound', true) 
+    -- self.isMusic = cc.UserDefault:getInstance():getBoolForKey('MJisMusic', true) 
+    -- self.isVoice = cc.UserDefault:getInstance():getBoolForKey('MJisVoice', true) 
 
-    self.Slider_1 = ccui.Helper:seekWidgetByName(self.root,"Slider_1")
-    self.Slider_2 = ccui.Helper:seekWidgetByName(self.root,"Slider_2")
-    self.Slider_3 = ccui.Helper:seekWidgetByName(self.root,"Slider_3")
+    -- self.Slider_1 = ccui.Helper:seekWidgetByName(self.root,"Slider_1")
+    -- self.Slider_2 = ccui.Helper:seekWidgetByName(self.root,"Slider_2")
+    -- self.Slider_3 = ccui.Helper:seekWidgetByName(self.root,"Slider_3")
 
-    self.Button_Sound = ccui.Helper:seekWidgetByName(self.root,"Button_Sound")
-    self.Button_Music = ccui.Helper:seekWidgetByName(self.root,"Button_Music")
-    self.Button_Voice = ccui.Helper:seekWidgetByName(self.root,"Button_Voice")
-    Common:addTouchEventListener(self.Button_Sound,function() 
-        UserData.Music:saveVolume()
-        self:onSoundCall()
-    end)
-    Common:addTouchEventListener(self.Button_Music,function() 
-        UserData.Music:saveVolume()
-        self:onMusicCall()
-    end)
-    Common:addTouchEventListener(self.Button_Voice,function() 
-        UserData.Music:saveVolume()
-        self:onVoiceCall()
-    end)
+    -- self.Button_Sound = ccui.Helper:seekWidgetByName(self.root,"Button_Sound")
+    -- self.Button_Music = ccui.Helper:seekWidgetByName(self.root,"Button_Music")
+    -- self.Button_Voice = ccui.Helper:seekWidgetByName(self.root,"Button_Voice")
+    -- Common:addTouchEventListener(self.Button_Sound,function() 
+    --     UserData.Music:saveVolume()
+    --     self:onSoundCall()
+    -- end)
+    -- Common:addTouchEventListener(self.Button_Music,function() 
+    --     UserData.Music:saveVolume()
+    --     self:onMusicCall()
+    -- end)
+    -- Common:addTouchEventListener(self.Button_Voice,function() 
+    --     UserData.Music:saveVolume()
+    --     self:onVoiceCall()
+    -- end)
 
-    local value1 = self:getVoice(0,1,UserData.Music:getVolumeSound()) * 100
-	self.Slider_1:setPercent(value1)
-	local value2 = self:getVoice(0,1,UserData.Music:getVolumeMusic()) * 100
-    self.Slider_2:setPercent(value2)
-    local value3 = self:getVoice(0,1,UserData.Music:getVolumeVoice()) * 100
-    self.Slider_3:setPercent(value3)
-    self:updateSound()
-    self:updateMusic()
-    self:updateVoice()
-    self:registerSliderEvent()
+    -- local value1 = self:getVoice(0,1,UserData.Music:getVolumeSound()) * 100
+	-- self.Slider_1:setPercent(value1)
+	-- local value2 = self:getVoice(0,1,UserData.Music:getVolumeMusic()) * 100
+    -- self.Slider_2:setPercent(value2)
+    -- local value3 = self:getVoice(0,1,UserData.Music:getVolumeVoice()) * 100
+    -- self.Slider_3:setPercent(value3)
+    -- self:updateSound()
+    -- self:updateMusic()
+    -- self:updateVoice()
+    -- self:registerSliderEvent()
 
-    self.UserDefault_MaJiangCard = cc.UserDefault:getInstance():getIntegerForKey(Default.UserDefault_MaJiangCard,0)   --麻将牌类型
+    -- self.UserDefault_MaJiangCard = cc.UserDefault:getInstance():getIntegerForKey(Default.UserDefault_MaJiangCard,0)   --麻将牌类型
 
-    self.Button_card1 = ccui.Helper:seekWidgetByName(self.root,"Button_card1")
-    self.Button_card2 = ccui.Helper:seekWidgetByName(self.root,"Button_card2")
-    self.Button_card3 = ccui.Helper:seekWidgetByName(self.root,"Button_card3")
-    self.Button_card4 = ccui.Helper:seekWidgetByName(self.root,"Button_card4")
+    -- self.Button_card1 = ccui.Helper:seekWidgetByName(self.root,"Button_card1")
+    -- self.Button_card2 = ccui.Helper:seekWidgetByName(self.root,"Button_card2")
+    -- self.Button_card3 = ccui.Helper:seekWidgetByName(self.root,"Button_card3")
+    -- self.Button_card4 = ccui.Helper:seekWidgetByName(self.root,"Button_card4")
 
-    local function CardChange(type)
-        self.UserDefault_MaJiangCard = type
-        self:updateCard()
-    end  
-    Common:addTouchEventListener(self.Button_card1,function() CardChange(0)end)
-    Common:addTouchEventListener(self.Button_card2,function() CardChange(1)end)
-    Common:addTouchEventListener(self.Button_card3,function() CardChange(2)end)
-    Common:addTouchEventListener(self.Button_card4,function() CardChange(3)end)
+    -- local function CardChange(type)
+    --     self.UserDefault_MaJiangCard = type
+    --     self:updateCard()
+    -- end  
+    -- Common:addTouchEventListener(self.Button_card1,function() CardChange(0)end)
+    -- Common:addTouchEventListener(self.Button_card2,function() CardChange(1)end)
+    -- Common:addTouchEventListener(self.Button_card3,function() CardChange(2)end)
+    -- Common:addTouchEventListener(self.Button_card4,function() CardChange(3)end)
 
-    self:updateCard()
+    -- self:updateCard()
 
-    self.UserDefault_MaJiangCard = cc.UserDefault:getInstance():getIntegerForKey(Default.UserDefault_MaJiangCard,0)   --麻将牌类型
+    -- self.UserDefault_MaJiangCard = cc.UserDefault:getInstance():getIntegerForKey(Default.UserDefault_MaJiangCard,0)   --麻将牌类型
 
-    local uiImage_1 = ccui.Helper:seekWidgetByName(self.Button_card1,"Image")
-    local uiImage_2 = ccui.Helper:seekWidgetByName(self.Button_card2,"Image")
-    local uiImage_3 = ccui.Helper:seekWidgetByName(self.Button_card3,"Image")
-    local uiImage_4 = ccui.Helper:seekWidgetByName(self.Button_card4,"Image")
-    uiImage_1:setTouchEnabled(true)
-    uiImage_2:setTouchEnabled(true)            
-    uiImage_3:setTouchEnabled(true)           
-    uiImage_4:setTouchEnabled(true)
-    local function CardChange(type,sender)
-        -- if sender == true then 
-        --     Common:palyButton()
-        -- end 
-        self.UserDefault_MaJiangCard = type
-        self:updateCard()
-    end  
-    Common:addTouchEventListener(self.Button_card1,function() CardChange(0)end)
-    Common:addTouchEventListener(self.Button_card2,function() CardChange(1)end)
-    Common:addTouchEventListener(self.Button_card3,function() CardChange(2)end)
-    Common:addTouchEventListener(self.Button_card4,function() CardChange(3)end)
-    uiImage_1:addTouchEventListener(function() CardChange(0,true)end)
-    uiImage_2:addTouchEventListener(function() CardChange(1,true)end)
-    uiImage_3:addTouchEventListener(function() CardChange(2,true)end)
-    uiImage_4:addTouchEventListener(function() CardChange(3,true)end)
+    -- local uiImage_1 = ccui.Helper:seekWidgetByName(self.Button_card1,"Image")
+    -- local uiImage_2 = ccui.Helper:seekWidgetByName(self.Button_card2,"Image")
+    -- local uiImage_3 = ccui.Helper:seekWidgetByName(self.Button_card3,"Image")
+    -- local uiImage_4 = ccui.Helper:seekWidgetByName(self.Button_card4,"Image")
+    -- uiImage_1:setTouchEnabled(true)
+    -- uiImage_2:setTouchEnabled(true)            
+    -- uiImage_3:setTouchEnabled(true)           
+    -- uiImage_4:setTouchEnabled(true)
+    -- local function CardChange(type,sender)
+    --     -- if sender == true then 
+    --     --     Common:palyButton()
+    --     -- end 
+    --     self.UserDefault_MaJiangCard = type
+    --     self:updateCard()
+    -- end  
+    -- Common:addTouchEventListener(self.Button_card1,function() CardChange(0)end)
+    -- Common:addTouchEventListener(self.Button_card2,function() CardChange(1)end)
+    -- Common:addTouchEventListener(self.Button_card3,function() CardChange(2)end)
+    -- Common:addTouchEventListener(self.Button_card4,function() CardChange(3)end)
+    -- uiImage_1:addTouchEventListener(function() CardChange(0,true)end)
+    -- uiImage_2:addTouchEventListener(function() CardChange(1,true)end)
+    -- uiImage_3:addTouchEventListener(function() CardChange(2,true)end)
+    -- uiImage_4:addTouchEventListener(function() CardChange(3,true)end)
 
-    self:updateCard()
-
-
-    self.UserDefault_MaJiangpaizhuo = cc.UserDefault:getInstance():getIntegerForKey(Default.UserDefault_MaJiangpaizhuo,0)   --麻将牌类型
-
-    self.Button_bg1 = ccui.Helper:seekWidgetByName(self.root,"Button_bg1")
-    self.Button_bg2 = ccui.Helper:seekWidgetByName(self.root,"Button_bg2")
-    self.Button_bg3 = ccui.Helper:seekWidgetByName(self.root,"Button_bg3")
-
-    local function BGChange(type,sender)
-        self.UserDefault_MaJiangpaizhuo = type
-        self:updateBG()
-    end  
-    Common:addTouchEventListener(self.Button_bg1,function() BGChange(0)end)
-    Common:addTouchEventListener(self.Button_bg2,function() BGChange(1)end)
-    Common:addTouchEventListener(self.Button_bg3,function() BGChange(2)end)
-
-    local Image_1 = ccui.Helper:seekWidgetByName(self.Button_bg1,"Image")
-    local Image_2 = ccui.Helper:seekWidgetByName(self.Button_bg2,"Image")
-    local Image_3 = ccui.Helper:seekWidgetByName(self.Button_bg3,"Image")
-    Image_1:setTouchEnabled(true)
-    Image_2:setTouchEnabled(true)            
-    Image_3:setTouchEnabled(true)     
-    Image_1:addTouchEventListener(function() BGChange(0,true)end)
-    Image_2:addTouchEventListener(function() BGChange(1,true)end)
-    Image_3:addTouchEventListener(function() BGChange(2,true)end)      
+    -- self:updateCard()
 
 
-    self:updateBG()
+    -- self.UserDefault_MaJiangpaizhuo = cc.UserDefault:getInstance():getIntegerForKey(Default.UserDefault_MaJiangpaizhuo,0)   --麻将牌类型
 
-    local uiButton_disbanded = ccui.Helper:seekWidgetByName(self.root,"Button_disbanded")
-    Common:addTouchEventListener(uiButton_disbanded,function() 
-        require("common.MsgBoxLayer"):create(1,nil,"是否确定解散房间？",function()
-            NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GR_USER,NetMsgId.REQ_GR_DISMISS_TABLE,"")
-        end)
-    end)
+    -- self.Button_bg1 = ccui.Helper:seekWidgetByName(self.root,"Button_bg1")
+    -- self.Button_bg2 = ccui.Helper:seekWidgetByName(self.root,"Button_bg2")
+    -- self.Button_bg3 = ccui.Helper:seekWidgetByName(self.root,"Button_bg3")
+
+    -- local function BGChange(type,sender)
+    --     self.UserDefault_MaJiangpaizhuo = type
+    --     self:updateBG()
+    -- end  
+    -- Common:addTouchEventListener(self.Button_bg1,function() BGChange(0)end)
+    -- Common:addTouchEventListener(self.Button_bg2,function() BGChange(1)end)
+    -- Common:addTouchEventListener(self.Button_bg3,function() BGChange(2)end)
+
+    -- local Image_1 = ccui.Helper:seekWidgetByName(self.Button_bg1,"Image")
+    -- local Image_2 = ccui.Helper:seekWidgetByName(self.Button_bg2,"Image")
+    -- local Image_3 = ccui.Helper:seekWidgetByName(self.Button_bg3,"Image")
+    -- Image_1:setTouchEnabled(true)
+    -- Image_2:setTouchEnabled(true)            
+    -- Image_3:setTouchEnabled(true)     
+    -- Image_1:addTouchEventListener(function() BGChange(0,true)end)
+    -- Image_2:addTouchEventListener(function() BGChange(1,true)end)
+    -- Image_3:addTouchEventListener(function() BGChange(2,true)end)      
+
+
+    -- self:updateBG()
+
+    -- local uiButton_disbanded = ccui.Helper:seekWidgetByName(self.root,"Button_disbanded")
+    -- Common:addTouchEventListener(uiButton_disbanded,function() 
+    --     require("common.MsgBoxLayer"):create(1,nil,"是否确定解散房间？",function()
+    --         NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GR_USER,NetMsgId.REQ_GR_DISMISS_TABLE,"")
+    --     end)
+    -- end)
 
     -- self:initSound() 
 end

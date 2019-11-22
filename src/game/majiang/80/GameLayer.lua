@@ -74,7 +74,7 @@ function GameLayer:startGame(...)
     GameCommon.playbackData = params[3]
     GameCommon.player = {}
     GameCommon.gameConfig = {}
-    GameCommon.mHuCard = {}
+    GameCommon.mBTHuCard = {}
     GameCommon.mBaoTingCard = {}  -- 报听牌制空 防止上局解散时报听数据没有清空
 
     GameCommon.mGang = false      --长沙麻将杠精出世
@@ -86,11 +86,11 @@ function GameLayer:startGame(...)
     self.csb = csb       
     GameCommon:init()
     GameCommon.wKindID = GameCommon.tableConfig.wKindID
-    local regionSound = cc.UserDefault:getInstance():getFloatForKey('volumeSelect', 1) 
-    if regionSound ~= nil and regionSound == 0 then
-        GameCommon.regionSound = 0
+    local language = cc.UserDefault:getInstance():getIntegerForKey('volumeSelect', 1) 
+    if language ~= nil and language == 0 then
+        GameCommon.language = 0
     else
-        GameCommon.regionSound = 1
+        GameCommon.language = 1
     end
     
     self:resetPiaoFen()
@@ -522,17 +522,17 @@ function GameLayer:readBuffer(luaFunc, mainCmdID, subCmdID)
         --     end
         --     self.tableLayer:showBaoting(_tagMsg.pBuffer)
         --     return true
-        elseif subCmdID == NetMsgId.SUB_S_GANG_CARD_DATA then        --返回客户端开杠后相关牌数据
+        -- elseif subCmdID == NetMsgId.SUB_S_GANG_CARD_DATA then        --返回客户端开杠后相关牌数据
 							
-            _tagMsg.pBuffer.wResumeUser = luaFunc:readRecvWORD()            --还原用户
-            _tagMsg.pBuffer.cbCardCount = luaFunc:readRecvByte()            --累加数据
-            _tagMsg.pBuffer.mGangItemArray = {}         --组合麻将	2019.2.12  70版新改  （共24张：杠起6张公牌----极限情况下有吃、碰、杠、胡各6次）
-            for  i = 1,24 do
-                _tagMsg.pBuffer.mGangItemArray[i] = {}
-                _tagMsg.pBuffer.mGangItemArray[i].cbGangKind = luaFunc:readRecvWORD()
-                _tagMsg.pBuffer.mGangItemArray[i].cbPublicCard = luaFunc:readRecvByte()
-                print("++++++++首杠+++++++",i,_tagMsg.pBuffer.mGangItemArray[i].cbGangKind,_tagMsg.pBuffer.mGangItemArray[i].cbPublicCard )
-            end 
+        --     _tagMsg.pBuffer.wResumeUser = luaFunc:readRecvWORD()            --还原用户
+        --     _tagMsg.pBuffer.cbCardCount = luaFunc:readRecvByte()            --累加数据
+        --     _tagMsg.pBuffer.mGangItemArray = {}         --组合麻将	2019.2.12  70版新改  （共24张：杠起6张公牌----极限情况下有吃、碰、杠、胡各6次）
+        --     for  i = 1,24 do
+        --         _tagMsg.pBuffer.mGangItemArray[i] = {}
+        --         _tagMsg.pBuffer.mGangItemArray[i].cbGangKind = luaFunc:readRecvWORD()
+        --         _tagMsg.pBuffer.mGangItemArray[i].cbPublicCard = luaFunc:readRecvByte()
+        --         print("++++++++首杠+++++++",i,_tagMsg.pBuffer.mGangItemArray[i].cbGangKind,_tagMsg.pBuffer.mGangItemArray[i].cbPublicCard )
+        --     end 
         elseif subCmdID == NetMsgId.SUB_S_OPERATE_RESULT then              --操作结果
             _tagMsg.pBuffer.wOperateUser = luaFunc:readRecvWORD()       --操作用户
             _tagMsg.pBuffer.wProvideUser = luaFunc:readRecvWORD()       --供应用户
@@ -980,8 +980,10 @@ function GameLayer:OnGameMessageRun(_tagMsg)
     if mainCmdID == NetMsgId.MDM_GR_USER then   
         if subCmdID == NetMsgId.SUB_GR_GAME_STATISTICS then
             self:removeAllChildren()
-            local layer = require("game.majiang.KwxGameOver"):create(pBuffer)
-            self:addChild(layer)
+            -- local layer = require("game.majiang.GameMaJiangRoomEnd"):create(pBuffer)
+            -- self:addChild(layer)
+            local box = require("app.MyApp"):create(pBuffer):createGame("game.majiang.GameMaJiangRoomEnd")
+            self:addChild(box)
         else
             return print("error, not found this :",mainCmdID, subCmdID)
         end
@@ -1060,9 +1062,9 @@ function GameLayer:OnGameMessageRun(_tagMsg)
             self.tableLayer:BaoTingCardShow({cbBTCard = pBuffer.cbBTCard,mBTHuCard = pBuffer.mBTHuCard})
        elseif subCmdID == NetMsgId.SUB_S_ALONE_BAOTINGCARD then           --报听可胡哪些牌数据   
            self.tableLayer:doAction(NetMsgId.SUB_S_ALONE_BAOTINGCARD,pBuffer)
-        elseif subCmdID == NetMsgId.SUB_S_GANG_CARD_DATA then        --返回客户端开杠后相关牌数据
-            GameCommon.waitGangCardUser = pBuffer.wResumeUser
-            self.tableLayer:DataClient(pBuffer)    --相关数据客户端整理运行
+        -- elseif subCmdID == NetMsgId.SUB_S_GANG_CARD_DATA then        --返回客户端开杠后相关牌数据
+        --     GameCommon.waitGangCardUser = pBuffer.wResumeUser
+        --     self.tableLayer:DataClient(pBuffer)    --相关数据客户端整理运行
         elseif subCmdID == NetMsgId.SUB_S_OPERATE_RESULT then              --操作结果
             GameCommon.iNOoutcard = false
             self.tableLayer:doAction(NetMsgId.SUB_S_OPERATE_RESULT, pBuffer)
@@ -1174,21 +1176,35 @@ function GameLayer:OnGameMessageRun(_tagMsg)
                         GameCommon.mBaoTingCard[i] = pBuffer.cbBTCard[i]
                     end
                 end       --pBuffer.mBTHuCard[i][j]
-                -- GameCommon.mHuCard = {}
-                -- for i = 1, 27 do   
-                --     if pBuffer.mAloneBaoTingCardEx[i]~= nil and pBuffer.mAloneBaoTingCardEx[i] ~= 0 then 
-                --         GameCommon.mHuCard[i] = pBuffer.mAloneBaoTingCardEx[i]  
-                --     end              
-                -- end
+                GameCommon.mBTHuCard = {}
+                for i = 1, 14 do
+                    if pBuffer.mBTHuCard[i] ~= nil and pBuffer.mBTHuCard[i] ~= 0 then
+                        GameCommon.mBTHuCard[i]= {}
+                        for j = 1, 27 do
+                            if pBuffer.mBTHuCard[i][j]~= nil and pBuffer.mBTHuCard[i][j] ~= 0 then
+                                GameCommon.mBTHuCard[i][j]=pBuffer.mBTHuCard[i][j]
+                                print("+++++报停胡获取胡那些牌++++",i,j,pBuffer.mBTHuCard[i][j])
+                            end                
+                        end 
+                    end
+                end 
+            
+                local a = 1 
             elseif GameCommon.waitOutCardUser ~= GameCommon:getRoleChairID() and  pBuffer.cbActionMask == 0 then 
                 --if pBuffer.mAloneBaoTingCardEx ~= nil and  pBuffer.mAloneBaoTingCardEx[1] ~= 0 then 
                 if  pBuffer.mBTHuCard~= {} and pBuffer.mBTHuCard[1] ~={} and pBuffer.mBTHuCard[1][1] ~= 0 then 
-                    -- GameCommon.mHuCard = {}
-                    -- for i = 1, 27 do
-                    --     if pBuffer.mBTHuCard[1][i]~= nil and pBuffer.mBTHuCard[1][i] ~= 0 then 
-                    --         GameCommon.mHuCard[i] = pBuffer.mBTHuCard[1][i]  
-                    --     end              
-                    -- end
+                    GameCommon.mBTHuCard = {}
+                    for i = 1, 14 do
+                        if pBuffer.mBTHuCard[i] ~= nil and pBuffer.mBTHuCard[i] ~= 0 then
+                            GameCommon.mBTHuCard[i]= {}
+                            for j = 1, 27 do
+                                if pBuffer.mBTHuCard[i][j]~= nil and pBuffer.mBTHuCard[i][j] ~= 0 then
+                                    GameCommon.mBTHuCard[i][j]=pBuffer.mBTHuCard[i][j]
+                                    print("+++++报停胡获取胡那些牌++++",i,j,pBuffer.mBTHuCard[i][j])
+                                end                
+                            end 
+                        end
+                    end 
                     local uiButton_chakan = ccui.Helper:seekWidgetByName(self.root,"Button_chakan")  
                     uiButton_chakan:setVisible(true)  
                 end
@@ -1224,7 +1240,6 @@ function GameLayer:OnGameMessageRun(_tagMsg)
             --    self.tableLayer:huCardShow(1)
             if  pBuffer.mBTHuCard~= {} and pBuffer.mBTHuCard[1] ~={} and pBuffer.mBTHuCard[1][1] ~= 0 then 
                 -- self.tableLayer:BaoTingCardShow({cbBTCard = pBuffer.cbBTCard,mBTHuCard = pBuffer.mBTHuCard})
- 
                  self.tableLayer:doAction(NetMsgId.SUB_S_BAOTINGOUTCARD,pBuffer)
              end  
             ------------------
@@ -1255,11 +1270,11 @@ function GameLayer:OnGameMessageRun(_tagMsg)
                         cbActionCard = pBuffer.cbActionCard,bIsSelf = false,cbGangCard = pBuffer.cbGangCard,cbBuCard = pBuffer.cbBuCard})
                 end   
             end               
-            if pBuffer.mcbGangItemCount ~= 0 then 
-                GameCommon.waitGangCardUser = pBuffer.wCurrentUser 
-                pBuffer.wResumeUser = 0
-                self.tableLayer:DataClient(pBuffer)    --相关数据客户端整理运行
-            end  
+            -- if pBuffer.mcbGangItemCount ~= 0 then 
+            --     GameCommon.waitGangCardUser = pBuffer.wCurrentUser 
+            --     pBuffer.wResumeUser = 0
+            --     self.tableLayer:DataClient(pBuffer)    --相关数据客户端整理运行
+            -- end  
             if pBuffer.wHaiDiUser <= GameCommon.gameConfig.bPlayerCount then
                 self.tableLayer:doAction(NetMsgId.SUB_S_OPERATE_HAIDI, {wCurrentUser = pBuffer.wHaiDiUser, false})
             end

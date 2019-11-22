@@ -76,6 +76,7 @@ function RoomCreateLayer:onCreate(parameter)
     local uiPanel_para = ccui.Helper:seekWidgetByName(self.root,"Panel_para")
     uiPanel_para:setVisible(false)
     local function showGameType(type)
+        
         if type == 1 then
             uiButton_zipai:setBright(true)
             uiButton_majiang:setBright(false)
@@ -93,18 +94,18 @@ function RoomCreateLayer:onCreate(parameter)
         local games = {}
         games = clone(UserData.Game.tableSortGames)
         local isFound = false
-        local tableNiuNiuUserID = {
-            [10013998]=1,[10015147]=1,[10024831]=1,[10037008]=1,[10025776]=1
-        }
         for key, var in pairs(games) do
             local wKindID = tonumber(var)
             local data = StaticData.Games[wKindID]
-            if UserData.Game.tableGames[wKindID] ~= nil and Bit:_and(data.friends,1) ~= 0  and (data.type == type or type == nil ) and (wKindID ~= 51 or locationID == 51 or tableNiuNiuUserID[UserData.User.userID] ~= nil) and (wKindID ~= 53 or locationID == 53 or tableNiuNiuUserID[UserData.User.userID] ~= nil) then
+            if UserData.Game.tableGames[wKindID] ~= nil and Bit:_and(data.friends,1) ~= 0  and (data.type == type or type == nil ) and (StaticData.Games[wKindID].isVisible == 1 or UserData.User.wPrivilege == 1) then
                 local item = uiButton_iten:clone()
+
+                item.press = self:seekWidgetByNameEx(item,'Image_press')
                 item.wKindID = wKindID
                 item:setBright(false)
                 item:setVisible(true)
-                item:loadTextures(data.icon1,data.icon1,data.icons)
+                item.press:loadTexture(data.icon1)
+                -- item:loadTextures(data.icon1,data.icon1,data.icons)
                 uiListView_games:pushBackCustomItem(item)
                 item:setAnchorPoint(cc.p(0,0.5))
                 Common:addTouchEventListener(item,function() self:showGameParameter(wKindID) end)
@@ -146,8 +147,10 @@ function RoomCreateLayer:onCreate(parameter)
     -- if  #UserData.Game.tableSortGames <= 5 then  
     --     showGameType()
     -- else
-    if locationID == nil or locationID == 0 or UserData.Game.tableGames[locationID] == nil then
+    if locationID == nil or locationID == 0  then
         showGameType(3)
+    elseif  UserData.Game.tableGames[locationID] == nil then 
+        showGameType(locationID)
     else
         showGameType(StaticData.Games[locationID].type)
     end

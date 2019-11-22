@@ -811,15 +811,25 @@ function DDZTableLayer:initUI()
     uiPanel_dipai:setVisible(false)
     --UI层
     local uiButton_menu = ccui.Helper:seekWidgetByName(self.root,"Button_menu")
+
+    local TopSetting = ccui.Helper:seekWidgetByName(self.root, "TopSetting")
+    TopSetting:setVisible(false)
+
     local uiPanel_function = ccui.Helper:seekWidgetByName(self.root,"Panel_function")
     uiPanel_function:setEnabled(false)
     Common:addTouchEventListener(uiButton_menu,function() 
-        uiPanel_function:stopAllActions()
-        uiPanel_function:runAction(cc.Sequence:create(cc.MoveTo:create(0.2,cc.p(-99,0)),cc.CallFunc:create(function(sender,event) 
-            uiPanel_function:setEnabled(true)
-        end)))
-        uiButton_menu:stopAllActions()
-        uiButton_menu:runAction(cc.ScaleTo:create(0.2,0))
+        -- uiPanel_function:stopAllActions()
+        -- uiPanel_function:runAction(cc.Sequence:create(cc.MoveTo:create(0.2,cc.p(-99,0)),cc.CallFunc:create(function(sender,event) 
+        --     uiPanel_function:setEnabled(true)
+        -- end)))
+        -- uiButton_menu:stopAllActions()
+        -- uiButton_menu:runAction(cc.ScaleTo:create(0.2,0))
+
+        if TopSetting:isVisible() then
+			TopSetting:setVisible(false)
+		else
+			TopSetting:setVisible(true)
+		end
     end)
     uiPanel_function:addTouchEventListener(function(sender,event)
         if event == ccui.TouchEventType.ended then
@@ -891,29 +901,34 @@ function DDZTableLayer:initUI()
         uiPanel_night:setVisible(true)
     end
     Common:addTouchEventListener(ccui.Helper:seekWidgetByName(self.root,"Button_settings"),function() 
+        local path = self:requireClass('SettingsLayer')
+		local box = require("app.MyApp"):create(DDZGameCommon):createGame(path)
         -- local path = self:requireClass('DDZSetting')
 		-- local box = require("app.MyApp"):create():createGame(path)
         -- self:addChild(box)
-        if DDZGameCommon.tableConfig.nTableType == TableType_GoldRoom or DDZGameCommon.tableConfig.nTableType == TableType_RedEnvelopeRoom then  
-            require("common.SceneMgr"):switchOperation(require("app.MyApp"):create(2):createView("SettingsLayer"))
-        else  
-            require("common.SceneMgr"):switchOperation(require("app.MyApp"):create():createView("SettingsLayer"))
-        end
+        -- if DDZGameCommon.tableConfig.nTableType == TableType_GoldRoom or DDZGameCommon.tableConfig.nTableType == TableType_RedEnvelopeRoom then  
+        --     require("common.SceneMgr"):switchOperation(require("app.MyApp"):create(2):createView("SettingsLayer"))
+        -- else
+        --     require("common.SceneMgr"):switchOperation(require("app.MyApp"):create():createView("SettingsLayer"))
+        -- end
     end)
     local uiButton_expression = ccui.Helper:seekWidgetByName(self.root,"Button_expression")
     uiButton_expression:setPressedActionEnabled(true)
     local function onEventExpression(sender,event)
         if event == ccui.TouchEventType.ended then
             Common:palyButton()
-            local child = self:getChildByName('DDZChat')
-			if child and child:getName() == 'DDZChat' then
-				child:setVisible(true)
-				return true
-			end
-			local path = self:requireClass('DDZChat')
-			local box = require("app.MyApp"):create():createGame(path)
-			box:setName('DDZChat')
-			self:addChild(box)
+            -- local child = self:getChildByName('DDZChat')
+			-- if child and child:getName() == 'DDZChat' then
+			-- 	child:setVisible(true)
+			-- 	return true
+			-- end
+			-- local path = self:requireClass('DDZChat')
+			-- local box = require("app.MyApp"):create():createGame(path)
+			-- box:setName('DDZChat')
+            -- self:addChild(box)
+            local data = 84 
+            local box = require("app.MyApp"):create(data):createGame('game.puke.KwxChat')
+            self:addChild(box)
         end
     end
     uiButton_expression:addTouchEventListener(onEventExpression)
@@ -1581,7 +1596,11 @@ function DDZTableLayer:showReward(pBuffer)
 end 
 
 function DDZTableLayer:showExperssion(pBuffer)
-	self:playSpine(pBuffer)
+    if pBuffer.wIndex <= 100 then
+		self:playFrameAnimation(pBuffer)
+	else
+		self:playSpine(pBuffer)
+	end
 end
 
 function DDZTableLayer:playSpine(pBuffer)
@@ -1601,73 +1620,99 @@ function DDZTableLayer:playSpine(pBuffer)
     
 	local worldPos = cc.p(userAnim:getParent():convertToWorldSpace(cc.p(userAnim:getPosition())))
 
-	local path = ''
-	local index = math.floor(pBuffer.wIndex / 50) + 1
-	local animIndex
-	if index == 1 then --第一页
-		animIndex = 23
-	elseif index == 2 then --第二页
-		animIndex = 24
+	local path = string.format('anhua/chat/%d', pBuffer.wIndex - 100)
+	local skeletonNode = cusNode:getChildByName('hhchat_' .. pBuffer.wIndex)
+	if not skeletonNode then
+		skeletonNode = sp.SkeletonAnimation:create(path .. '.json', path .. '.atlas', 0.6)
+		skeletonNode:setScale(0.7)
+		cusNode:addChild(skeletonNode)
+		skeletonNode:setName('hhchat_' .. pBuffer.wIndex)
 	end
-	local anim
-	if animIndex then
-		anim = require("game.puke.Animation") [animIndex]
+	skeletonNode:setPosition(worldPos)
+	skeletonNode:setAnimation(0, 'animation', true)
+	skeletonNode:setVisible(true)
+	skeletonNode:runAction(cc.Sequence:create(cc.DelayTime:create(2.5), cc.CallFunc:create(function()
+		skeletonNode:setVisible(false)
+	end)))
+	
+	local Chat = require("game.anhua.Animation") [23]
+	local data = Chat[pBuffer.wIndex - 100]
+	local sound = nil
+	if data then
+		sound = data.sound
 	end
-	if anim then
-        local id = math.mod(pBuffer.wIndex, 50)
-
-
-		local data = anim[id]
-		if data then
-			local skeletonNode = cusNode:getChildByName('pdkskele_' .. pBuffer.wIndex)
-			if not skeletonNode then
-				skeletonNode = sp.SkeletonAnimation:create(data.animFile .. '.json', data.animFile .. '.atlas')
-				cusNode:addChild(skeletonNode)
-				skeletonNode:setName('pdkskele_' .. pBuffer.wIndex)
+	local soundData = nil
+	local soundFile = ''
+	if sound then
+		soundData = sound[DDZGameCommon.language]
+		if soundData ~= nil then
+			local player = DDZGameCommon.player[pBuffer.wChairID]
+			local csbSex = 0
+			if player then
+				csbSex = player.cbSex
 			end
-			skeletonNode:setPosition(worldPos)
-			skeletonNode:setAnimation(0, data.animName, false)
-			skeletonNode:setVisible(true)
-
-			local idx = 1
-			skeletonNode:registerSpineEventHandler(function()
-				idx = idx + 1
-				if idx > 3 then
-					-- skeletonNode:runAction(cc.Sequence:create(cc.DelayTime:create(0), cc.RemoveSelf:create()))
-					skeletonNode:setVisible(false)
-				else
-					skeletonNode:setAnimation(0, data.animName, false)
-				end
-			end, sp.EventType.ANIMATION_COMPLETE)
-			
-			local sound = data.sound
-			local soundData = nil
-			local soundFile = ''
-			if sound then
-				
-				soundData = sound[DDZGameCommon.language]
-				if DDZGameCommon.language ~= 0 then
-					local wKindID = DDZGameCommon.tableConfig.wKindID
-					if wKindID == 47 or wKindID == 48 or wKindID == 49 or wKindID == 60 then
-						soundData = sound[2]
-					end
-				end
-				
-				if soundData ~= nil then
-					local player = DDZGameCommon.player[pBuffer.wChairID]
-					local csbSex = 0
-					if player then
-						csbSex = player.cbSex
-					end
-					soundFile = soundData[csbSex]
-				end
-			end
-			
-			if soundFile and soundFile ~= "" then
-				require("common.Common"):playEffect(soundFile)
-			end
+			soundFile = soundData[csbSex]
 		end
 	end
+	
+	if data ~= nil and soundFile ~= "" then
+		require("common.Common"):playEffect(soundFile)
+	end
+end
+
+function DDZTableLayer:playFrameAnimation(pBuffer)
+	local viewID = DDZGameCommon:getViewIDByChairID(pBuffer.wChairID, true)
+	local Panel_player = ccui.Helper:seekWidgetByName(self.root, string.format("Panel_player%d", viewID))
+	if Panel_player then
+		local Image_avatarFrame = Panel_player:getChildByName('Panel_playerInfo')
+		local size = Image_avatarFrame:getSize()
+		local endIndex = 0
+		--if pBuffer.wIndex == 1 then
+		
+		self:playerExportAnim(pBuffer.wIndex,Image_avatarFrame)
+
+		local Chat = require("game.anhua.Animation") [24]
+		local data = Chat[pBuffer.wIndex]
+		local sound = nil
+		if data then
+			sound = data.sound
+		end
+		local soundData = nil
+		if sound then
+			soundData = sound[0]
+		end
+		
+		if data ~= nil and soundData ~= "" then
+			require("common.Common"):playEffect(soundData)
+		end
+
+	end
+end
+
+function DDZTableLayer:playerExportAnim( index,target )
+	local Animation = require("game.anhua.Animation")
+
+	local data = Animation[24]
+	local AnimationData = data[index]
+	if not AnimationData or not data then
+		return
+	end
+
+	local am = self:playDH(target,AnimationData.animFile,AnimationData.animName,AnimationData.playName)
+	am:setPosition(80,80)
+end
+
+function DDZTableLayer:playDH( target, animFile,animName,playName)
+	ccs.ArmatureDataManager:getInstance():addArmatureFileInfo(animFile)
+	local armature = ccs.Armature:create(animName)
+	target:addChild(armature,100)
+	if playName and playName ~= '' then
+		armature:getAnimation():play(playName,-1,0)
+	end
+	armature:runAction(cc.Sequence:create(
+		cc.DelayTime:create(1.5),
+		cc.RemoveSelf:create()))
+	return armature
 end
 
 --提取牌型

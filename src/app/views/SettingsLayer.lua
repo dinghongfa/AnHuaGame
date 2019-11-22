@@ -31,13 +31,11 @@ function SettingsLayer:onCreate(parames)
         require("common.SceneMgr"):switchOperation()
     end)
 
-    print("++++++++++++!",parames)
     self:initSound(parames)  
 end
 
 function SettingsLayer:initSound(parames)
 
-    print("++++++++++++@",parames)
     --版本信息
     local uiText_edition = ccui.Helper:seekWidgetByName(self.root,"Text_edition")
     if require("loading.Update").version ~= "" then
@@ -68,10 +66,9 @@ function SettingsLayer:initSound(parames)
     local uiButton_qingsong = ccui.Helper:seekWidgetByName(self.root,"Button_qingsong")
     local uiButton_huankuai = ccui.Helper:seekWidgetByName(self.root,"Button_huankuai")
     local uiButton_xiuxian = ccui.Helper:seekWidgetByName(self.root,"Button_xiuxian")
-    local items = {uiButton_qingsong, uiButton_huankuai,uiButton_xiuxian}
+    local items_1 = {uiButton_qingsong, uiButton_huankuai,uiButton_xiuxian}
     local Musictype = cc.UserDefault:getInstance():getFloatForKey("UserDefault_Musictype",1)
-
-    Common:addCheckTouchEventListener(items,false,function(index) 
+    Common:addCheckTouchEventListener(items_1,false,function(index) 
         if index == 1 then
             local mousic = string.format("achannel/%d/music%d.mp3",CHANNEL_ID,index)
             cc.UserDefault:getInstance():setFloatForKey("UserDefault_Musictype",index)
@@ -87,23 +84,23 @@ function SettingsLayer:initSound(parames)
         end
     end)
     if Musictype == 1 then
-        items[1]:setBright(true)
+        items_1[1]:setBright(true)
     elseif Musictype == 2 then
-        items[2]:setBright(true)
+        items_1[2]:setBright(true)
     elseif Musictype == 3 then
-        items[3]:setBright(true)
+        items_1[3]:setBright(true)
     end
     
 
     local uiButton_Mandarin = ccui.Helper:seekWidgetByName(self.root,"Button_Mandarin")
     local uiButton_Dialect = ccui.Helper:seekWidgetByName(self.root,"Button_Dialect")
     local items = {uiButton_Mandarin,uiButton_Dialect}
-    local Volume = cc.UserDefault:getInstance():getFloatForKey("volumeSelect",1)
+    local Volume = cc.UserDefault:getInstance():getIntegerForKey("volumeSelect",1)
     Common:addCheckTouchEventListener(items,false,function(index) 
         if index == 1 then
-            cc.UserDefault:getInstance():setFloatForKey("volumeSelect",0)
+            cc.UserDefault:getInstance():setIntegerForKey("volumeSelect",0)
         elseif index == 2 then
-            cc.UserDefault:getInstance():setFloatForKey("volumeSelect",1)
+            cc.UserDefault:getInstance():setIntegerForKey("volumeSelect",1)
         end
     end)
     if Volume == 0 then

@@ -11,248 +11,184 @@ local Common = require("common.Common")
 local MAXNUM = 20 --最大容量
 function KwxChat:onConfig()
 	self.widget = {
+		{'head_2', 'onClickPage'},
+		{'head_1', 'onClickPage'},
+		{'ListView_chat'},
+		{'scrollview_1'},
+		{'templateemojj'},
+		{'root'},
 		{'mask'},
+		{'text_template'},
 		{'sendClick', 'onSendCall'},
 		{'TextField'},
-		{'tempdes'},
-		{'emTempLate'},
-		{'templatelab'},
-		{'head_2', 'onClickHead'},
-		{'head_1', 'onClickHead'},
-		{'page_1'},
-		{'page_2'},
-		{'templateTextEmoj'},
-		{'head_2_child'},
-		{'head_1_child'},
-		{'Image_kwxChat'},
-		
+		{'ScrollView_2'},
+		{'templateemojj_2'}
 	}
 	self.pageView = {}
-	self.allButton = {}
 end
 
 function KwxChat:onEnter()
-	EventMgr:registListener('SUB_GR_SEND_CHAT', self, self.SUB_GR_SEND_CHAT)
-	EventMgr:registListener('SUB_GF_USER_EXPRESSION', self, self.SUB_GF_USER_EXPRESSION)
 end
 
 function KwxChat:onExit()
-	EventMgr:unregistListener('SUB_GR_SEND_CHAT', self, self.SUB_GR_SEND_CHAT)
-	EventMgr:unregistListener('SUB_GF_USER_EXPRESSION', self, self.SUB_GF_USER_EXPRESSION)
 end
 
 function KwxChat:onCreate(params)
-	self.tempdes:setVisible(false)
-	self.templateTextEmoj:setVisible(false)
-	self.usePage = nil
-	self:addMaskListen()
-	self:initEmSetting()
-	self:initChatLab()
-	self.page_1:setVisible(false)
-	self.page_2:setVisible(false)
-	self.isOS = PLATFORM_TYPE == cc.PLATFORM_OS_APPLE_REAL
-	self:createrInput()
-	if self.isOS then
-		self.TextField:setText('')
-	else
-		self.TextField:setString('')
-	end
-	self:showPage('head_1')
+	self:initOnePage('head_2', 'page_2', handler(self, self.updatePageTwo))
+	self:initOnePage('head_1', 'page_1', handler(self, self.updatePageOne))
+	self:showPage('head_2') --显示1
+	self:moveTo()
+	self:initExpression()
+	self:initLab()
+	--self:initLocalEmoji()
 end
 
-function KwxChat:createrInput( ... )
-
-	if self.isOS then
-		self.TextField = ccui.EditBox:create(cc.size(350.00,60.00), "chat/xitongliaotiandi.png")
-		self.TextField:setPosition(cc.p(0,0))
-		self.TextField:setAnchorPoint(cc.p(0,0))
-		self.TextField:setFontSize(23)
-		self.TextField:setPlaceHolder("最多输入30个字")
-		self.TextField:setPlaceholderFontSize(20)
-		self.TextField:setFontColor(cc.c3b(148, 93, 30))
-		self.TextField:setMaxLength(30)
-		self.TextField:setInputMode(cc.EDITBOX_INPUT_MODE_SINGLELINE)
-		self.TextField:setInputFlag(cc.EDITBOX_INPUT_FLAG_INITIAL_CAPS_WORD)
-		self.TextField:setReturnType(cc.KEYBOARD_RETURNTYPE_DONE)
-		self.Image_kwxChat:addChild(self.TextField)
-	else
-		self.TextField:setVisible(not self.isOS)
-	end
-
-end
-
-function KwxChat:initEmSetting(...)
-	--50 为了做分页给每页表情赋值一个id
-	self:initOneEmjio('page1_Button_1', 'page1_ScrollView_1', 'press_1', 23, 0)
-end
-
---初始化表情 --page1_ScrollView_1
-function KwxChat:initOneEmjio(btnName, listName, press, index, start)
-	local scrollview = self:seekWidgetByNameEx(self.csb, listName)
-	local viewSize = scrollview:getContentSize()
-	self.emTempLate:setVisible(false)
-	local y = self.emTempLate:getSize()
-	local count = 122
-	local contentSize = 0
-	
-	contentSize = math.floor(count / 5) *(64+10) + 50
-	
-	if contentSize <= viewSize.height then
-		contentSize = viewSize.height
-	end
-	scrollview:setInnerContainerSize(cc.size(viewSize.width, contentSize))
-	for i = 1, count do
-		local node = self.emTempLate:clone()
-		node:setVisible(true)
-        local path = string.format( "majiang/ui/chat/emoj/emoji%d.png",(i-1)) --'' .. (i-1)
-		node:loadTextures(path, path)
-		node:setName(i-1)
-		node:ignoreContentAdaptWithSize(true)
-		local row = math.floor((i - 1) / 5) -- 5行
-		local colum =(i - 1) % 5  -- 3行
-		local posx = 50 +((64 + 30) * colum)
-		local posy = contentSize -(64 / 2) *(row + 1) - 40 * row
-		node:setPosition(posx, posy)
-		self:addListener(node, handler(self, self.buttonCall))
-		scrollview:addChild(node)
-	end
-	
-	local btn = self:seekWidgetByNameEx(self.csb, btnName)
-	if btn then
-		self:addListener(btn, handler(self, self.emButtonCall))
-	end
-end
-
---初始化 文本 从100开始
-function KwxChat:initChatLab(...)
-	local chat = require("game.majiang.ChatConfig")
-	local scrollview = self:seekWidgetByNameEx(self.csb, 'page2_ScrollView')
-	local viewSize = scrollview:getContentSize()
-	
-	self.templatelab:setVisible(false)
-	local y = self.templatelab:getSize()
-	local contentSize = #chat *(y.height + 5)
-	scrollview:setInnerContainerSize(cc.size(viewSize.width, contentSize))
-	for i = 1, #chat do
-		local node = self.templatelab:clone()
-		node:setColor(cc.c3b(142,63,0))
-		node:setVisible(true)
-		node:setTitleText(chat[i].text)
-		node:setName(100 + i)
-		local size = node:getSize()
-		local posy = contentSize + 150 -(size.height +20) * i 
-		node:setPosition(100, posy)
-		self:addListener(node, handler(self, self.clickExpressLab))
-		scrollview:addChild(node)
-	end
-end
-
-
-function KwxChat:addMaskListen(...)
+function KwxChat:moveTo(...)
 	self.mask:setTouchEnabled(true)
 	self.mask:addTouchEventListener(function(sender, event)
 		if event == ccui.TouchEventType.ended then
-			self:closeView()
+			self:moveBack()
 		end
 	end)
 end
 
-function KwxChat:addPanelListen(item, call)
-	item:setTouchEnabled(true)
-	item:addTouchEventListener(function(sender, event)
-		if event == ccui.TouchEventType.ended then
-			if call then
-				call(sender)
-			end
-		end
-	end)
-end
 
-function KwxChat:closeView(...)
-	self:setVisible(false)
-end
-
-function KwxChat:onSendCall(...)
-	local contents = ''
-	if self.isOS then
-		contents = self.TextField:getText()
-	else
-		contents = self.TextField:getString()
-	end
-	if #contents == 0 then
-		return
-	end
-	NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GR_USER, NetMsgId.REQ_GR_USER_SEND_CHAT, "dwbnsdns",
-	GameCommon:getRoleChairID(), 0, GameCommon:getUserInfo(GameCommon:getRoleChairID()).cbSex, 32, "", string.len(contents), string.len(contents), contents)
-	self:setVisible(false)
+function KwxChat:moveBack(...)
 	self:removeFromParent()
 end
 
-function KwxChat:clickExpressLab(sender)
+function KwxChat:initOnePage(headName, pageName, call)
 	
-	local chat = require("game.majiang.ChatConfig")
+	local btn = self:seekWidgetByNameEx(self.csb, headName)
+	local press = self:seekWidgetByNameEx(btn, 'press')
+	local page = self:seekWidgetByNameEx(self.csb, pageName)
+	
+	self.pageView[headName] = {press, page, call}
+end
+
+function KwxChat:updatePageOne(...)
+	
+end
+
+function KwxChat:updatePageTwo(...)
+	
+end
+
+function KwxChat:onClickPage(sender)
+	self:showPage(sender:getName())
+end
+
+function KwxChat:showPage(headName)
+	for k, v in pairs(self.pageView) do
+		v[1]:setVisible(k == headName)
+		v[2]:setVisible(k == headName)
+	end
+	
+	local page = self.pageView[headName]
+	if page then
+		if page[3] then
+			page[3]()
+		end
+	end
+end
+
+function KwxChat:initExpression()
+	local name = 'Expression%d.png'
+	local imageName = 'anhua/ui/chat/'
+	local viewSize = self.scrollview_1:getContentSize()
+	for i = 1, 8 do
+		local node = self.templateemojj:clone()
+		node:setVisible(true)
+		node:ignoreContentAdaptWithSize(true)
+		local path = string.format(imageName .. name, i)
+		node:loadTextures(path, path)
+		node:setName(i)
+		local size = node:getSize()
+		local row = math.floor((i - 1) / 4) -- 5行
+		local colum =(i - 1) % 4  -- 3行
+		local posx = 55 +((size.width + 15) * colum)
+		local posy = viewSize.height - 70 -(size.height + 30) * row
+		node:setPosition(posx, posy)
+		self:addListener(node, handler(self, self.buttonCall))
+		self.scrollview_1:addChild(node)
+	end
+end
+
+function KwxChat:initLab(...)
+	local chat = require("game.anhua.ChatConfig")
+	self.text_template:setVisible(false)
+	for i = 1, #chat do
+		local item = self.text_template:clone()
+		item:setVisible(true)
+		item:setSwallowTouches(true)
+		local des = item:getChildByName('des')
+		item:setName(i)
+		self:addListener(item, handler(self, self.clickExpressLab))
+		des:setString(chat[i].text)
+		des:setColor(cc.c3b(99, 73, 41))
+		self.ListView_chat:pushBackCustomItem(item)
+		self.ListView_chat:refreshView()
+	end
+
+end
+
+function KwxChat:initLocalEmoji(...)
+	local anim = require("game.anhua.Animation") [23]
+	local viewSize = self.ScrollView_2:getContentSize()
+	for i = 1, #anim do
+		local node = self.templateemojj_2:clone()
+		node:setVisible(true)
+		local scale = 1
+		node:setScale(scale)
+		local animData = anim[i]
+		local path = ''
+		if animData then
+			path = animData.animFile
+			node:loadTextures(path, path)
+			node:ignoreContentAdaptWithSize(true)
+		end
+		node:setName(i + 100)
+		local size = node:getSize()
+		local row = math.floor((i - 1) / 4) -- 5行
+		local colum =(i - 1) % 4  -- 3行
+		local posx = 70 +((size.width * scale ) * colum)
+		local posy =(viewSize.height - 70 -(size.height * scale ) * row)
+		node:setPosition(posx, posy)
+		self:addListener(node, handler(self, self.buttonCall))
+		self.ScrollView_2:addChild(node)
+	end
+end
+
+function KwxChat:clickExpressLab(sender)
+	self:moveBack()
+	local chat = require("game.anhua.ChatConfig")
 	local index = sender:getName() or 1
-	local chatContent = chat[tonumber(index) - 100]
+	local chatContent = chat[tonumber(index)]
 	local contents = ''
 	if chatContent then
 		contents = chatContent.text
 	end
-	self:hidePage(self.page_2)
 	NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GR_USER, NetMsgId.REQ_GR_USER_SEND_CHAT, "dwbnsdns",
-	GameCommon:getRoleChairID(), index, GameCommon:getUserInfo(GameCommon:getRoleChairID()).cbSex, 32, "", string.len(contents), string.len(contents), contents)
-	self:removeFromParent()
+	GameCommon:getRoleChairID(), tonumber(index), GameCommon:getUserInfo(GameCommon:getRoleChairID()).cbSex, 32, "", string.len(contents), string.len(contents), contents)
 end
 
-function KwxChat:onClickHead(sender)
-	local name = sender:getName()
-	
-	self:showPage(name)
-end
-
-function KwxChat:showPage( hedeName )
-	if hedeName == 'head_1' then
-		self.page_1:setVisible(true)
-		self.page_2:setVisible(false)
-		self:setUsetPage(self.page_1)
-		self.head_1_child:setVisible(true)
-		self.head_2_child:setVisible(false)
-	elseif hedeName == 'head_2' then
-		self.page_2:setVisible(true)
-		self.page_1:setVisible(false)
-		self:setUsetPage(self.page_2)
-		self.head_1_child:setVisible(false)
-		self.head_2_child:setVisible(true)
+function KwxChat:onSendCall(...)
+	local contents = self.TextField:getString()
+	if #contents == 0 then
+		return
 	end
-end
-
-function KwxChat:hidePage(page)
-	local isShow = page:isVisible()
-	page:setVisible(not isShow)
-	self:setUsetPage(page)
-end
-
-function KwxChat:setUsetPage(page)
-	if self.usePage and self.usePage ~= page then
-		self.usePage:setVisible(false)
-	end
-	self.usePage = page
+	self:moveBack()
+	NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GR_USER, NetMsgId.REQ_GR_USER_SEND_CHAT, "dwbnsdns",
+	GameCommon:getRoleChairID(), 0, GameCommon:getUserInfo(GameCommon:getRoleChairID()).cbSex, 32, "", string.len(contents), string.len(contents), contents)
 end
 
 function KwxChat:buttonCall(sender)
+	self:moveBack()
 	local index = sender:getName()
-	self:hidePage(self.page_1)
 	NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GF_GAME, NetMsgId.SUB_GF_USER_EXPRESSION, "ww", index, GameCommon:getRoleChairID())
-	self:removeFromParent()
 end
-
-function KwxChat:emButtonCall(sender)
-	local name = sender:getName()
-	self:showPage(name)
-end
-
 
 function KwxChat:addListener(btn, callback)
-	btn:setPressedActionEnabled(false)
 	btn:addTouchEventListener(function(sender, event)
 		if event == ccui.TouchEventType.ended then
 			Common:palyButton()
@@ -263,13 +199,5 @@ function KwxChat:addListener(btn, callback)
 	end)
 end
 
-
-function KwxChat:SUB_GR_SEND_CHAT(event)
-
-end
-
-function KwxChat:SUB_GF_USER_EXPRESSION(event)
-
-end
 
 return KwxChat 

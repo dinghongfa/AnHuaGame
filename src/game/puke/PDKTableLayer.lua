@@ -357,30 +357,39 @@ function PDKTableLayer:doAction(action,pBuffer)
 end
 
 function PDKTableLayer:showCountDown(wChairID,isHide)    
-    -- if PDKGameCommon.tableConfig.tableParameter.bMustOutCard == 1 then
-    --     isHide = false
-    -- end
     self:resetUserCountTimeAni()
-    local viewID = PDKGameCommon:getViewIDByChairID(wChairID)
-    local Panel_player = ccui.Helper:seekWidgetByName(self.root,string.format("Panel_player%d",viewID))
-    local Panel_countdown = Panel_player:getChildByName("Panel_countdown")
-    local uiAtlasLabel_countdownTime = Panel_countdown:getChildByName("AtlasLabel_countdownTime")
-    Panel_countdown:setVisible(true)
-
-    uiAtlasLabel_countdownTime:stopAllActions()
-    uiAtlasLabel_countdownTime:setString(15)
-    local function onEventTime(sender,event)
-        local currentTime = tonumber(uiAtlasLabel_countdownTime:getString())
-        currentTime = currentTime - 1
-        if currentTime < 0 then
-            currentTime = 0
-            uiAtlasLabel_countdownTime:stopAllActions()
-        end
-        uiAtlasLabel_countdownTime:setString(tostring(currentTime))
-    end
-    uiAtlasLabel_countdownTime:runAction(cc.RepeatForever:create(cc.Sequence:create(cc.DelayTime:create(1),cc.CallFunc:create(onEventTime))))
+	local viewID = PDKGameCommon:getViewIDByChairID(wChairID, true)
+	if viewsID ~= nil then 
+		viewID = viewsID
+	end 
+	local Panel_player = ccui.Helper:seekWidgetByName(self.root, string.format("Panel_player%d", viewID))
+	local Panel_countdown = Panel_player:getChildByName("Panel_countdown")
+	local AtlasLabel_countdownTime = Panel_countdown:getChildByName("AtlasLabel_countdownTime")
+	Panel_countdown:setVisible(true)
+	local Image_warning = Panel_countdown:getChildByName('Image_warning')
+	Image_warning:setVisible(false)
+	-- local Image_warning_all = ccui.Helper:seekWidgetByName(self.root, 'Image_warning_all')
+	-- Image_warning_all:setVisible(false)
+	AtlasLabel_countdownTime:stopAllActions()
+	AtlasLabel_countdownTime:setString(15)
+	local function onEventTime(sender, event)
+		local currentTime = tonumber(AtlasLabel_countdownTime:getString())
+		currentTime = currentTime - 1
+		if currentTime < 0 then
+			currentTime = 0
+			AtlasLabel_countdownTime:stopAllActions()
+			if viewsID ~= nil then
+				Image_warning:setVisible(true)
+				-- Image_warning_all:setVisible(false)
+			else  
+				Image_warning:setVisible(PDKGameCommon.meChairID == wChairID)
+				-- Image_warning_all:setVisible(PDKGameCommon.meChairID ~= wChairID)
+			end 
+		end
+		AtlasLabel_countdownTime:setString(tostring(currentTime))
+	end
+	AtlasLabel_countdownTime:runAction(cc.RepeatForever:create(cc.Sequence:create(cc.DelayTime:create(1), cc.CallFunc:create(onEventTime))))
     
-   -- Button_notoutCard
     local uiPanel_out = ccui.Helper:seekWidgetByName(self.root,"Panel_out")
     uiPanel_out:setVisible(false)
     local uiPanel_notout = ccui.Helper:seekWidgetByName(self.root,"Panel_notout")
@@ -443,13 +452,13 @@ end
 --@ fux
 function PDKTableLayer:changeBgLayer()
     local uiPanel_bg = ccui.Helper:seekWidgetByName(self.root,"Panel_bg")
-    local UserDefault_Pukepaizhuo = cc.UserDefault:getInstance():getIntegerForKey('PDKBgNum',2)
-    if UserDefault_Pukepaizhuo < 0 or UserDefault_Pukepaizhuo > 4 then
-        UserDefault_Pukepaizhuo = 1
-        cc.UserDefault:getInstance():setIntegerForKey('PDKBgNum',UserDefault_Pukepaizhuo)
-    end
-    uiPanel_bg:removeAllChildren()
-    uiPanel_bg:addChild(ccui.ImageView:create(string.format("puke/ui/beijing_%d.jpg",UserDefault_Pukepaizhuo)))
+    -- local UserDefault_Pukepaizhuo = cc.UserDefault:getInstance():getIntegerForKey('PDKBgNum',2)
+    -- if UserDefault_Pukepaizhuo < 0 or UserDefault_Pukepaizhuo > 4 then
+    --     UserDefault_Pukepaizhuo = 1
+    --     cc.UserDefault:getInstance():setIntegerForKey('PDKBgNum',UserDefault_Pukepaizhuo)
+    -- end
+    -- uiPanel_bg:removeAllChildren()
+    -- uiPanel_bg:addChild(ccui.ImageView:create(string.format("puke/ui/beijing_%d.jpg",UserDefault_Pukepaizhuo)))
     local a = 1
 end
 
@@ -737,15 +746,25 @@ function PDKTableLayer:initUI()
 
     --UI层
     local uiButton_menu = ccui.Helper:seekWidgetByName(self.root,"Button_menu")
+
+    local TopSetting = ccui.Helper:seekWidgetByName(self.root, "TopSetting")
+    TopSetting:setVisible(false)
+    
     local uiPanel_function = ccui.Helper:seekWidgetByName(self.root,"Panel_function")
     uiPanel_function:setEnabled(false)
     Common:addTouchEventListener(uiButton_menu,function() 
-        uiPanel_function:stopAllActions()
-        uiPanel_function:runAction(cc.Sequence:create(cc.MoveTo:create(0.2,cc.p(-99,0)),cc.CallFunc:create(function(sender,event) 
-            uiPanel_function:setEnabled(true)
-        end)))
-        uiButton_menu:stopAllActions()
-        uiButton_menu:runAction(cc.ScaleTo:create(0.2,0))
+        -- uiPanel_function:stopAllActions()
+        -- uiPanel_function:runAction(cc.Sequence:create(cc.MoveTo:create(0.2,cc.p(-99,0)),cc.CallFunc:create(function(sender,event) 
+        --     uiPanel_function:setEnabled(true)
+        -- end)))
+        -- uiButton_menu:stopAllActions()
+        -- uiButton_menu:runAction(cc.ScaleTo:create(0.2,0))
+
+        if TopSetting:isVisible() then
+			TopSetting:setVisible(false)
+		else
+			TopSetting:setVisible(true)
+		end
     end)
     uiPanel_function:addTouchEventListener(function(sender,event)
         if event == ccui.TouchEventType.ended then
@@ -775,10 +794,10 @@ function PDKTableLayer:initUI()
         UserDefault_Pukepaizhuo = 1
         cc.UserDefault:getInstance():setIntegerForKey('PDKBgNum',UserDefault_Pukepaizhuo)
     end
-    if UserDefault_Pukepaizhuo ~= 0 then
-        uiPanel_bg:removeAllChildren()
-        uiPanel_bg:addChild(ccui.ImageView:create(string.format("puke/ui/beijing_%d.jpg",UserDefault_Pukepaizhuo)))
-    end
+    -- if UserDefault_Pukepaizhuo ~= 0 then
+    --     uiPanel_bg:removeAllChildren()
+    --     uiPanel_bg:addChild(ccui.ImageView:create(string.format("puke/ui/beijing_%d.jpg",UserDefault_Pukepaizhuo)))
+    -- end
     
     Common:addTouchEventListener(ccui.Helper:seekWidgetByName(self.root,"Button_font"),function() 
         local UserDefault_PukeCard = nil 
@@ -811,29 +830,34 @@ function PDKTableLayer:initUI()
         uiPanel_night:setVisible(true)
     end
     Common:addTouchEventListener(ccui.Helper:seekWidgetByName(self.root,"Button_settings"),function() 
-        -- local path = self:requireClass('PDKSetting')
-		-- local box = require("app.MyApp"):create():createGame(path)
-        -- self:addChild(box)
-        if PDKGameCommon.tableConfig.nTableType == TableType_GoldRoom or PDKGameCommon.tableConfig.nTableType == TableType_RedEnvelopeRoom then  
-            require("common.SceneMgr"):switchOperation(require("app.MyApp"):create(2):createView("SettingsLayer"))
-        else  
-            require("common.SceneMgr"):switchOperation(require("app.MyApp"):create():createView("SettingsLayer"))
-        end
+        local path = self:requireClass('SettingsLayer')
+		local box = require("app.MyApp"):create(PDKGameCommon):createGame(path)
+        -- self:addChild(box)    aaaaaaaaa
+       -- return cc.SimpleAudioEngine:getInstance():playEffect("puke/sound/chat/fix_b_1.mp3")--puke/sound/chat/fix_b_1.mp3
+       -- require("common.SceneMgr"):switchOperation(require("app.MyApp"):create(PDKGameCommon):createView("game.puke.SettingsLayer"))
+        -- if PDKGameCommon.tableConfig.nTableType == TableType_GoldRoom or PDKGameCommon.tableConfig.nTableType == TableType_RedEnvelopeRoom then  
+        --     require("common.SceneMgr"):switchOperation(require("app.MyApp"):create(2):createView("SettingsLayer"))
+        -- else  
+        --     require("common.SceneMgr"):switchOperation(require("app.MyApp"):create():createView("SettingsLayer"))
+        -- end
     end)
     local uiButton_expression = ccui.Helper:seekWidgetByName(self.root,"Button_expression")
     uiButton_expression:setPressedActionEnabled(true)
     local function onEventExpression(sender,event)
         if event == ccui.TouchEventType.ended then
-            Common:palyButton()
-            local child = self:getChildByName('PDKChat')
-			if child and child:getName() == 'PDKChat' then
-				child:setVisible(true)
-				return true
-			end
-			local path = self:requireClass('PDKChat')
-			local box = require("app.MyApp"):create():createGame(path)
-			box:setName('PDKChat')
-			self:addChild(box)
+          --  Common:palyButton()
+            -- local child = self:getChildByName('PDKChat')
+			-- if child and child:getName() == 'PDKChat' then
+			-- 	child:setVisible(true)
+			-- 	return true
+			-- end
+			-- local path = self:requireClass('PDKChat')
+			-- local box = require("app.MyApp"):create():createGame(path)
+			-- box:setName('PDKChat')
+            -- self:addChild(box)
+            local data = 83 
+            local box = require("app.MyApp"):create(data):createGame('game.puke.KwxChat')
+            self:addChild(box)
         end
     end
     uiButton_expression:addTouchEventListener(onEventExpression)
@@ -957,7 +981,7 @@ function PDKTableLayer:initUI()
             uiButton_Invitation:setVisible(false)
             -- uiButton_out:setPositionX(visibleSize.width*0.5)   
         end
-        uiText_des:setString(string.format("房间号:%d 局数:%d/%d",PDKGameCommon.tableConfig.wTbaleID, PDKGameCommon.tableConfig.wCurrentNumber, PDKGameCommon.tableConfig.wTableNumber))
+        uiText_des:setString(string.format("房间号:%d\n局数:%d/%d",PDKGameCommon.tableConfig.wTbaleID, PDKGameCommon.tableConfig.wCurrentNumber, PDKGameCommon.tableConfig.wTableNumber))
 
         -- ccs.ArmatureDataManager:getInstance():addArmatureFileInfo("game/dengdaihaoyou/dengdaihaoyou.ExportJson")
         -- local waitArmature=ccs.Armature:create("dengdaihaoyou")
@@ -1433,8 +1457,8 @@ function PDKTableLayer:showChat(pBuffer)
 	uiImage_chat:runAction(cc.Sequence:create(cc.ScaleTo:create(0.1, 1), cc.DelayTime:create(5), cc.Hide:create()))
 	local wKindID = PDKGameCommon.tableConfig.wKindID
 	local Chat = nil
-	local Chat = require("game.puke.ChatConfig")
-    local data = Chat[pBuffer.dwSoundID - 100]
+	local Chat = require("game.anhua.ChatConfig")
+    local data = Chat[pBuffer.dwSoundID]
 
 	local sound = nil
 	if data then
@@ -1442,18 +1466,13 @@ function PDKTableLayer:showChat(pBuffer)
 	end
 	local soundData = nil
 	local soundFile = ''
-	if data then
-		soundData = sound[1]
-		if PDKGameCommon.language ~= 0 then
-			local wKindID = PDKGameCommon.tableConfig.wKindID
-			if wKindID == 47 or wKindID == 48 or wKindID == 49 or wKindID == 60 then
-				soundData = sound[2]
-			end
-		end
-		
+    if data then
+     ------------------aaaaaaaaaaaaaaa   
+        soundData = sound[PDKGameCommon.language]
 		if soundData ~= nil then
 			soundFile = soundData[pBuffer.cbSex]
-		end
+        end
+		
 	end
 	
 	if data ~= nil and soundFile ~= "" then
@@ -1487,7 +1506,12 @@ function PDKTableLayer:showReward(pBuffer)
 end
 
 function PDKTableLayer:showExperssion(pBuffer)
-	self:playSpine(pBuffer)
+    print('----------->>>收到消息', pBuffer.wIndex)
+	if pBuffer.wIndex <= 100 then
+		self:playFrameAnimation(pBuffer)
+	else
+		self:playSpine(pBuffer)
+	end
 end
 
 function PDKTableLayer:playSpine(pBuffer)
@@ -1507,73 +1531,99 @@ function PDKTableLayer:playSpine(pBuffer)
     
 	local worldPos = cc.p(userAnim:getParent():convertToWorldSpace(cc.p(userAnim:getPosition())))
 
-	local path = ''
-	local index = math.floor(pBuffer.wIndex / 50) + 1
-	local animIndex
-	if index == 1 then --第一页
-		animIndex = 23
-	elseif index == 2 then --第二页
-		animIndex = 24
+	local path = string.format('anhua/chat/%d', pBuffer.wIndex - 100)
+	local skeletonNode = cusNode:getChildByName('hhchat_' .. pBuffer.wIndex)
+	if not skeletonNode then
+		skeletonNode = sp.SkeletonAnimation:create(path .. '.json', path .. '.atlas', 0.6)
+		skeletonNode:setScale(0.7)
+		cusNode:addChild(skeletonNode)
+		skeletonNode:setName('hhchat_' .. pBuffer.wIndex)
 	end
-	local anim
-	if animIndex then
-		anim = require("game.puke.Animation") [animIndex]
+	skeletonNode:setPosition(worldPos)
+	skeletonNode:setAnimation(0, 'animation', true)
+	skeletonNode:setVisible(true)
+	skeletonNode:runAction(cc.Sequence:create(cc.DelayTime:create(2.5), cc.CallFunc:create(function()
+		skeletonNode:setVisible(false)
+	end)))
+	
+	local Chat = require("game.anhua.Animation") [23]
+	local data = Chat[pBuffer.wIndex - 100]
+	local sound = nil
+	if data then
+		sound = data.sound
 	end
-	if anim then
-        local id = math.mod(pBuffer.wIndex, 50)
-
-
-		local data = anim[id]
-		if data then
-			local skeletonNode = cusNode:getChildByName('pdkskele_' .. pBuffer.wIndex)
-			if not skeletonNode then
-				skeletonNode = sp.SkeletonAnimation:create(data.animFile .. '.json', data.animFile .. '.atlas')
-				cusNode:addChild(skeletonNode)
-				skeletonNode:setName('pdkskele_' .. pBuffer.wIndex)
+	local soundData = nil
+	local soundFile = ''
+	if sound then
+		soundData = sound[PDKGameCommon.language]
+		if soundData ~= nil then
+			local player = PDKGameCommon.player[pBuffer.wChairID]
+			local csbSex = 0
+			if player then
+				csbSex = player.cbSex
 			end
-			skeletonNode:setPosition(worldPos)
-			skeletonNode:setAnimation(0, data.animName, false)
-			skeletonNode:setVisible(true)
-
-			local idx = 1
-			skeletonNode:registerSpineEventHandler(function()
-				idx = idx + 1
-				if idx > 3 then
-					-- skeletonNode:runAction(cc.Sequence:create(cc.DelayTime:create(0), cc.RemoveSelf:create()))
-					skeletonNode:setVisible(false)
-				else
-					skeletonNode:setAnimation(0, data.animName, false)
-				end
-			end, sp.EventType.ANIMATION_COMPLETE)
-			
-			local sound = data.sound
-			local soundData = nil
-			local soundFile = ''
-			if sound then
-				
-				soundData = sound[PDKGameCommon.language]
-				if PDKGameCommon.language ~= 0 then
-					local wKindID = PDKGameCommon.tableConfig.wKindID
-					if wKindID == 47 or wKindID == 48 or wKindID == 49 or wKindID == 60 then
-						soundData = sound[2]
-					end
-				end
-				
-				if soundData ~= nil then
-					local player = PDKGameCommon.player[pBuffer.wChairID]
-					local csbSex = 0
-					if player then
-						csbSex = player.cbSex
-					end
-					soundFile = soundData[csbSex]
-				end
-			end
-			
-			if soundFile and soundFile ~= "" then
-				require("common.Common"):playEffect(soundFile)
-			end
+			soundFile = soundData[csbSex]
 		end
 	end
+	
+	if data ~= nil and soundFile ~= "" then
+		require("common.Common"):playEffect(soundFile)
+	end
+end
+
+function PDKTableLayer:playFrameAnimation(pBuffer)
+	local viewID = PDKGameCommon:getViewIDByChairID(pBuffer.wChairID, true)
+	local Panel_player = ccui.Helper:seekWidgetByName(self.root, string.format("Panel_player%d", viewID))
+	if Panel_player then
+		local Image_avatarFrame = Panel_player:getChildByName('Panel_playerInfo')
+		local size = Image_avatarFrame:getSize()
+		local endIndex = 0
+		--if pBuffer.wIndex == 1 then
+		
+		self:playerExportAnim(pBuffer.wIndex,Image_avatarFrame)
+
+		local Chat = require("game.anhua.Animation") [24]
+		local data = Chat[pBuffer.wIndex]
+		local sound = nil
+		if data then
+			sound = data.sound
+		end
+		local soundData = nil
+		if sound then
+			soundData = sound[0]
+		end
+		
+		if data ~= nil and soundData ~= "" then
+			require("common.Common"):playEffect(soundData)
+		end
+
+	end
+end
+
+function PDKTableLayer:playerExportAnim( index,target )
+	local Animation = require("game.anhua.Animation")
+
+	local data = Animation[24]
+	local AnimationData = data[index]
+	if not AnimationData or not data then
+		return
+	end
+
+	local am = self:playDH(target,AnimationData.animFile,AnimationData.animName,AnimationData.playName)
+	am:setPosition(80,80)
+end
+
+function PDKTableLayer:playDH( target, animFile,animName,playName)
+	ccs.ArmatureDataManager:getInstance():addArmatureFileInfo(animFile)
+	local armature = ccs.Armature:create(animName)
+	target:addChild(armature,100)
+	if playName and playName ~= '' then
+		armature:getAnimation():play(playName,-1,0)
+	end
+	armature:runAction(cc.Sequence:create(
+		cc.DelayTime:create(1.5),
+		cc.RemoveSelf:create()))
+	return armature
 end
 
 --提取牌型
@@ -2598,11 +2648,13 @@ end
 --]
 function PDKTableLayer:resetUserCountTimeAni()
     for i = 1, 3 do
-        local Panel_player = ccui.Helper:seekWidgetByName(self.root,string.format("Panel_player%d",i))
-        local Panel_countdown = Panel_player:getChildByName("Panel_countdown")
-        local AtlasLabel_countdownTime = Panel_countdown:getChildByName("AtlasLabel_countdownTime")
-        Panel_countdown:setVisible(false)
-        AtlasLabel_countdownTime:stopAllActions()
+		local Panel_player = ccui.Helper:seekWidgetByName(self.root, string.format("Panel_player%d", i))
+		local Panel_countdown = Panel_player:getChildByName("Panel_countdown")
+		local AtlasLabel_countdownTime = Panel_countdown:getChildByName("AtlasLabel_countdownTime")
+		Panel_countdown:setVisible(false)
+		AtlasLabel_countdownTime:stopAllActions()
+		local Image_warning = Panel_countdown:getChildByName('Image_warning')
+		Image_warning:setVisible(false)
 
         -- local aniNode = Panel_countdown:getChildByName('AniTimeCount' .. i)
         -- if not aniNode then

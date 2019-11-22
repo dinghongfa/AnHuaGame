@@ -132,7 +132,7 @@ end
 
 --初始化 文本 从100开始
 function PDKChat:initChatLab(...)
-	local chat = require("game.puke.ChatConfig")
+	local chat = require("game.anhua.ChatConfig")
 	local scrollview = self:seekWidgetByNameEx(self.csb, 'page2_ScrollView')
 	local viewSize = scrollview:getContentSize()
 	local imgPath = 'puke/face/'
@@ -196,7 +196,7 @@ end
 
 function PDKChat:clickExpressLab(sender)
 	
-	local chat = require("game.puke.ChatConfig")
+	local chat = require("game.anhua.ChatConfig")
 	local index = sender:getName() or 1
 	local chatContent = chat[tonumber(index) - 100]
 	local contents = ''

@@ -84,12 +84,15 @@ function GameplayLayer:onCreate(parameter)
         for key, var in pairs(games) do
             local wKindID = tonumber(var)
             local data = StaticData.Games[wKindID]
-            if UserData.Game.tableGames[wKindID] ~= nil and Bit:_and(data.friends,1) ~= 0  and (data.type == type or type == nil ) and (wKindID ~= 51 or locationID == 51 or tableNiuNiuUserID[UserData.User.userID] ~= nil) and (wKindID ~= 53 or locationID == 53 or tableNiuNiuUserID[UserData.User.userID] ~= nil) then
+            if UserData.Game.tableGames[wKindID] ~= nil and Bit:_and(data.friends,1) ~= 0  and (data.type == type or type == nil ) and (StaticData.Games[wKindID].isVisible == 1 or UserData.User.wPrivilege == 1) then
                 local item = uiButton_iten:clone()
+
+                item.press = self:seekWidgetByNameEx(item,'Image_press')
                 item.wKindID = wKindID
                 item:setBright(false)
                 item:setVisible(true)
-                item:loadTextures(data.icon1,data.icon1,data.icons)
+                item.press:loadTexture(data.icon1)
+                -- item:loadTextures(data.icon1,data.icon1,data.icons)
                 uiListView_games:pushBackCustomItem(item)
                 item:setAnchorPoint(cc.p(0,0.5))
                 Common:addTouchEventListener(item,function() self:showGameParameter(wKindID) end)

@@ -117,7 +117,7 @@ function ActivityLayer:onCreate(parames)
 
         end   
     end
-    showUI(2)  
+    showUI(3)  
     
     Common:addTouchEventListener(uiButton_meiju,function() showUI(1)  end)  
     Common:addTouchEventListener(uiButton_daili,function() showUI(2)  end)  

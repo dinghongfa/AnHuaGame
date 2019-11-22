@@ -90,8 +90,7 @@ function GameLayer:startGame(...)
     self.tableLayer:updateGameState(PDKGameCommon.GameState_Init)
     self.isRunningActions = false
     self.userMsgArray = {} --消息缓存
-    PDKGameCommon.regionSound = 0
-    
+    PDKGameCommon.language = cc.UserDefault:getInstance():getIntegerForKey('volumeSelect', 0) 
     local uiButton_Invitation = ccui.Helper:seekWidgetByName(self.root,"Button_Invitation")
     if StaticData.Hide[CHANNEL_ID].btn4 ~= 1 then
         uiButton_Invitation:setVisible(false)
@@ -271,7 +270,7 @@ function GameLayer:readBuffer(luaFunc, mainCmdID, subCmdID)
             local randCeil = PDKGameCommon.tableConfig.wCurrentNumber or 0
             local randFloor = PDKGameCommon.tableConfig.wTableNumber or 0
             uiText_title:setString(StaticData.Games[PDKGameCommon.tableConfig.wKindID].name)
-            uiText_des:setString(string.format("房间号:%d 局数:%d/%d",roomId,randCeil,randFloor))
+            uiText_des:setString(string.format("房间号:%d\n局数:%d/%d",roomId,randCeil,randFloor))
             return true
             
         elseif subCmdID == NetMsgId.SUB_GR_DISMISS_TABLE_SUCCESS then
@@ -822,9 +821,15 @@ function GameLayer:updatePlayerInfo()
             Common:requestUserAvatar(PDKGameCommon.player[wChairID].dwUserID,PDKGameCommon.player[wChairID].szPto,uiImage_avatar,"img")
             local uiText_name = ccui.Helper:seekWidgetByName(uiPanel_player,"Text_name")
             uiText_name:setString(PDKGameCommon.player[wChairID].szNickName)
+
+            local uiText_ip = ccui.Helper:seekWidgetByName(uiPanel_player,"Text_ip")
+            uiText_ip:setString(string.format("UID:%d",PDKGameCommon.player[wChairID].dwUserID) )
             local Text_score = ccui.Helper:seekWidgetByName(uiPanel_player,"Text_score") 
             --个人添加
             local uiText_score = ccui.Helper:seekWidgetByName(uiPanel_player,"Text_score")
+            if viewID == 1 then 
+                local  a = 1 
+            end 
             local dwGold = Common:itemNumberToString(PDKGameCommon.player[wChairID].lScore)
             uiText_score:setString(tostring(dwGold))             
         end
@@ -878,6 +883,9 @@ function GameLayer:updatePlayerlScore()
         local uiPanel_player = ccui.Helper:seekWidgetByName(self.root,string.format("Panel_player%d",viewID))
         local uiText_score = ccui.Helper:seekWidgetByName(uiPanel_player,"Text_score")
         local dwGold = Common:itemNumberToString(PDKGameCommon.player[wChairID].lScore)
+        if viewID == 1 then 
+            local  a = 1 
+        end 
         uiText_score:setString(tostring(dwGold))   
     end
 end

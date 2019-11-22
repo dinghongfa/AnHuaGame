@@ -195,7 +195,40 @@ function RoomCreateLayer:onCreate(parameter)
 
     --可选
     local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(4),"ListView_parameter"):getItems()
-    Common:addCheckTouchEventListener(items,true)
+    Common:addCheckTouchEventListener(items,true,function(index) 
+        local items_9 = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(9),"ListView_parameter"):getItems()
+        if items[1]:isBright() then
+            for key, var in pairs(items_9) do
+                var:setBright(false)
+                var:setEnabled(false)
+                var:setColor(cc.c3b(152,148,142))
+                local uiText_desc = ccui.Helper:seekWidgetByName(var,"Text_desc")
+                if uiText_desc ~= nil then 
+                    uiText_desc:setTextColor(cc.c3b(140,102,57))
+                end
+            end
+        else
+            local isHaveDefault = false
+            for key, var in pairs(items_9) do
+                var:setEnabled(true)
+                var:setColor(cc.c3b(255,255,255))
+                local uiText_desc = ccui.Helper:seekWidgetByName(var,"Text_desc")
+                if uiText_desc ~= nil then 
+                    uiText_desc:setTextColor(cc.c3b(109,58,44))
+                end
+                -- if var:isBright() then
+                --     isHaveDefault = true
+                -- end
+            end
+            -- if isHaveDefault == false then
+            --     items[1]:setBright(true)
+            --     local uiText_desc = ccui.Helper:seekWidgetByName(items[1],"Text_desc")
+            --     if uiText_desc ~= nil then 
+            --         uiText_desc:setTextColor(cc.c3b(238,105,40))
+            --     end  
+            -- end           
+        end
+    end)
 
     
     -- local uiPanel_wanFaContents = ccui.Helper:seekWidgetByName(self.root,"Panel_wanFaContents")
@@ -384,6 +417,39 @@ function RoomCreateLayer:onCreate(parameter)
             uiText_desc:setTextColor(cc.c3b(215,86,31))
         end
     end 
+
+    --带四
+    local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(9),"ListView_parameter"):getItems()
+    Common:addCheckTouchEventListener(items,true)
+
+
+    if self.recordCreateParameter["b4Add2"] ~= nil and self.recordCreateParameter["b4Add2"] == 0 then
+        items[1]:setBright(true)
+        local uiText_desc = ccui.Helper:seekWidgetByName(items[1],"Text_desc")
+        if uiText_desc ~= nil then 
+            uiText_desc:setTextColor(cc.c3b(215,86,31))
+        end
+    end
+
+    if self.recordCreateParameter["b4Add3"] ~= nil and self.recordCreateParameter["b4Add3"] == 0 then
+        items[2]:setBright(true)
+        local uiText_desc = ccui.Helper:seekWidgetByName(items[2],"Text_desc")
+        if uiText_desc ~= nil then 
+            uiText_desc:setTextColor(cc.c3b(215,86,31))
+        end
+    end
+    
+    if self.recordCreateParameter["bBombSeparation"] == nil or self.recordCreateParameter["bBombSeparation"] == 0 then
+        for key, var in pairs(items) do
+            var:setBright(false)
+            var:setEnabled(false)
+            var:setColor(cc.c3b(152,148,142))
+            local uiText_desc = ccui.Helper:seekWidgetByName(var,"Text_desc")
+            if uiText_desc ~= nil then 
+                uiText_desc:setTextColor(cc.c3b(140,102,57))
+            end
+        end
+    end
     
     if self.showType == 3 then
         self.tableFriendsRoomParams = {[1] = {wGameCount = 1}}
@@ -570,19 +636,35 @@ function RoomCreateLayer:onEventCreate(nTableType)
     end
 
     --飘分
-    local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(7),"ListView_parameter"):getItems()
+    local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(8),"ListView_parameter"):getItems()
     if items[1]:isBright() then
         tableParameter.bMustNextWarn = 0
     else
         tableParameter.bMustNextWarn = 1
     end
-    tableParameter.b4Add3 = 0 
+
+
+     --飘分
+     local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(9),"ListView_parameter"):getItems()
+     if items[1]:isBright() then
+         tableParameter.b4Add2 = 1
+     else
+         tableParameter.b4Add2 = 0
+     end
+
+     if items[2]:isBright() then
+        tableParameter.b4Add3 = 1
+    else
+        tableParameter.b4Add3 = 0
+    end
+
+    -- tableParameter.b4Add3 = 0 
     if tableParameter.b15Or16 == 1 then 
         tableParameter.bSpringMinCount = 16
     else
         tableParameter.bSpringMinCount = 15
     end 
-    
+    tableParameter.bHostedTime = 0
     tableParameter.bAbandon = 0
     tableParameter.bCheating = 0
     tableParameter.bFalseSpring = 0

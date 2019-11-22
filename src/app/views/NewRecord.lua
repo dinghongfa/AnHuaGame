@@ -76,10 +76,10 @@ function NewRecord:onCreate(params)
 	self.oldTips = nil
 	self:initUI()
 	self:initRecordData()
-	self.cellSize = cc.size(1040, 175) --宽 高
-	self.viewSize = cc.size(1030, 580)
+	self.cellSize = cc.size(1020, 175) --宽 高
+	self.viewSize = cc.size(1018, 480)
 	self.listView = Common:_createList(self.viewSize, handler(self, self._itemUpdateCall), self.cellSize.width, self.cellSize.height, handler(self, self.getDataCount), nil, nil, nil, false)
-	self.listView:setPosition(cc.p(257,60))
+	self.listView:setPosition(cc.p(240,90))
 	self.listView:setBounceable(false)
 	self.Panel_record:addChild(self.listView)
 	self:reqRecord(DAY_TYPE.TODAY,RECORD_TYPE.PERSON_RECORD)
@@ -90,13 +90,21 @@ function NewRecord:onCreate(params)
 
 	self:canGoTo()
 
-	-- if stype == 1 then 
-        self.Button_choice:setBright(true)
-    --     self:switchUI(1)
-    -- else
-    --     self.Button_choice:setBright(false)
-    --     self:switchUI(2)
-    -- end 
+	if stype == 1 then 
+		self.Button_choice:setBright(true)
+		
+		self.Button_Ordinary:setBright(true)
+		self.Button_friends:setBright(false)
+		--self:switchUI(1)
+		self:chageRecord(RECORD_TYPE.PERSON_RECORD)
+	else
+		self.Button_choice:setBright(false)
+		
+		self.Button_Ordinary:setBright(false)
+		self.Button_friends:setBright(true)
+		self:chageRecord(RECORD_TYPE.CLUB_RECORD)
+        --self:switchUI(2)
+    end 
 end
 
 --是否需要跳转
@@ -233,7 +241,7 @@ end
 
 function NewRecord:onchoice()
     if self.Button_choice:isBright() == true then 
-        self.Button_choice:setBright(false)
+		self.Button_choice:setBright(false)
 		--self:switchUI(2)
 		self:chageRecord(RECORD_TYPE.CLUB_RECORD)
     else
@@ -245,11 +253,15 @@ end
 
 function NewRecord:onOrdinary()
 	self.Button_choice:setBright(true)
+	self.Button_Ordinary:setBright(true)
+	self.Button_friends:setBright(false)
 	self:chageRecord(RECORD_TYPE.PERSON_RECORD)
 end 
 
 function NewRecord:onfriends()
 	self.Button_choice:setBright(false)
+	self.Button_Ordinary:setBright(false)
+	self.Button_friends:setBright(true)
 	self:chageRecord(RECORD_TYPE.CLUB_RECORD)
 end 
 

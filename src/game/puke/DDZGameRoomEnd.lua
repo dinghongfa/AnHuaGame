@@ -41,9 +41,9 @@ local posDis = {
 
 local listPos = 
 {
-	[2] = cc.p(520.00,418),
-	[3] = cc.p(388.00,418),
-	[4] = cc.p(372,418),
+	[2] = cc.p(486.40,375),
+	[3] = cc.p(318.40,375),
+	[4] = cc.p(372,375),
 }
 
 function DDZGameRoomEnd:onConfig()
@@ -58,7 +58,7 @@ function DDZGameRoomEnd:onConfig()
 		{'tishi_des'},
 		{'template_player'},
 		{'listview'},
-		{'Panel_text_template'},
+	--	{'Panel_text_template'},
 		{'Panel_Childs'}
 	}
 end
@@ -119,29 +119,33 @@ function DDZGameRoomEnd:initPlayerInfo( ... )
 		local total_score = self:seekWidgetByNameEx(item,'total_score')
 		local total_score_1 = self:seekWidgetByNameEx(item,'total_score_1')
 
-		local ListView_score = self:seekWidgetByNameEx(item,'ListView_score')
-		for i=1,self.pBuffer.dwDataCount do
-			if data.lScore[i] then
-				local score_item = self.Panel_text_template:clone()
-				local round = self:seekWidgetByNameEx(score_item,'Text_round')
-				local score = self:seekWidgetByNameEx(score_item,'Text_score')
-				setNameColor(round,string.format( "第%d局",i))
-				setNameColor(score,data.lScore[i])
-				ListView_score:pushBackCustomItem(score_item)
-				ListView_score:refreshView()
-			end
+		--local ListView_score = self:seekWidgetByNameEx(item,'ListView_score')
+		-- for i=1,self.pBuffer.dwDataCount do
+		-- 	if data.lScore[i] then
+		-- 		local score_item = self.Panel_text_template:clone()
+		-- 		local round = self:seekWidgetByNameEx(score_item,'Text_round')
+		-- 		local score = self:seekWidgetByNameEx(score_item,'Text_score')
+		-- 		setNameColor(round,string.format( "第%d局",i))
+		-- 		setNameColor(score,data.lScore[i])
+		-- 		ListView_score:pushBackCustomItem(score_item)
+		-- 		ListView_score:refreshView()
+		-- 	end
+		-- end
+		for i = 1 , 3 do 
+			local score = self:seekWidgetByNameEx(item,string.format( "score%d",i))	
+			score:setText(string.format("%d", data.totalScore))
 		end
-
 		Image_gs:setVisible(isWinner)
 		Image_bigwinner:setVisible(isWinner)
 		Image_normal:setVisible(not isWinner)
-		if data.totalScore >= 0 then
-			total_score_1:setText(data.totalScore)
-		else
-			total_score:setText(data.totalScore)
-		end
+
 		total_score_1:setVisible(data.totalScore >= 0)
 		total_score:setVisible(data.totalScore < 0)
+		if data.totalScore >= 0 then
+			total_score_1:setText(string.format("%d", data.totalScore))
+		else
+			total_score:setText(string.format("%d", data.totalScore))
+		end
 		Common:requestUserAvatar(data.dwUserID, data.player.szPto, image_player, "img")
 		local L_name = Common:getShortName(data.player.szNickName,8,6)
 		--setNameColor(name,data.player.szNickName)
@@ -153,7 +157,7 @@ function DDZGameRoomEnd:initPlayerInfo( ... )
 		self.listview:refreshView()
 	end	
 	if self.pBuffer.dwUserCount == 2 then 	
-		self.listview:setItemsMargin(300)
+		self.listview:setItemsMargin(150)
 		-- self.listview:setContentSize(cc.size(self.listview:getInnerContainerSize().width,self.listview:getInnerContainerSize().height)) 
 		-- self.listview:setPositionX(self.listview:getParent():getContentSize().width/2)
 	end 

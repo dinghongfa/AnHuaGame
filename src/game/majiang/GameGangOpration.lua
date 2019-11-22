@@ -94,7 +94,7 @@ function GameGangOpration:showOpration(pBuffer)
         end)
     end 
     --补
-    if pBuffer.tableBuCard[1]~= nil then
+    if pBuffer.tableBuCard[1]~= nil and GameCommon.tableConfig.wKindID ~= 92 then
         local img = "game/op_bu.png"
         local item = ccui.Button:create(img,img,img)
         uiListView_Opration:pushBackCustomItem(item)

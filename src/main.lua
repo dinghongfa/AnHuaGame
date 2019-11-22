@@ -38,7 +38,7 @@ if cc.PLATFORM_OS_DEVELOPER == PLATFORM_TYPE then
     IS_OPEN_UPDATE = false
 end
 
-cc.exports.CONST_ACCOUNTS = "tanling01"
+cc.exports.CONST_ACCOUNTS = "cxx"
 
 local searchPaths = cc.FileUtils:getInstance():getSearchPaths()
 local path = cc.FileUtils:getInstance():getWritablePath().."huyoo/"
@@ -65,7 +65,7 @@ local function main()
     print(collectgarbage("setstepmul", 5000))
     math.randomseed((os.time()) * 1000) 
 
-    cc.Director:getInstance():getOpenGLView():setDesignResolutionSize(1334,750,cc.ResolutionPolicy.EXACT_FIT)
+    cc.Director:getInstance():getOpenGLView():setDesignResolutionSize(1280,720,cc.ResolutionPolicy.EXACT_FIT)
     cc.Director:getInstance():setAnimationInterval(1.0/60.0)
 
     require("StartGame")

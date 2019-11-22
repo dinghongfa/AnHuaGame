@@ -61,15 +61,15 @@ function GameEndLayer:onCreate(pBuffer)
     end
     uiButton_return:addTouchEventListener(onEventReturn)
     local uiButton_continue = ccui.Helper:seekWidgetByName(self.root,"Button_continue")
-    local uiImage_continue = ccui.Helper:seekWidgetByName(self.root,"Image_continue")
+   -- local uiImage_continue = ccui.Helper:seekWidgetByName(self.root,"Image_continue")
     if GameCommon.tableConfig.nTableType == TableType_FriendRoom or GameCommon.tableConfig.nTableType == TableType_ClubRoom then
         if GameCommon.tableConfig.wCurrentNumber==GameCommon.tableConfig.wTableNumber then
             uiButton_continue:setVisible(true)  
-            local textureName = nil
-            textureName = "newcommon/ok_ui_p_btn_pic6.png"       
-            local texture = cc.Director:getInstance():getTextureCache():addImage(textureName)
-            uiImage_continue:loadTexture(textureName)
-            uiImage_continue:setContentSize(texture:getContentSizeInPixels())       
+            -- local textureName = nil
+            -- textureName = "newcommon/ok_ui_p_btn_pic6.png"       
+            -- local texture = cc.Director:getInstance():getTextureCache():addImage(textureName)
+            -- uiImage_continue:loadTexture(textureName)
+            -- uiImage_continue:setContentSize(texture:getContentSizeInPixels())       
         else
             uiButton_continue:setVisible(true)    
         end
@@ -166,7 +166,7 @@ function GameEndLayer:onCreate(pBuffer)
     
     local uiText_time = ccui.Helper:seekWidgetByName(self.root, "Text_time")   
     local date = os.date("*t", os.time())
-    uiText_time:setString(string.format("%d-%02d-%02d %02d:%02d:%02d", date.year, date.month, date.day, date.hour, date.min, date.sec))
+    uiText_time:setString(string.format("%d:%02d", date.hour, date.min))
     --显示桌面、显示结算
     local uiPanel_look = ccui.Helper:seekWidgetByName(self.root,"Panel_look")
     local uiButton_look = ccui.Helper:seekWidgetByName(self.root,"Button_look")
@@ -232,7 +232,7 @@ function GameEndLayer:onCreate(pBuffer)
             break
         end
     end
-    uiImage_dice:setContentSize(cc.size(141.00+(line-1)*43,76.00))   
+    --uiImage_dice:setContentSize(cc.size(141.00+(line-1)*43,76.00))   
 
 
     local uiListView_player = ccui.Helper:seekWidgetByName(self.root,"ListView_player")
@@ -268,7 +268,7 @@ function GameEndLayer:onCreate(pBuffer)
         local item = uiPanel_itemWin:clone()
         uiListView_player:pushBackCustomItem(item)
         local uiImage_avatar = ccui.Helper:seekWidgetByName(item,"Image_avatar")
-        Common:requestUserAvatar(var.dwUserID,var.szPto,uiImage_avatar,"clip")
+        --Common:requestUserAvatar(var.dwUserID,var.szPto,uiImage_avatar,"clip")
         local uiText_name = ccui.Helper:seekWidgetByName(item,"Text_name")
         --uiText_name:setString(string.format("%s\n%d",var.szNickName,var.dwUserID))
         local name = Common:getShortName(var.szNickName,8,6)
@@ -278,7 +278,7 @@ function GameEndLayer:onCreate(pBuffer)
         if i == GameCommon.wBankerUser + 1 then
             local img = ccui.ImageView:create("game/game_table_banker.png")
             uiImage_avatar:addChild(img,1000)
-            img:setPosition(10.00,86.00)            
+            img:setPosition(145.00,43.62)                 
         end
         uiImage_zhuang:setVisible(false)
 
@@ -430,14 +430,16 @@ function GameEndLayer:onCreate(pBuffer)
         local Text_GangFunzi = ccui.Helper:seekWidgetByName(item,"Text_GangFunzi")
         Text_GangFunzi:setColor(cc.c3b(127,90,46))
         Text_GangFunzi:setString("")--码数
-        local uiAtlasLabel_score = ccui.Helper:seekWidgetByName(item,"AtlasLabel_score")
-        if pBuffer.lGameScore[i] < 0 then       
-            uiAtlasLabel_score:setProperty(string.format("/%d",pBuffer.lGameScore[i]),"fonts/font_num_blue.png",26,34,'/')              
-        elseif  pBuffer.lGameScore[i] >= 0 then
-            uiAtlasLabel_score:setProperty(string.format("/%d",pBuffer.lGameScore[i]),"fonts/font_num_red.png",26,34,'/')
+        local uiBitmapFontLabel = ccui.Helper:seekWidgetByName(item,"BitmapFontLabel")
+        local uiBitmapFontLabel_1 = ccui.Helper:seekWidgetByName(item,"BitmapFontLabel_1")
+		uiBitmapFontLabel_1:setVisible(pBuffer.lGameScore[i] >= 0)
+		uiBitmapFontLabel:setVisible(pBuffer.lGameScore[i] < 0)
+		if pBuffer.lGameScore[i] >= 0 then
+			uiBitmapFontLabel_1:setText(string.format("%d", pBuffer.lGameScore[i]))
+		else
+			uiBitmapFontLabel:setText(string.format("%d", pBuffer.lGameScore[i]))
         end
-        local Text_zhongfen = ccui.Helper:seekWidgetByName(item,"Text_zhongfen")
-        Text_zhongfen:setColor(cc.c3b(127,90,46))
+
     end
     uiPanel_itemWin:release()
 end

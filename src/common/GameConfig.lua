@@ -216,7 +216,9 @@ function GameConfig:getParameter(wKindID,luaFunc)
         data.bMustNextWarn = luaFunc:readRecvByte()        --下家报单是否必出  0必出    1不必出
         data.bJiaPiao = luaFunc:readRecvByte()             --0不漂分 1漂123 2漂235 3漂258
         data.bThreeEx = luaFunc:readRecvByte()             --0 三带两张  1 三带1张、2张、不带
-        haveReadByte = 17    --已读长度，每次增加或者减少都要修改该值，Byte1个字节 WORD2个字节 DWORD4个字节
+        data.b4Add2 = luaFunc:readRecvByte()                --是否可4带2        0无      1有
+        data.bHostedTime = luaFunc:readRecvByte()                --是否可4带2        0无      1有
+        haveReadByte = 19    --已读长度，每次增加或者减少都要修改该值，Byte1个字节 WORD2个字节 DWORD4个字节
     elseif wKindID == 84 then 
         data.bPlayerCount = luaFunc:readRecvByte()          --参与游戏的人数   
         data.bShowCardCount = luaFunc:readRecvByte()          --是否显示牌数量    0无      1有
@@ -225,6 +227,7 @@ function GameConfig:getParameter(wKindID,luaFunc)
         data.bShoutBankerType = luaFunc:readRecvByte()          --叫地主类型 0 随机 1 先出完先叫
         data.bBombMaxNum = luaFunc:readRecvByte()          --炸弹上限  0无限制  3、4、5炸
         data.bBankerWayType = luaFunc:readRecvByte()          --0叫分 1,2,3分  1 叫地主
+        haveReadByte = 7
     elseif wKindID == 36 then
         data.FanXing = {}
         data.FanXing.bType = luaFunc:readRecvByte()                        --翻省    0默认没有反省  1上省  2下省  3跟省
@@ -740,7 +743,8 @@ function GameConfig:getParameter(wKindID,luaFunc)
         data.mNiaoType = luaFunc:readRecvByte()             --//1.一鸟一分、2.一鸟两分
         data.mHongNiao = luaFunc:readRecvByte()             --//1.无红中加一码、0.无	
         data.bWuTong = luaFunc:readRecvByte()               --//1.有筒  0.无筒 (默认有筒)
-        haveReadByte = 12 
+        data.bFirstZhuang = luaFunc:readRecvByte()          --//1.首局随机庄家
+        haveReadByte = 13
     elseif wKindID == 79 then 
         data.bPlayerCount = luaFunc:readRecvByte()          --参与游戏的人数
         data.mLaiZiCount = luaFunc:readRecvByte()           --0.无红中  1.四红中   （默认无红中）
@@ -784,8 +788,8 @@ function GameConfig:getParameter(wKindID,luaFunc)
         data.mKGNPFlag = luaFunc:readRecvByte()             --开杠拿牌 默认2，可选2、4、6
         --有无筒
         data.bWuTong = luaFunc:readRecvByte()               --1.有筒  0.无筒 (默认有筒)
-
-        haveReadByte = 21
+        data.bFirstZhuang = luaFunc:readRecvByte()          --//1.首局随机庄家
+        haveReadByte = 22
 
     elseif wKindID == 81 then 
         data.bPlayerCount = luaFunc:readRecvByte()          --参与游戏的人数
@@ -849,11 +853,24 @@ function GameConfig:getParameter(wKindID,luaFunc)
         data.bNoLookCard = luaFunc:readRecvBool()
         data.b35Down = luaFunc:readRecvBool()
         haveReadByte = 13
-
+    elseif wKindID == 92 then  
+        data.bPlayerCount = luaFunc:readRecvByte()          --参与游戏的人数
+        --玩法
+        data.mQiWangFlag = luaFunc:readRecvByte()               --0.七王 1.四王
+        data.bMaCount = luaFunc:readRecvByte()              --马数 1、2、3、4
+        data.bDaiWangYing = luaFunc:readRecvByte()               --代王硬：    0.非勾选  1.勾选
+        data.bQGHu = luaFunc:readRecvByte()            --可抢杠胡：  0.非勾选  1.勾选
+        data.bSJZhuang = luaFunc:readRecvByte()              --首局随机庄：0.非勾选  1.勾选
+        -- data.mZXFlag = luaFunc:readRecvByte()              --中途四喜 默认0  否
+        -- data.bMaType = luaFunc:readRecvByte()             --金童玉女 默认0  否
+        -- data.mNiaoType = luaFunc:readRecvByte()            --中途六六顺 默认0  否
+        haveReadByte = 6
     else
     
     end
-    
+    local Log               = require("common.Log")
+    print("+++++++++++++",wKindID,haveReadByte)
+    Log.d(data)
     return data, haveReadByte
 end
 

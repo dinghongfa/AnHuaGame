@@ -599,6 +599,17 @@ function RoomCreateLayer:onCreate(parameter)
         end    
     end 
 
+    --首局随机庄家
+    local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(12),"ListView_parameter"):getItems()
+    Common:addCheckTouchEventListener(items,true)
+    if self.recordCreateParameter["bFirstZhuang"] == nil or self.recordCreateParameter["bFirstZhuang"] == 1 then
+        items[1]:setBright(true)
+        local uiText_desc = ccui.Helper:seekWidgetByName(items[2],"Text_desc")
+        if uiText_desc ~= nil then 
+            uiText_desc:setTextColor(cc.c3b(215,86,31))
+        end  
+    end 
+
     if self.showType == 3 then
         self.tableFriendsRoomParams = {[1] = {wGameCount = 1}}
         self:SUB_CL_FRIENDROOM_CONFIG_END()
@@ -798,6 +809,15 @@ function RoomCreateLayer:onEventCreate(nTableType)
     else
         tableParameter.mHongNiao = 0
     end
+
+    tableParameter.bFirstZhuang = 1
+    local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(12),"ListView_parameter"):getItems()
+    if items[1]:isBright() then
+        tableParameter.bFirstZhuang = 1
+    else
+        tableParameter.bFirstZhuang = 0
+    end
+    
    if self.showType ~= 2 and nTableType == TableType_FriendRoom then
         --普通创房和代开需要判断金币
         local uiListView_parameterList = ccui.Helper:seekWidgetByName(self.root,"ListView_parameterList")

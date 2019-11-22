@@ -291,7 +291,7 @@ local GameCommon = {
 }
 
 function GameCommon:init()
-    self.regionSound = 0
+    self.language = 0
 	    --数据
     self.tagUserInfoList = {}
     self.wPlayerCount = 0
@@ -855,7 +855,7 @@ function GameCommon:playAnimation(root,id, wChairID)
     if Animation[id] == nil then
         return
     end
-    local AnimationData = Animation[id][GameCommon.regionSound]
+    local AnimationData = Animation[id][GameCommon.language]
     if AnimationData == nil then
         return
     end

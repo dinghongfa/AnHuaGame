@@ -121,7 +121,7 @@ function TableLayer:doAction(action,pBuffer)
         --self:showEffectState(viewID)
     end
 
-    if (GameCommon.tableConfig.wKindID == 80 or GameCommon.tableConfig.wKindID == 70) and action == NetMsgId.SUB_S_SpecialCard_RESULT and pBuffer.wActionUser ~= GameCommon:getRoleChairID() then
+    if (GameCommon.tableConfig.wKindID == 80 or GameCommon.tableConfig.wKindID == 70 or GameCommon.tableConfig.wKindID == 92) and action == NetMsgId.SUB_S_SpecialCard_RESULT and pBuffer.wActionUser ~= GameCommon:getRoleChairID() then
     
     elseif action == NetMsgId.SUB_S_BAOTINGOUTCARD then
     else
@@ -167,10 +167,10 @@ function TableLayer:doAction(action,pBuffer)
     elseif action == NetMsgId.SUB_S_OUT_CARD_RESULT then
         local uiPanel_hucardbg = ccui.Helper:seekWidgetByName(self.root,"Panel_hucardbg")  
         uiPanel_hucardbg:setVisible(false) 
-        self:setAllCardGray(nil,false)
+        -- self:setAllCardGray(nil,false)
         local uiButton_chakan = ccui.Helper:seekWidgetByName(self.root,"Button_chakan")
        
-        if (GameCommon.tableConfig.wKindID == 80 or GameCommon.tableConfig.wKindID == 70) then --玩家出牌.杠数据清空清空
+        if (GameCommon.tableConfig.wKindID == 80 or GameCommon.tableConfig.wKindID == 70 or GameCommon.tableConfig.wKindID == 92) then --玩家出牌.杠数据清空清空
             GameCommon.mGang = false
         end
         GameCommon.cbOperateCode = 0 --玩家出牌.王闯王钓清空
@@ -270,6 +270,7 @@ function TableLayer:doAction(action,pBuffer)
         uiSendOrOutCardNode:setPosition(uiPanel_tipsCardPos:getPosition())
         uiSendOrOutCardNode:setScale(1.2)
         uiSendOrOutCardNode:setVisible(false)
+
         self:addDiscardCard(uiSendOrOutCardNode.wChairID, uiSendOrOutCardNode.cbCardData)
         
         --[[
@@ -300,7 +301,7 @@ function TableLayer:doAction(action,pBuffer)
 --            uiSendOrOutCardNode:addChild(armature) 
 --            armature:setPosition(armature:getParent():getContentSize().width/2,armature:getParent():getContentSize().height/2)  
 --            if viewID == 2 or viewID == 4 then    
---                armature:setRotation(90)   
+--                armature:setRotation(86)   
 --            end      
             uiSendOrOutCardNode:setPosition(cc.p(uiSendOrOutCardNode:getParent():convertToNodeSpace(pos)))
             uiSendOrOutCardNode:runAction(cc.MoveTo:create(0.1,cc.p(uiPanel_tipsCardPos:getPosition()))) 
@@ -321,7 +322,7 @@ function TableLayer:doAction(action,pBuffer)
         --十秒场自动取消明牌方式 ,自己打出牌
         if outChairID == wChairID then
             if not GameCommon.player[outChairID].wMingTF then
-                self:cancleMingPai();
+    --            self:cancleMingPai();
             end
         end
   
@@ -344,10 +345,28 @@ function TableLayer:doAction(action,pBuffer)
         end
         local uiPanel_tipsCardPos = ccui.Helper:seekWidgetByName(self.root,string.format("Panel_tipsCardPos%d",viewID))
         local uiPanel_tipsCard = ccui.Helper:seekWidgetByName(self.root,"Panel_tipsCard")
-        if (GameCommon.tableConfig.wKindID == 80 or GameCommon.tableConfig.wKindID == 70) then
+        if (GameCommon.tableConfig.wKindID == 80 or GameCommon.tableConfig.wKindID == 70 or GameCommon.tableConfig.wKindID == 92) then
             local  n = 2
+            if GameCommon.tableConfig.wKindID == 92 then 
+                n = 3
+            end 
             if GameCommon.gameConfig.mKGNPFlag ~= nil and GameCommon.gameConfig.mKGNPFlag ~= 0 then 
                 n = GameCommon.gameConfig.mKGNPFlag
+            end 
+            if GameCommon.tableConfig.wKindID == 92 then
+                local ListView_newgang = ccui.Helper:seekWidgetByName(self.root,"ListView_newgang")
+                for i = 1, n do
+               -- local uiSendOrOutCardNode = ListView_newgang:getChildByName("SendOrOutCardNode")
+                    local uiSendOrOutCardNode = ListView_newgang:getChildByName(string.format("SendOrOutCardNode%d",i))
+                    if uiSendOrOutCardNode ~= nil then
+                        uiSendOrOutCardNode:runAction(cc.Sequence:create(
+                            cc.RemoveSelf:create(),
+                            cc.CallFunc:create(function(sender,event) 
+                                self:addDiscardCard(sender.wChairID, sender.cbCardData) 
+                                self:showHandCard({wChairID = sender.wChairID})    
+                        end)))
+                    end 
+                end 
             end 
             for i = 1, n do
                 local uiSendOrOutCardNode = uiPanel_tipsCard:getChildByName(string.format("SendOrOutCardNode%d",i))
@@ -359,6 +378,7 @@ function TableLayer:doAction(action,pBuffer)
                     end)))
                 end
             end
+            
         end
         --[[
         local uiSendOrOutCardNode = uiPanel_tipsCard:getChildByName("SendOrOutCardNode")
@@ -371,6 +391,10 @@ function TableLayer:doAction(action,pBuffer)
         end
         --]]
         --print('->>>>>>>>>>>添加',pBuffer.cbCardData)
+
+        local uiPanel_newgang = ccui.Helper:seekWidgetByName(self.root,"Panel_newgang")
+        uiPanel_newgang:setVisible(false)
+
         self:addOneHandCard(wChairID,pBuffer.cbCardData)
         self:showHandCard({wChairID = wChairID, cbSendCard = pBuffer.cbCardData})
         self:showCountDown(wChairID)
@@ -393,7 +417,7 @@ function TableLayer:doAction(action,pBuffer)
         end
 
         if isShowOperator then
-            if (GameCommon.tableConfig.wKindID == 80 or GameCommon.tableConfig.wKindID == 70) and pBuffer.cbActionCard == 0 then
+            if (GameCommon.tableConfig.wKindID == 80 or GameCommon.tableConfig.wKindID == 70 or GameCommon.tableConfig.wKindID == 92) and pBuffer.cbActionCard == 0 then
                 pBuffer.tableActionCard = {}
                 local uiPanel_tipsCard = ccui.Helper:seekWidgetByName(self.root,"Panel_tipsCard")
                 local  n = 2
@@ -406,10 +430,33 @@ function TableLayer:doAction(action,pBuffer)
                         pBuffer.tableActionCard[i] = uiSendOrOutCardNode.cbCardData
                     end
                 end
+
+                local ListView_newgang = ccui.Helper:seekWidgetByName(self.root,"ListView_newgang")
+                for i = 1, n do
+                    local uiSendOrOutCardNode = ListView_newgang:getChildByName(string.format("SendOrOutCardNode%d",i))
+                    if uiSendOrOutCardNode ~= nil then
+                        pBuffer.tableActionCard[i] = uiSendOrOutCardNode.cbCardData
+                    end 
+                end 
+            end
+            local ISBIHU = false 
+            for i = 1, 4 do
+                if GameCommon.tableConfig.wKindID == 92 then
+                    if GameCommon.cbKingCard ~= nil and GameCommon.cbKingCard[1] ~= 0 then                                        
+                        if  GameCommon.cbKingCard[1] == pBuffer.cbGangCard[i] or (GameCommon.cbKingCard[2] == pBuffer.cbGangCard[i] and GameCommon.cbKingCard[2] ~= 0)  then 
+                            ISBIHU = true
+                        end 
+                    end
+                end
             end
 
            -- if GameCommon.tableConfig.nTableType == TableType_Playback or Bit:_and(pBuffer.cbActionMask,GameCommon.WIK_MING_PAI) == 0  then--or (pBuffer.mMingPaiIndex + 1 >= pBuffer.mMingPaiCount)
-                local oprationLayer = GameOpration:create(pBuffer)
+                local oprationLayer = nil
+                if ISBIHU == true then
+                    oprationLayer = GameOpration:create(pBuffer,5) 
+                else
+                    oprationLayer = GameOpration:create(pBuffer) 
+                end
                 local uiPanel_operation = ccui.Helper:seekWidgetByName(self.root,"Panel_operation")
                 uiPanel_operation:addChild(oprationLayer)
                 uiPanel_operation:setVisible(true)  
@@ -469,6 +516,10 @@ function TableLayer:doAction(action,pBuffer)
         local uiPanel_operation = ccui.Helper:seekWidgetByName(self.root,"Panel_operation")
         uiPanel_operation:removeAllChildren()
         uiPanel_operation:setVisible(false)
+
+        local uiPanel_newgang = ccui.Helper:seekWidgetByName(self.root,"Panel_newgang")
+        uiPanel_newgang:setVisible(false)
+
         local wChairID = pBuffer.wOperateUser
         local viewID = GameCommon:getViewIDByChairID(wChairID)
                
@@ -493,7 +544,7 @@ function TableLayer:doAction(action,pBuffer)
                 self:removeOperateDisCard()
             end
         end
-        if(GameCommon.tableConfig.wKindID == 80 or GameCommon.tableConfig.wKindID == 70)then
+        if(GameCommon.tableConfig.wKindID == 80 or GameCommon.tableConfig.wKindID == 70 or GameCommon.tableConfig.wKindID == 92)then
             local onceFlag = false
             local  n = 2
             if GameCommon.gameConfig.mKGNPFlag ~= nil and GameCommon.gameConfig.mKGNPFlag ~= 0 then 
@@ -580,8 +631,8 @@ function TableLayer:doAction(action,pBuffer)
                     --是否有名堂 如果有名堂优先播放名堂动画
                     local isHaveMingTang = false
 
-                    -- --名堂动画
-                    -- local mingTangArr = pBuffer.mFanItem[i]
+                    --名堂动画
+                    local mingTangArr = pBuffer.wChiHuKind[i]
 
                     -- for i=16,30 do
                     --     local mFanItem = mingTangArr[i]
@@ -643,6 +694,87 @@ function TableLayer:doAction(action,pBuffer)
                     --     end
                     -- end
 
+                    local CHK_PING_HU				  =	0x0001									--平胡类型
+                    local CHR_QING_YI_SE			  =	0x0002									--清一色
+                    local CHR_YING_ZHUANG			  =	0x0004									--硬庄
+                    local CHK_QI_XIAO_DUI			  =	0x0008									--七小对
+                    local CHR_QIANG_GANG_HU		      =	0x0010									--抢杠胡
+                    local CHR_GANG				      =	0x0020									--杠上开花			
+                    local CHR_GANG_SHANG_PAO		  =	0x0040									--杠上炮			
+                    local CHR_SAN_WANG			      =	0x0080									--三王
+                    local CHR_SI_WANG				  =	0x0100									--四王
+                    local CHR_LIU_WANG			      =	0x0200									--六王
+                    local CHR_QI_WANG				  =	0x0400									--七王
+
+                    local MTAction = {}
+                    if Bit:_and(pBuffer.wChiHuKind[i],CHR_QING_YI_SE) ~= 0 then
+                        local MT = "清一色"
+                        table.insert(MTAction, #MTAction, MT)
+                        isHaveMingTang = true
+                    end
+            
+                    if Bit:_and(pBuffer.wChiHuKind[i],CHR_YING_ZHUANG) ~= 0  then  
+                        local MT = "硬庄"
+                        table.insert(MTAction, #MTAction, MT) 
+                        isHaveMingTang = true
+                    end
+               
+                    if Bit:_and(pBuffer.wChiHuKind[i],CHK_QI_XIAO_DUI) ~= 0 then
+                        local MT = "七对"
+                        table.insert(MTAction, #MTAction, MT)
+                        isHaveMingTang = true
+                    end
+               
+                    if Bit:_and(pBuffer.wChiHuKind[i],CHR_QIANG_GANG_HU) ~= 0   then
+                        local MT = "抢杠胡"
+                        table.insert(MTAction, #MTAction, MT)
+                        isHaveMingTang = true
+                    end
+
+                    if Bit:_and(pBuffer.wChiHuKind[i],CHR_GANG) ~= 0  then
+                        local MT = "杠上开花"
+                        table.insert(MTAction, #MTAction, MT)
+                        isHaveMingTang = true
+                    end
+
+                    if Bit:_and(pBuffer.wChiHuKind[i],CHR_GANG_SHANG_PAO) ~= 0   then
+                        local MT = "杠上炮"
+                        table.insert(MTAction, #MTAction, MT)
+                        isHaveMingTang = true
+                    end
+
+                    if Bit:_and(pBuffer.wChiHuKind[i],CHR_QI_WANG) ~= 0   then
+                        local MT = "七王"
+                        table.insert(MTAction, #MTAction, MT)
+                        isHaveMingTang = true
+                    else
+                        if Bit:_and(pBuffer.wChiHuKind[i],CHR_LIU_WANG) ~= 0   then
+                            local MT = "六王"
+                            table.insert(MTAction, #MTAction, MT)
+                            isHaveMingTang = true
+                        else
+                            if Bit:_and(pBuffer.wChiHuKind[i],CHR_SI_WANG) ~= 0 then
+                                local MT = "四王"
+                                table.insert(MTAction, #MTAction, MT)
+                                isHaveMingTang = true
+                            elseif Bit:_and(pBuffer.wChiHuKind[i],CHR_SAN_WANG) ~= 0  then
+                                    local MT = "三王"
+                                    table.insert(MTAction, #MTAction, MT)
+                                    isHaveMingTang = true
+                            end    
+                        end           
+                    end   
+
+
+                    for key, var in pairs(MTAction) do
+                        print("+++++++++++三王++++++",key,var)
+                        self:runAction(cc.Sequence:create(  
+                            cc.DelayTime:create(0.5*key), 
+                            cc.CallFunc:create(function(sender, event) 
+                            GameCommon:playAnimation(self.root,var,wChairID)
+                        end)))
+                    end
+                    local v = 1 
                     -- if not isHaveMingTang then
                     --     for j=1,15 do
                     --         local mFanItem = mingTangArr[j]
@@ -697,7 +829,44 @@ function TableLayer:doAction(action,pBuffer)
         if uiAtlasLabel_countdownTime then
             uiAtlasLabel_countdownTime:stopAllActions()
         end
-        self.Panel_hu:setVisible(false)        
+        self.Panel_hu:setVisible(false)     
+    elseif action == NetMsgId.SUB_S_KING_CARD then   
+        -- if GameCommon:getRoleChairID() == GameCommon.wBankerUser then
+        --     self:setHandCard(pBuffer.wActionUser,14, pBuffer.cbCardData)
+        -- else
+        --     self:setHandCard(pBuffer.wActionUser,13, pBuffer.cbCardData)
+        -- end
+        local uiImage_WP = ccui.Helper:seekWidgetByName(self.root,"Image_WP")
+
+        uiImage_WP:setScale(0)
+        uiImage_WP:setPosition(640,500)  -- 730  400
+
+        local png = ccui.ImageView:create("majiang/table/liangwang.png")
+        local uiPanel_operation = ccui.Helper:seekWidgetByName(self.root,"Panel_operation")
+        uiPanel_operation:setVisible(true)
+        uiPanel_operation:addChild(png)
+        png:setVisible(true)
+        png:setPosition(640, 360)
+        png:runAction(cc.Sequence:create(cc.ScaleTo:create(0.8, 1.2, 1.2),cc.DelayTime:create(0.4),cc.RemoveSelf:create(),
+        cc.CallFunc:create(function(sender, event)
+            uiPanel_operation:setVisible(false)
+            uiImage_WP:setVisible(true) 
+            self:showHandCard({wChairID = GameCommon:getRoleChairID()})
+        end)))
+        self:setHandCard(GameCommon:getRoleChairID(),GameCommon.player[GameCommon:getRoleChairID()].cbCardCount, GameCommon.player[GameCommon:getRoleChairID()].cbCardData)
+        if uiImage_WP ~= nil then 
+            uiImage_WP:runAction(cc.Sequence:create(
+                cc.DelayTime:create(1.2),cc.ScaleTo:create(0.2,1,1),cc.MoveTo:create(0.2,cc.p(730,400)
+            )))
+        end 
+       -- uiImage_WP:setVisible(true)
+        local uiImage_wang = ccui.Helper:seekWidgetByName(self.root,"Image_wang")        
+        local  data = GameCommon.cbKingCard[1]
+        local cbValue = Bit:_and(data,0x0F)
+        local cbColor = Bit:_rshift(Bit:_and(data,0xF0),4)    
+        local colorNode = string.format("majiang/card/%d%d.png",cbColor,cbValue)
+        uiImage_wang:loadTexture(colorNode)        
+        self:runAction(cc.Sequence:create(cc.DelayTime:create(2),cc.CallFunc:create(function(sender,event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))
     elseif action == NetMsgId.SUB_S_SpecialCard then
         local oprationLayer = GameSpecial:create(pBuffer)
         local uiPanel_operation = ccui.Helper:seekWidgetByName(self.root,"Panel_operation")
@@ -848,18 +1017,51 @@ function TableLayer:doAction(action,pBuffer)
         end
         for i = 1,6 do
             if pBuffer.wDiceCard~=nil and pBuffer.wDiceCard[i] ~= 0 then
-                table.insert(tableCard,#tableCard+1,pBuffer.wDiceCard[i])
+                table.insert(tableCard,#tableCard+1,pBuffer.wDiceCard[i])            
             end
         end  
-        for key, var in pairs(tableCard) do
+        for key, var in pairs(tableCard) do  -- cbKingCard 
             uiSendOrOutCardNode = GameCommon:getDiscardCardAndWeaveItemArray(var,viewID)
             uiSendOrOutCardNode:setName(string.format("SendOrOutCardNode%d",key))
             uiSendOrOutCardNode.cbCardData = var
             uiSendOrOutCardNode.wChairID = wChairID
+            uiSendOrOutCardNode.node = nil 
+            if GameCommon.tableConfig.wKindID == 92 then
+                if GameCommon.cbKingCard ~= nil and GameCommon.cbKingCard[1] ~= 0 then  
+                    local liang = ccui.ImageView:create("majiang/card/koutip_wan.png")            
+                    
+                    for j = 1 , 2 do
+                        if GameCommon.cbKingCard[j] ~= 0 and  GameCommon.cbKingCard[j] == var then 
+                            uiSendOrOutCardNode:addChild(liang)
+                            if viewID == 1 then
+                                liang:setPosition(50,74)
+                                liang:setRotation(0)
+                                liang:setScale(0.8)
+                            elseif viewID == 2 then                               
+                                liang:setPosition(30,29)
+                                liang:setRotation(90)
+                                liang:setScale(0.4)
+                            elseif viewID == 3 then
+                                liang:setPosition(28,43)
+                                liang:setRotation(0)
+                                liang:setScale(0.4)
+                            elseif viewID == 4 then
+                                liang:setPosition(22,33)
+                                liang:setRotation(270)
+                                liang:setScale(0.4)
+                            end 
+                            print("输出王牌显示++++++++++++",GameCommon.cbKingCard[j])
+                            break
+                        end 
+                    end 
+                end 
+            end 
+
+
             uiPanel_tipsCard:addChild(uiSendOrOutCardNode)
             uiSendOrOutCardNode:setPosition(uiPanel_tipsCardPos:getPosition())
             uiSendOrOutCardNode:setScale(0)
-            uiSendOrOutCardNode:runAction(cc.ScaleTo:create(0.2,1))
+            --uiSendOrOutCardNode:runAction(cc.ScaleTo:create(0.2,1.0))
             self:updateLeftCardCount(GameCommon.cbLeftCardCount-1)
             GameCommon.btableCard = tableCard
             if #tableCard > 1 then
@@ -870,15 +1072,17 @@ function TableLayer:doAction(action,pBuffer)
                     i = key/2 +0.5
                 end
                 if viewID == 1 then   -- 两两麻将间距为 60   
+                    uiSendOrOutCardNode:runAction(cc.ScaleTo:create(0.2,1.1))
                     if i == 1 or  i == -1 then
-                        uiSendOrOutCardNode:setPositionX(uiSendOrOutCardNode:getPositionX()+(40*i))
+                        uiSendOrOutCardNode:setPositionX(uiSendOrOutCardNode:getPositionX()+(50*i))
                     elseif i == 2 or  i == -2 then
-                        uiSendOrOutCardNode:setPositionX(uiSendOrOutCardNode:getPositionX()+(60*i))
+                        uiSendOrOutCardNode:setPositionX(uiSendOrOutCardNode:getPositionX()+(75*i))
                     elseif i == 3 or  i == -3 then
-                        uiSendOrOutCardNode:setPositionX(uiSendOrOutCardNode:getPositionX()+(70*i))
+                        uiSendOrOutCardNode:setPositionX(uiSendOrOutCardNode:getPositionX()+(80*i))
                     end
                     
                 elseif viewID == 2 then
+                    uiSendOrOutCardNode:runAction(cc.ScaleTo:create(0.2,1.2))
                     if i == 1 or  i == -1 then
                         uiSendOrOutCardNode:setPositionY(uiSendOrOutCardNode:getPositionY()-(30*i))
                     elseif i == 2 or  i == -2 then
@@ -888,6 +1092,7 @@ function TableLayer:doAction(action,pBuffer)
                     end
                     
                 elseif viewID == 3 then
+                    uiSendOrOutCardNode:runAction(cc.ScaleTo:create(0.2,1.2))
                     if i == 1 or  i == -1 then
                         uiSendOrOutCardNode:setPositionX(uiSendOrOutCardNode:getPositionX()-(40*i))
                     elseif i == 2 or  i == -2 then
@@ -897,6 +1102,7 @@ function TableLayer:doAction(action,pBuffer)
                     end
                     
                 elseif viewID == 4 then
+                    uiSendOrOutCardNode:runAction(cc.ScaleTo:create(0.2,1.2))
                     if i == 1 or  i == -1 then
                         uiSendOrOutCardNode:setPositionY(uiSendOrOutCardNode:getPositionY()-(30*i))
                     elseif i == 2 or  i == -2 then
@@ -908,11 +1114,68 @@ function TableLayer:doAction(action,pBuffer)
             end
         end
         self:showCountDown(wChairID)
-        self:runAction(cc.Sequence:create(cc.DelayTime:create(0.5),cc.CallFunc:create(function(sender,event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))
+        self:runAction(cc.Sequence:create(cc.DelayTime:create(1.5),cc.CallFunc:create(function(sender,event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))
+    
+    elseif action == NetMsgId.SUB_S_CASTDICE_RESULT_92 then
+        local uiPanel_newgang = ccui.Helper:seekWidgetByName(self.root,"Panel_newgang")
+        uiPanel_newgang:setVisible(true)
+        local ListView_newgang = ccui.Helper:seekWidgetByName(self.root,"ListView_newgang")
+        local wChairID =  pBuffer.wCurrentUser
+        local uiSendOrOutCardNode = ListView_newgang:getChildByName("SendOrOutCardNode")
+        if uiSendOrOutCardNode ~= nil then
+            uiSendOrOutCardNode:runAction(cc.Sequence:create(
+                cc.RemoveSelf:create(),
+                cc.CallFunc:create(function(sender,event) 
+                    self:addDiscardCard(sender.wChairID, sender.cbCardData) 
+                end)))
+        end        
+        -- ListView_newgang:removeAllItems()
+        local tableCard = {}
+        for i = 1,6 do
+            if pBuffer.wDiceCard~=nil and pBuffer.wDiceCard[i] ~= 0 then
+                table.insert(tableCard,#tableCard+1,pBuffer.wDiceCard[i])            
+            end
+        end 
+        for key, var in pairs(tableCard) do  -- cbKingCard 
+
+           -- local 
+           -- uiSendOrOutCardNode = GameCommon:GetCardHand(var,viewID)
+            uiSendOrOutCardNode = GameCommon:getDiscardCardAndWeaveItemArray(var,viewID)
+            uiSendOrOutCardNode:setName(string.format("SendOrOutCardNode%d",key))
+            uiSendOrOutCardNode.cbCardData = var
+            uiSendOrOutCardNode.wChairID = wChairID
+            -- uiSendOrOutCardNode.node = nil 
+            uiSendOrOutCardNode:setScale(0.6)
+            if GameCommon.tableConfig.wKindID == 92 then
+                if GameCommon.cbKingCard ~= nil and GameCommon.cbKingCard[1] ~= 0 then  
+                    local liang = ccui.ImageView:create("majiang/card/koutip_wan.png")            
+                    
+                    for j = 1 , 2 do
+                        if GameCommon.cbKingCard[j] ~= 0 and  GameCommon.cbKingCard[j] == var then 
+                            uiSendOrOutCardNode:addChild(liang)
+                            liang:setPosition(50,74)
+                            liang:setRotation(0)
+                            liang:setScale(0.8)
+                            print("输出王牌显示++++++++++++",GameCommon.cbKingCard[j])
+                            break
+                        end 
+                    end 
+                end 
+            end 
+
+            ListView_newgang:pushBackCustomItem(uiSendOrOutCardNode)
+
+            --uiSendOrOutCardNode:runAction(cc.ScaleTo:create(0.2,1.0))
+            self:updateLeftCardCount(GameCommon.cbLeftCardCount-1)
+            GameCommon.btableCard = tableCard
+        end
+
+        self:showCountDown(wChairID)
+        self:runAction(cc.Sequence:create(cc.DelayTime:create(1.5),cc.CallFunc:create(function(sender,event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))
 	
     elseif action == NetMsgId.SUB_S_OPERATE_HAIDI then
         local uiPanel_tipsCard = ccui.Helper:seekWidgetByName(self.root,"Panel_tipsCard")
-        if GameCommon.tableConfig.wKindID == 80 and GameCommon.tableConfig.wKindID == 70 then
+        if GameCommon.tableConfig.wKindID == 80 or GameCommon.tableConfig.wKindID == 70 or GameCommon.tableConfig.wKindID == 92 then
             local  n = 2
             if GameCommon.gameConfig.mKGNPFlag ~= nil and GameCommon.gameConfig.mKGNPFlag ~= 0 then 
                 n = GameCommon.gameConfig.mKGNPFlag
@@ -1030,6 +1293,16 @@ function TableLayer:doAction(action,pBuffer)
         uiPanel_operation:setVisible(true)  
         print("玩家必胡+++小胡",pBuffer.wCurUser)
         self:runAction(cc.Sequence:create(cc.DelayTime:create(0.5),cc.CallFunc:create(function(sender,event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))
+
+    elseif action == NetMsgId.SUB_S_STARTHU_FOURKING then          --通知客户端起手四王胡牌
+        if  pBuffer.mStartHuUser == GameCommon:getRoleChairID() then 
+            local oprationLayer = GameOpration:create(pBuffer,4)
+            local uiPanel_operation = ccui.Helper:seekWidgetByName(self.root,"Panel_operation")
+            uiPanel_operation:addChild(oprationLayer)
+            uiPanel_operation:setVisible(true)  
+            print("玩家必胡+++小胡",pBuffer.wCurUser)
+        end 
+        self:runAction(cc.Sequence:create(cc.DelayTime:create(0.5),cc.CallFunc:create(function(sender,event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))
     else
 	
 	end
@@ -1045,7 +1318,7 @@ function TableLayer:showHUScore( pBuffer )
         if Panel_player then
             local Image_avatarFrame = Panel_player:getChildByName('Panel_playerInfo')
             local uiTextAtlasScore = nil
-            if GameCommon.tableConfig.wKindID ~= 80 then 
+            if GameCommon.tableConfig.wKindID ~= 80  and GameCommon.tableConfig.wKindID ~= 92 then 
                 if pBuffer.lGameScore[i] > 0 then
                     uiTextAtlasScore = cc.LabelBMFont:create(string.format("+%d",pBuffer.lGameScore[i]),"fonts/score_yellow.fnt")    
                 elseif pBuffer.lGameScore[i] < 0 then
@@ -1161,11 +1434,19 @@ function TableLayer:showCountDown(wChairID)
 
     uiAtlasLabel_countdownTime:setPosition(uiAtlasLabel_countdownTime:getParent():getContentSize().width/2,uiAtlasLabel_countdownTime:getParent():getContentSize().height/2)
     uiAtlasLabel_countdownTime:stopAllActions()
-    if GameCommon.gameConfig and GameCommon.gameConfig.bShiMiao == 1 then
-        uiAtlasLabel_countdownTime:setString(10)
-    else
-        uiAtlasLabel_countdownTime:setString(15)
-    end
+    local time = 15
+
+    if GameCommon.tableConfig.nTableType > TableType_GoldRoom and GameCommon.bHosted ~= nil then
+        -- if GameCommon.bHosted[wChairID] == false  then  
+            if GameCommon.gameConfig.bHostedTime ~= 0 then 
+                time = 60*GameCommon.gameConfig.bHostedTime
+            else
+                time = 15
+            end 
+        -- else
+        --     time = 3
+        -- end 
+    end 
     
     local function onEventTime(sender,event)
         local currentTime = tonumber(uiAtlasLabel_countdownTime:getString())
@@ -1185,7 +1466,7 @@ function TableLayer:showCountDown(wChairID)
     local uiPanel_outCardTips = ccui.Helper:seekWidgetByName(self.root,"Panel_outCardTips")
     uiPanel_outCardTips:removeAllChildren()
     local uiImage_dir = ccui.Helper:seekWidgetByName(self.root,string.format("Image_%d",num))
-
+    print("-------不知道这有什么用---------",num)
     if uiImage_dir ~= nil then
         uiImage_dir:setVisible(true)
         --uiImage_dir:runAction(cc.RepeatForever:create(cc.Blink:create(1,1)))
@@ -1196,7 +1477,7 @@ end
 function TableLayer:updateLeftCardCount(cbLeftCardCount)
     GameCommon.cbLeftCardCount = cbLeftCardCount
     local uiText_stack = ccui.Helper:seekWidgetByName(self.root,"Text_majiang_num")
-    uiText_stack:setString(string.format("%d",GameCommon.cbLeftCardCount))
+    uiText_stack:setString(string.format("剩%d张",GameCommon.cbLeftCardCount))
     uiText_stack:setVisible(true)
 
     local uiText_majiang_numcard = ccui.Helper:seekWidgetByName(self.root,"Text_majiang_numcard")
@@ -1229,7 +1510,7 @@ function TableLayer:addWeaveItemArray(wChairID,WeaveItemArray)
                     self:removeHandCard(wChairID,cbCardList[1])
                 end 
             else
-                if (GameCommon.tableConfig.wKindID ~= 50 and GameCommon.tableConfig.wKindID ~= 70 and GameCommon.tableConfig.wKindID ~= 80 )or GameCommon.mGang ~= true then
+                if (GameCommon.tableConfig.wKindID ~= 50 and GameCommon.tableConfig.wKindID ~= 70 and GameCommon.tableConfig.wKindID ~= 80 and GameCommon.tableConfig.wKindID ~= 92 )or GameCommon.mGang ~= true then
                     self:removeHandCard(wChairID,cbCardList[1])
                 end 
             end 
@@ -1249,7 +1530,7 @@ function TableLayer:addWeaveItemArray(wChairID,WeaveItemArray)
                     self:removeHandCard(wChairID,var)
                 end
             end
-            if(GameCommon.tableConfig.wKindID == 80 or GameCommon.tableConfig.wKindID == 70)then 
+            if(GameCommon.tableConfig.wKindID == 80 or GameCommon.tableConfig.wKindID == 70 or GameCommon.tableConfig.wKindID == 92 )then 
                 for i = 1, GameCommon.player[wChairID].bWeaveItemCount do
                     local var = GameCommon.player[wChairID].WeaveItemArray[i]
                     if var.cbCenterCard == WeaveItemArray.cbCenterCard then
@@ -1267,7 +1548,7 @@ function TableLayer:addWeaveItemArray(wChairID,WeaveItemArray)
             end       
         else    
         end
-        if(GameCommon.tableConfig.wKindID == 80 or GameCommon.tableConfig.wKindID == 70)then 
+        if(GameCommon.tableConfig.wKindID == 80 or GameCommon.tableConfig.wKindID == 70 or GameCommon.tableConfig.wKindID == 92 )then 
             GameCommon.mGang = true
         end     
     elseif Bit:_and(WeaveItemArray.cbWeaveKind,GameCommon.WIK_FILL) ~= 0 then
@@ -1400,433 +1681,433 @@ function TableLayer:getWeaveItemArray(var)
 end
 
 --新增明牌偎
-function TableLayer:setWeaveToMingPaiItemArray( wChairID, bWeaveItemCount, WeaveItemArray,pos )
-    GameCommon.player[wChairID].bWeaveItemCount = bWeaveItemCount
-    GameCommon.player[wChairID].WeaveItemArray = WeaveItemArray
-    local viewID = GameCommon:getViewIDByChairID(wChairID)
-    local uiPanel_weaveItemArray = ccui.Helper:seekWidgetByName(self.root,string.format("Panel_weaveItemArray%d",viewID))
-    uiPanel_weaveItemArray:removeAllChildren()
-    local size = uiPanel_weaveItemArray:getContentSize()
-    local bWeaveItemCount = GameCommon.player[wChairID].bWeaveItemCount
-    local WeaveItemArray = GameCommon.player[wChairID].WeaveItemArray
-    local node = nil
-    if viewID == 1 then
-        local cardScale = 1.1
-        local cardWidth = 81 * cardScale
-        local cardHeight = 144 * cardScale
-        local beganX = cardWidth/2
-        local beganY = cardHeight/2
-        local stepX = cardWidth*3
-        local stepY = 0
-        for key = 1, bWeaveItemCount do
-            local var = GameCommon.player[wChairID].WeaveItemArray[key]
-            local content = ccui.Layout:create()
-            if key == pos then
-                node = content
-            end
-            GameCommon.player[wChairID].WeaveItemArray[key].node = content
-            uiPanel_weaveItemArray:addChild(content)
-            content:setContentSize(cc.size(cardWidth*3,size.height))
-            content:setPosition(stepX*(key-1),0)
-            local cbCardList = self:getWeaveItemArray(var)
+-- function TableLayer:setWeaveToMingPaiItemArray( wChairID, bWeaveItemCount, WeaveItemArray,pos )
+--     GameCommon.player[wChairID].bWeaveItemCount = bWeaveItemCount
+--     GameCommon.player[wChairID].WeaveItemArray = WeaveItemArray
+--     local viewID = GameCommon:getViewIDByChairID(wChairID)
+--     local uiPanel_weaveItemArray = ccui.Helper:seekWidgetByName(self.root,string.format("Panel_weaveItemArray%d",viewID))
+--     uiPanel_weaveItemArray:removeAllChildren()
+--     local size = uiPanel_weaveItemArray:getContentSize()
+--     local bWeaveItemCount = GameCommon.player[wChairID].bWeaveItemCount
+--     local WeaveItemArray = GameCommon.player[wChairID].WeaveItemArray
+--     local node = nil
+--     if viewID == 1 then
+--         local cardScale = 1.1
+--         local cardWidth = 81 * cardScale
+--         local cardHeight = 144 * cardScale
+--         local beganX = cardWidth/2
+--         local beganY = cardHeight/2
+--         local stepX = cardWidth*3
+--         local stepY = 0
+--         for key = 1, bWeaveItemCount do
+--             local var = GameCommon.player[wChairID].WeaveItemArray[key]
+--             local content = ccui.Layout:create()
+--             if key == pos then
+--                 node = content
+--             end
+--             GameCommon.player[wChairID].WeaveItemArray[key].node = content
+--             uiPanel_weaveItemArray:addChild(content)
+--             content:setContentSize(cc.size(cardWidth*3,size.height))
+--             content:setPosition(stepX*(key-1),0)
+--             local cbCardList = self:getWeaveItemArray(var)
 
-            local wProvideUser = var.wProvideUser --提供
-            local count = #cbCardList --总数
+--             local wProvideUser = var.wProvideUser --提供
+--             local count = #cbCardList --总数
 
-            for k, v in pairs(cbCardList) do
-                local card = nil
-                if k < 4 and var.cbPublicCard == 2 and (Bit:_and(var.cbWeaveKind,GameCommon.WIK_GANG) ~= 0 or Bit:_and(var.cbWeaveKind,GameCommon.WIK_FILL) ~= 0) then
-                    card = GameCommon:getDiscardCardAndWeaveItemArray(0,viewID)
-                else
-                    card = GameCommon:getDiscardCardAndWeaveItemArray(v,viewID)
-                    if k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_LEFT) ~= 0 then
-                        card:setColor(cc.c3b(170,170,170))
-                    elseif k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_CENTER) ~= 0 then
-                        card:setColor(cc.c3b(170,170,170))
-                    elseif k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_RIGHT) ~= 0 then
-                        card:setColor(cc.c3b(170,170,170))
-                    else
-                    end
-                end
-                content:addChild(card)
-                card.data = v
-                if k == 4 then
-                    card:setScale(cardScale) 
-                    card:setPosition(cardWidth/2+(2-1)*cardWidth,size.height/2+20)
-                    self:addArrow(wProvideUser,card,wChairID)
-                else
-                    card:setScale(cardScale) 
-                    card:setPosition(cardWidth/2+(k-1)*cardWidth,size.height/2)
-                end
-                if count == 3 then --总共3个
-                    if k == 2 then
-                        self:addArrow(wProvideUser,card,wChairID)
-                    end
-                end
-            end
-        end
+--             for k, v in pairs(cbCardList) do
+--                 local card = nil
+--                 if k < 4 and var.cbPublicCard == 2 and (Bit:_and(var.cbWeaveKind,GameCommon.WIK_GANG) ~= 0 or Bit:_and(var.cbWeaveKind,GameCommon.WIK_FILL) ~= 0) then
+--                     card = GameCommon:getDiscardCardAndWeaveItemArray(0,viewID)
+--                 else
+--                     card = GameCommon:getDiscardCardAndWeaveItemArray(v,viewID)
+--                     if k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_LEFT) ~= 0 then
+--                         card:setColor(cc.c3b(170,170,170))
+--                     elseif k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_CENTER) ~= 0 then
+--                         card:setColor(cc.c3b(170,170,170))
+--                     elseif k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_RIGHT) ~= 0 then
+--                         card:setColor(cc.c3b(170,170,170))
+--                     else
+--                     end
+--                 end
+--                 content:addChild(card)
+--                 card.data = v
+--                 if k == 4 then
+--                     card:setScale(cardScale) 
+--                     card:setPosition(cardWidth/2+(2-1)*cardWidth,size.height/2+20)
+--                     self:addArrow(wProvideUser,card,wChairID)
+--                 else
+--                     card:setScale(cardScale) 
+--                     card:setPosition(cardWidth/2+(k-1)*cardWidth,size.height/2)
+--                 end
+--                 if count == 3 then --总共3个
+--                     if k == 2 then
+--                         self:addArrow(wProvideUser,card,wChairID)
+--                     end
+--                 end
+--             end
+--         end
 
-        local kp = GameCommon.player[wChairID].wMingPaiCard
+--         local kp = GameCommon.player[wChairID].wMingPaiCard
 
-        dump(kp,'fx------xxxxxxxxxxxx-------->>')
+--         dump(kp,'fx------xxxxxxxxxxxx-------->>')
 
-        local index = 1
-        if #kp > 0 then --添加刻子
-            for key,v in ipairs(kp) do
-                if v ~= 0 then
-                    local content = ccui.Layout:create()
-                    uiPanel_weaveItemArray:addChild(content)
-                    content:setContentSize(cc.size(cardWidth*3,size.height))
-                    content:setPosition(stepX*(index-1 + bWeaveItemCount) ,0)
-                    index = index + 1
-                    for i=1,3 do
-                        local card = GameCommon:getDiscardCardAndWeaveItemArray(v,viewID)
-                        local imageKou = ccui.ImageView:create("majiang/card/koutip.png")
-                        card:addChild(imageKou)
-                        content:addChild(card)
-                        imageKou:setPosition(cc.p(54,42))
-                        card:setScale(cardScale) 
-                        card.data = v
-                        card:setPosition(cardWidth/2+(i-1)*cardWidth,size.height/2)
-                    end
-                end
-            end
-        end
+--         local index = 1
+--         if #kp > 0 then --添加刻子
+--             for key,v in ipairs(kp) do
+--                 if v ~= 0 then
+--                     local content = ccui.Layout:create()
+--                     uiPanel_weaveItemArray:addChild(content)
+--                     content:setContentSize(cc.size(cardWidth*3,size.height))
+--                     content:setPosition(stepX*(index-1 + bWeaveItemCount) ,0)
+--                     index = index + 1
+--                     for i=1,3 do
+--                         local card = GameCommon:getDiscardCardAndWeaveItemArray(v,viewID)
+--                         local imageKou = ccui.ImageView:create("majiang/card/koutip.png")
+--                         card:addChild(imageKou)
+--                         content:addChild(card)
+--                         imageKou:setPosition(cc.p(54,42))
+--                         card:setScale(cardScale) 
+--                         card.data = v
+--                         card:setPosition(cardWidth/2+(i-1)*cardWidth,size.height/2)
+--                     end
+--                 end
+--             end
+--         end
         
-    elseif viewID == 2 then
-        local cardScale = 1
-        local cardWidth = 52 * cardScale
-        local cardHeight = 47 * cardScale
-        local beganX = 0
-        local beganY = size.height-(cardHeight-10)*3
-        local stepX = 0
-        local stepY = -((cardHeight-10)*3)
-        for key = 1, bWeaveItemCount do
-            local var = GameCommon.player[wChairID].WeaveItemArray[key]
-            local content = ccui.Layout:create()
-            if key == pos then
-                node = content
-            end
-            GameCommon.player[wChairID].WeaveItemArray[key].node = content
-            uiPanel_weaveItemArray:addChild(content)
-            content:setContentSize(cc.size(size.width,(cardHeight-10)*3))
-            content:setPosition(beganX,beganY + stepY*(key-1))
-            local cbCardList = self:getWeaveItemArray(var)
+--     elseif viewID == 2 then
+--         local cardScale = 1
+--         local cardWidth = 52 * cardScale
+--         local cardHeight = 47 * cardScale
+--         local beganX = 0
+--         local beganY = size.height-(cardHeight-10)*3
+--         local stepX = 0
+--         local stepY = -((cardHeight-10)*3)
+--         for key = 1, bWeaveItemCount do
+--             local var = GameCommon.player[wChairID].WeaveItemArray[key]
+--             local content = ccui.Layout:create()
+--             if key == pos then
+--                 node = content
+--             end
+--             GameCommon.player[wChairID].WeaveItemArray[key].node = content
+--             uiPanel_weaveItemArray:addChild(content)
+--             content:setContentSize(cc.size(size.width,(cardHeight-10)*3))
+--             content:setPosition(beganX,beganY + stepY*(key-1))
+--             local cbCardList = self:getWeaveItemArray(var)
 
-            local wProvideUser = var.wProvideUser --提供
-            local count = #cbCardList --总数
+--             local wProvideUser = var.wProvideUser --提供
+--             local count = #cbCardList --总数
 
-            for k, v in pairs(cbCardList) do
-                local card = nil
-                if k < 4 and var.cbPublicCard == 2 and (Bit:_and(var.cbWeaveKind,GameCommon.WIK_GANG) ~= 0 or Bit:_and(var.cbWeaveKind,GameCommon.WIK_FILL) ~= 0) then
-                    card = GameCommon:getDiscardCardAndWeaveItemArray(0,viewID)
-                else
-                    card = GameCommon:getDiscardCardAndWeaveItemArray(v,viewID)
-                    if k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_LEFT) ~= 0 then
-                        card:setColor(cc.c3b(170,170,170))
-                    elseif k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_CENTER) ~= 0 then
-                        card:setColor(cc.c3b(170,170,170))
-                    elseif k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_RIGHT) ~= 0 then
-                        card:setColor(cc.c3b(170,170,170))
-                    else
-                    end
-                end
-                content:addChild(card)
-                card.data = v
-                if k == 4 then
-                    card:setScale(cardScale) 
-                    card:setPosition(size.width/2,cardHeight/2+(2-1)*(cardHeight-10))
-                    card:setLocalZOrder(4)   
-                    self:addArrow(wProvideUser,card,wChairID) 
-                else
-                    card:setScale(cardScale) 
-                    card:setPosition(size.width/2,cardHeight/2-10+(k-1)*(cardHeight-10))
-                    card:setLocalZOrder(3-k)    
-                end  
-                if count == 3 then --总共3个
-                    if k == 2 then
-                        self:addArrow(wProvideUser,card,wChairID)
-                    end
-                end
-            end
-        end
+--             for k, v in pairs(cbCardList) do
+--                 local card = nil
+--                 if k < 4 and var.cbPublicCard == 2 and (Bit:_and(var.cbWeaveKind,GameCommon.WIK_GANG) ~= 0 or Bit:_and(var.cbWeaveKind,GameCommon.WIK_FILL) ~= 0) then
+--                     card = GameCommon:getDiscardCardAndWeaveItemArray(0,viewID)
+--                 else
+--                     card = GameCommon:getDiscardCardAndWeaveItemArray(v,viewID)
+--                     if k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_LEFT) ~= 0 then
+--                         card:setColor(cc.c3b(170,170,170))
+--                     elseif k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_CENTER) ~= 0 then
+--                         card:setColor(cc.c3b(170,170,170))
+--                     elseif k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_RIGHT) ~= 0 then
+--                         card:setColor(cc.c3b(170,170,170))
+--                     else
+--                     end
+--                 end
+--                 content:addChild(card)
+--                 card.data = v
+--                 if k == 4 then
+--                     card:setScale(cardScale) 
+--                     card:setPosition(size.width/2,cardHeight/2+(2-1)*(cardHeight-10))
+--                     card:setLocalZOrder(4)   
+--                     self:addArrow(wProvideUser,card,wChairID) 
+--                 else
+--                     card:setScale(cardScale) 
+--                     card:setPosition(size.width/2,cardHeight/2-10+(k-1)*(cardHeight-10))
+--                     card:setLocalZOrder(3-k)    
+--                 end  
+--                 if count == 3 then --总共3个
+--                     if k == 2 then
+--                         self:addArrow(wProvideUser,card,wChairID)
+--                     end
+--                 end
+--             end
+--         end
 
-        if GameCommon.playbackData then-- 为了保证游戏正常分开
-            local kp = GameCommon.player[wChairID].wMingPaiCard
-            local index = 1
-            if #kp > 0 then --添加刻子
-                for key,v in ipairs(kp) do
-                    if v ~= 0 then
-                        local content = ccui.Layout:create()
-                        uiPanel_weaveItemArray:addChild(content)
-                        content:setContentSize(cc.size(size.width,(cardHeight-10)*3))
-                        content:setPosition(beganX,beganY + stepY*(index-1 + bWeaveItemCount))
-                        index = index + 1
-                        for i=1,3 do
-                            local card = GameCommon:getDiscardCardAndWeaveItemArray(v,viewID)
-                            local imageKou = ccui.ImageView:create("majiang/card/koutip.png")
-                            imageKou:setScale(0.44)
-                            imageKou:setPosition(cc.p(40,17))
-                            card:addChild(imageKou)
-                            card.data = v
-                            card:setScale(cardScale) 
-                            card:setPosition(size.width/2,cardHeight/2-10+(i-1)*(cardHeight-10))
-                            content:addChild(card)
-                            card:setLocalZOrder(3-i) 
-                        end
-                    end
-                end
-            end
-        else
-            local kp = GameCommon.player[wChairID].wMingCardCount --扣牌数量
-            --print('--->>>>>',kp)
-            if kp > 0 then --添加刻子
-                for i=1,kp/3 do
-                    local content = ccui.Layout:create()
-                    uiPanel_weaveItemArray:addChild(content)
-                    content:setContentSize(cc.size(size.width,(cardHeight-10)*3))
-                    content:setPosition(beganX,beganY + stepY*(i-1 + bWeaveItemCount))
-                    for k=1,3 do
-                        local card = GameCommon:getDiscardCardAndWeaveItemArray(0,viewID)
-                        card:setScale(cardScale) 
-                        card:setPosition(size.width/2,cardHeight/2-10+(k-1)*(cardHeight-10))
-                        content:addChild(card)
-                        card:setLocalZOrder(3-k)  
-                    end
-                end
-            end
-        end
-        --添加扣牌
+--         if GameCommon.playbackData then-- 为了保证游戏正常分开
+--             local kp = GameCommon.player[wChairID].wMingPaiCard
+--             local index = 1
+--             if #kp > 0 then --添加刻子
+--                 for key,v in ipairs(kp) do
+--                     if v ~= 0 then
+--                         local content = ccui.Layout:create()
+--                         uiPanel_weaveItemArray:addChild(content)
+--                         content:setContentSize(cc.size(size.width,(cardHeight-10)*3))
+--                         content:setPosition(beganX,beganY + stepY*(index-1 + bWeaveItemCount))
+--                         index = index + 1
+--                         for i=1,3 do
+--                             local card = GameCommon:getDiscardCardAndWeaveItemArray(v,viewID)
+--                             local imageKou = ccui.ImageView:create("majiang/card/koutip.png")
+--                             imageKou:setScale(0.44)
+--                             imageKou:setPosition(cc.p(40,17))
+--                             card:addChild(imageKou)
+--                             card.data = v
+--                             card:setScale(cardScale) 
+--                             card:setPosition(size.width/2,cardHeight/2-10+(i-1)*(cardHeight-10))
+--                             content:addChild(card)
+--                             card:setLocalZOrder(3-i) 
+--                         end
+--                     end
+--                 end
+--             end
+--         else
+--             local kp = GameCommon.player[wChairID].wMingCardCount --扣牌数量
+--             --print('--->>>>>',kp)
+--             if kp > 0 then --添加刻子
+--                 for i=1,kp/3 do
+--                     local content = ccui.Layout:create()
+--                     uiPanel_weaveItemArray:addChild(content)
+--                     content:setContentSize(cc.size(size.width,(cardHeight-10)*3))
+--                     content:setPosition(beganX,beganY + stepY*(i-1 + bWeaveItemCount))
+--                     for k=1,3 do
+--                         local card = GameCommon:getDiscardCardAndWeaveItemArray(0,viewID)
+--                         card:setScale(cardScale) 
+--                         card:setPosition(size.width/2,cardHeight/2-10+(k-1)*(cardHeight-10))
+--                         content:addChild(card)
+--                         card:setLocalZOrder(3-k)  
+--                     end
+--                 end
+--             end
+--         end
+--         --添加扣牌
        
-    elseif viewID == 3 then
-        local cardScale = 1.2
-        local cardWidth = 43 * cardScale
-        local cardHeight = 63 * cardScale
-        local beganX = size.width-cardWidth*3
-        local beganY = 0
-        local stepX = 0
-        local stepY = -(cardWidth)*3
-        for key = 1, bWeaveItemCount do
-            local var = GameCommon.player[wChairID].WeaveItemArray[key]
-            local content = ccui.Layout:create()
-            if key == pos then
-                node = content
-            end
-            GameCommon.player[wChairID].WeaveItemArray[key].node = content
-            uiPanel_weaveItemArray:addChild(content)
-            content:setContentSize(cc.size(cardWidth*3,size.height))
-            content:setPosition(beganX + stepY*(key-1),beganY)
-            local cbCardList = self:getWeaveItemArray(var)
+--     elseif viewID == 3 then
+--         local cardScale = 1.2
+--         local cardWidth = 43 * cardScale
+--         local cardHeight = 63 * cardScale
+--         local beganX = size.width-cardWidth*3
+--         local beganY = 0
+--         local stepX = 0
+--         local stepY = -(cardWidth)*3
+--         for key = 1, bWeaveItemCount do
+--             local var = GameCommon.player[wChairID].WeaveItemArray[key]
+--             local content = ccui.Layout:create()
+--             if key == pos then
+--                 node = content
+--             end
+--             GameCommon.player[wChairID].WeaveItemArray[key].node = content
+--             uiPanel_weaveItemArray:addChild(content)
+--             content:setContentSize(cc.size(cardWidth*3,size.height))
+--             content:setPosition(beganX + stepY*(key-1),beganY)
+--             local cbCardList = self:getWeaveItemArray(var)
 
-            local wProvideUser = var.wProvideUser --提供
-            local count = #cbCardList --总数
+--             local wProvideUser = var.wProvideUser --提供
+--             local count = #cbCardList --总数
 
-            for k, v in pairs(cbCardList) do
-                local card = nil
-                if k < 4 and var.cbPublicCard == 2 and (Bit:_and(var.cbWeaveKind,GameCommon.WIK_GANG) ~= 0 or Bit:_and(var.cbWeaveKind,GameCommon.WIK_FILL) ~= 0) then
-                    card = GameCommon:getDiscardCardAndWeaveItemArray(0,viewID)
-                else
-                    card = GameCommon:getDiscardCardAndWeaveItemArray(v,viewID)
-                    if k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_LEFT) ~= 0 then
-                        card:setColor(cc.c3b(170,170,170))
-                    elseif k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_CENTER) ~= 0 then
-                        card:setColor(cc.c3b(170,170,170))
-                    elseif k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_RIGHT) ~= 0 then
-                        card:setColor(cc.c3b(170,170,170))
-                    else
-                    end
-                end
-                content:addChild(card)
-                card.data = v
+--             for k, v in pairs(cbCardList) do
+--                 local card = nil
+--                 if k < 4 and var.cbPublicCard == 2 and (Bit:_and(var.cbWeaveKind,GameCommon.WIK_GANG) ~= 0 or Bit:_and(var.cbWeaveKind,GameCommon.WIK_FILL) ~= 0) then
+--                     card = GameCommon:getDiscardCardAndWeaveItemArray(0,viewID)
+--                 else
+--                     card = GameCommon:getDiscardCardAndWeaveItemArray(v,viewID)
+--                     if k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_LEFT) ~= 0 then
+--                         card:setColor(cc.c3b(170,170,170))
+--                     elseif k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_CENTER) ~= 0 then
+--                         card:setColor(cc.c3b(170,170,170))
+--                     elseif k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_RIGHT) ~= 0 then
+--                         card:setColor(cc.c3b(170,170,170))
+--                     else
+--                     end
+--                 end
+--                 content:addChild(card)
+--                 card.data = v
 
-                if k == 4 then
-                    card:setScale(cardScale) 
-                    card:setPosition(cardWidth/2+(2-1)*cardWidth,size.height/2+12)
-                    card:setLocalZOrder(4)  
-                    self:addArrow(wProvideUser,card,wChairID)
-                else
-                    card:setScale(cardScale) 
-                    card:setPosition(cardWidth/2+(k-1)*cardWidth,size.height/2)
-                    card:setLocalZOrder(3-k)      
-                end
+--                 if k == 4 then
+--                     card:setScale(cardScale) 
+--                     card:setPosition(cardWidth/2+(2-1)*cardWidth,size.height/2+12)
+--                     card:setLocalZOrder(4)  
+--                     self:addArrow(wProvideUser,card,wChairID)
+--                 else
+--                     card:setScale(cardScale) 
+--                     card:setPosition(cardWidth/2+(k-1)*cardWidth,size.height/2)
+--                     card:setLocalZOrder(3-k)      
+--                 end
 
-                if count == 3 then --总共3个
-                    if k == 2 then
-                        self:addArrow(wProvideUser,card,wChairID)
-                    end
-                end
-            end
-        end
+--                 if count == 3 then --总共3个
+--                     if k == 2 then
+--                         self:addArrow(wProvideUser,card,wChairID)
+--                     end
+--                 end
+--             end
+--         end
 
-        if GameCommon.playbackData then
-            print('-->>>xxxxxxxx')
-            dump(GameCommon.player[wChairID].wMingPaiCard,'xxxx')
-            local kp = GameCommon.player[wChairID].wMingPaiCard
-            local index = 1
-            if #kp > 0 then --添加刻子
-                for key,v in ipairs(kp) do
-                    if v ~= 0 then
-                        local content = ccui.Layout:create()
-                        uiPanel_weaveItemArray:addChild(content)
-                        content:setContentSize(cc.size(cardWidth*3,size.height))
-                        content:setPosition(beganX + stepY*(index-1+bWeaveItemCount),beganY)
-                        index = index + 1
-                        for i=1,3 do
-                            local card = GameCommon:getDiscardCardAndWeaveItemArray(v,viewID)
-                            local imageKou = ccui.ImageView:create("majiang/card/koutip.png")
-                            card:addChild(imageKou)
-                            imageKou:setScale(0.44)
-                            imageKou:setPosition(cc.p(31,19))
-                            card.data = v
-                            card:setScale(cardScale) 
-                            card:setPosition(cardWidth/2+(i-1)*cardWidth,size.height/2)
-                            content:addChild(card)
-                            card:setLocalZOrder(3-i)   
-                        end
-                    end
-                end
-            end
-        else
-            --添加扣牌
-            local kp = GameCommon.player[wChairID].wMingCardCount --扣牌数量
+--         if GameCommon.playbackData then
+--             print('-->>>xxxxxxxx')
+--             dump(GameCommon.player[wChairID].wMingPaiCard,'xxxx')
+--             local kp = GameCommon.player[wChairID].wMingPaiCard
+--             local index = 1
+--             if #kp > 0 then --添加刻子
+--                 for key,v in ipairs(kp) do
+--                     if v ~= 0 then
+--                         local content = ccui.Layout:create()
+--                         uiPanel_weaveItemArray:addChild(content)
+--                         content:setContentSize(cc.size(cardWidth*3,size.height))
+--                         content:setPosition(beganX + stepY*(index-1+bWeaveItemCount),beganY)
+--                         index = index + 1
+--                         for i=1,3 do
+--                             local card = GameCommon:getDiscardCardAndWeaveItemArray(v,viewID)
+--                             local imageKou = ccui.ImageView:create("majiang/card/koutip.png")
+--                             card:addChild(imageKou)
+--                             imageKou:setScale(0.44)
+--                             imageKou:setPosition(cc.p(31,19))
+--                             card.data = v
+--                             card:setScale(cardScale) 
+--                             card:setPosition(cardWidth/2+(i-1)*cardWidth,size.height/2)
+--                             content:addChild(card)
+--                             card:setLocalZOrder(3-i)   
+--                         end
+--                     end
+--                 end
+--             end
+--         else
+--             --添加扣牌
+--             local kp = GameCommon.player[wChairID].wMingCardCount --扣牌数量
 
-            if kp > 0 then --添加刻子
-                for i=1,kp / 3 do --刻子个数
-                    local content = ccui.Layout:create()
-                    uiPanel_weaveItemArray:addChild(content)
-                    content:setContentSize(cc.size(cardWidth*3,size.height))
-                    content:setPosition(beganX + stepY*(i-1+bWeaveItemCount),beganY)
-                    for k=1,3 do
-                        local card = GameCommon:getDiscardCardAndWeaveItemArray(0,viewID)
-                        card:setScale(cardScale) 
-                        card:setPosition(cardWidth/2+(k-1)*cardWidth,size.height/2)
-                        content:addChild(card)
-                        card:setLocalZOrder(3-k)   
-                    end
-                end
-            end
-        end
-    elseif viewID == 4 then
-        local cardScale = 1
-        local cardWidth = 52 * cardScale
-        local cardHeight = 47 * cardScale
-        local beganX = 0
-        local beganY = 0
-        local stepX = 0
-        local stepY = (cardHeight-15)*3
-        for key = 1, bWeaveItemCount do
-            local var = GameCommon.player[wChairID].WeaveItemArray[key]
-            local content = ccui.Layout:create()
-            if key == pos then
-                node = content
-            end
-            GameCommon.player[wChairID].WeaveItemArray[key].node = content
-            uiPanel_weaveItemArray:addChild(content)
-            content:setContentSize(cc.size(size.width,(cardHeight-20)*3))
-            content:setPosition(beganX,beganY + stepY*(key-1))
-            content:setLocalZOrder(bWeaveItemCount-key)  
-            local cbCardList = self:getWeaveItemArray(var)
+--             if kp > 0 then --添加刻子
+--                 for i=1,kp / 3 do --刻子个数
+--                     local content = ccui.Layout:create()
+--                     uiPanel_weaveItemArray:addChild(content)
+--                     content:setContentSize(cc.size(cardWidth*3,size.height))
+--                     content:setPosition(beganX + stepY*(i-1+bWeaveItemCount),beganY)
+--                     for k=1,3 do
+--                         local card = GameCommon:getDiscardCardAndWeaveItemArray(0,viewID)
+--                         card:setScale(cardScale) 
+--                         card:setPosition(cardWidth/2+(k-1)*cardWidth,size.height/2)
+--                         content:addChild(card)
+--                         card:setLocalZOrder(3-k)   
+--                     end
+--                 end
+--             end
+--         end
+--     elseif viewID == 4 then
+--         local cardScale = 1
+--         local cardWidth = 52 * cardScale
+--         local cardHeight = 47 * cardScale
+--         local beganX = 0
+--         local beganY = 0
+--         local stepX = 0
+--         local stepY = (cardHeight-15)*3
+--         for key = 1, bWeaveItemCount do
+--             local var = GameCommon.player[wChairID].WeaveItemArray[key]
+--             local content = ccui.Layout:create()
+--             if key == pos then
+--                 node = content
+--             end
+--             GameCommon.player[wChairID].WeaveItemArray[key].node = content
+--             uiPanel_weaveItemArray:addChild(content)
+--             content:setContentSize(cc.size(size.width,(cardHeight-20)*3))
+--             content:setPosition(beganX,beganY + stepY*(key-1))
+--             content:setLocalZOrder(bWeaveItemCount-key)  
+--             local cbCardList = self:getWeaveItemArray(var)
 
-            local wProvideUser = var.wProvideUser --提供
-            local count = #cbCardList --总数
+--             local wProvideUser = var.wProvideUser --提供
+--             local count = #cbCardList --总数
 
-            for k, v in pairs(cbCardList) do
-                local card = nil
-                if k < 4 and var.cbPublicCard == 2 and (Bit:_and(var.cbWeaveKind,GameCommon.WIK_GANG) ~= 0 or Bit:_and(var.cbWeaveKind,GameCommon.WIK_FILL) ~= 0) then
-                    card = GameCommon:getDiscardCardAndWeaveItemArray(0,viewID)
-                else
-                    card = GameCommon:getDiscardCardAndWeaveItemArray(v,viewID)
-                    if k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_LEFT) ~= 0 then
-                        card:setColor(cc.c3b(170,170,170))
-                    elseif k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_CENTER) ~= 0 then
-                        card:setColor(cc.c3b(170,170,170))
-                    elseif k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_RIGHT) ~= 0 then
-                        card:setColor(cc.c3b(170,170,170))
-                    else
-                    end
-                end
-                content:addChild(card)
-                card.data = v
+--             for k, v in pairs(cbCardList) do
+--                 local card = nil
+--                 if k < 4 and var.cbPublicCard == 2 and (Bit:_and(var.cbWeaveKind,GameCommon.WIK_GANG) ~= 0 or Bit:_and(var.cbWeaveKind,GameCommon.WIK_FILL) ~= 0) then
+--                     card = GameCommon:getDiscardCardAndWeaveItemArray(0,viewID)
+--                 else
+--                     card = GameCommon:getDiscardCardAndWeaveItemArray(v,viewID)
+--                     if k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_LEFT) ~= 0 then
+--                         card:setColor(cc.c3b(170,170,170))
+--                     elseif k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_CENTER) ~= 0 then
+--                         card:setColor(cc.c3b(170,170,170))
+--                     elseif k == 2 and Bit:_and(var.cbWeaveKind,GameCommon.WIK_RIGHT) ~= 0 then
+--                         card:setColor(cc.c3b(170,170,170))
+--                     else
+--                     end
+--                 end
+--                 content:addChild(card)
+--                 card.data = v
 
-                if k == 4 then
-                    card:setScale(cardScale) 
-                    card:setPosition(size.width/2,cardHeight/2+(2-1)*(cardHeight))
-                    card:setLocalZOrder(4)  
-                    self:addArrow(wProvideUser,card,wChairID)
-                else
-                    card:setScale(cardScale) 
-                    card:setPosition(size.width/2,cardHeight/2+(k-1)*(cardHeight-15))
-                    card:setLocalZOrder(3-k)   
-                end 
+--                 if k == 4 then
+--                     card:setScale(cardScale) 
+--                     card:setPosition(size.width/2,cardHeight/2+(2-1)*(cardHeight))
+--                     card:setLocalZOrder(4)  
+--                     self:addArrow(wProvideUser,card,wChairID)
+--                 else
+--                     card:setScale(cardScale) 
+--                     card:setPosition(size.width/2,cardHeight/2+(k-1)*(cardHeight-15))
+--                     card:setLocalZOrder(3-k)   
+--                 end 
 
-                if count == 3 then --总共3个
-                    if k == 2 then
-                        self:addArrow(wProvideUser,card,wChairID)
-                    end
-                end
-            end
-        end
+--                 if count == 3 then --总共3个
+--                     if k == 2 then
+--                         self:addArrow(wProvideUser,card,wChairID)
+--                     end
+--                 end
+--             end
+--         end
 
-        if GameCommon.playbackData then
-            local kp = GameCommon.player[wChairID].wMingPaiCard
-            local index = 1
-            if #kp > 0 then --添加刻子
-                for key,v in ipairs(kp) do
-                    if v ~= 0 then
-                        local content = ccui.Layout:create()
-                        uiPanel_weaveItemArray:addChild(content)
-                        content:setContentSize(cc.size(cardWidth*3,size.height))
-                        content:setPosition(beganX,beganY + stepY*(index-1+bWeaveItemCount) + 15)
-                        content:setLocalZOrder(-#kp+bWeaveItemCount-index) 
-                        index = index + 1
-                        for i=1,3 do
-                            local card = GameCommon:getDiscardCardAndWeaveItemArray(v,viewID)
-                            local imageKou = ccui.ImageView:create("majiang/card/koutip.png")
-                            card:addChild(imageKou)
-                            imageKou:setScale(0.44)
-                            imageKou:setPosition(cc.p(40.57,19.95))
-                            card.data = v
-                            card:setScale(cardScale) 
-                            card:setPosition(size.width/2,cardHeight/2+(i-1)*(cardHeight-15))
-                            content:addChild(card)
-                            card:setLocalZOrder(3-i)  
-                        end
-                    end
-                end
-            end
-        else
-            --添加扣牌
-            local kp = GameCommon.player[wChairID].wMingCardCount --扣牌数量
+--         if GameCommon.playbackData then
+--             local kp = GameCommon.player[wChairID].wMingPaiCard
+--             local index = 1
+--             if #kp > 0 then --添加刻子
+--                 for key,v in ipairs(kp) do
+--                     if v ~= 0 then
+--                         local content = ccui.Layout:create()
+--                         uiPanel_weaveItemArray:addChild(content)
+--                         content:setContentSize(cc.size(cardWidth*3,size.height))
+--                         content:setPosition(beganX,beganY + stepY*(index-1+bWeaveItemCount) + 15)
+--                         content:setLocalZOrder(-#kp+bWeaveItemCount-index) 
+--                         index = index + 1
+--                         for i=1,3 do
+--                             local card = GameCommon:getDiscardCardAndWeaveItemArray(v,viewID)
+--                             local imageKou = ccui.ImageView:create("majiang/card/koutip.png")
+--                             card:addChild(imageKou)
+--                             imageKou:setScale(0.44)
+--                             imageKou:setPosition(cc.p(40.57,19.95))
+--                             card.data = v
+--                             card:setScale(cardScale) 
+--                             card:setPosition(size.width/2,cardHeight/2+(i-1)*(cardHeight-15))
+--                             content:addChild(card)
+--                             card:setLocalZOrder(3-i)  
+--                         end
+--                     end
+--                 end
+--             end
+--         else
+--             --添加扣牌
+--             local kp = GameCommon.player[wChairID].wMingCardCount --扣牌数量
                 
-            if kp > 0 then --添加刻子
-                for i=1,kp/3 do
-                    local content = ccui.Layout:create()
-                    uiPanel_weaveItemArray:addChild(content)
-                    content:setContentSize(cc.size(cardWidth*3,size.height))
-                    content:setPosition(beganX,beganY + stepY*(i-1+bWeaveItemCount) + 15)
-                    content:setLocalZOrder(-kp+bWeaveItemCount-i)  
-                    for k=1,3 do
-                        local card = GameCommon:getDiscardCardAndWeaveItemArray(0,viewID)
-                        card:setScale(cardScale) 
-                        card:setPosition(size.width/2,cardHeight/2+(k-1)*(cardHeight-15))
-                        content:addChild(card)
-                        card:setLocalZOrder(3-k)   
-                    end
-                end
-            end
-        end
-    end
-    return node
-end
+--             if kp > 0 then --添加刻子
+--                 for i=1,kp/3 do
+--                     local content = ccui.Layout:create()
+--                     uiPanel_weaveItemArray:addChild(content)
+--                     content:setContentSize(cc.size(cardWidth*3,size.height))
+--                     content:setPosition(beganX,beganY + stepY*(i-1+bWeaveItemCount) + 15)
+--                     content:setLocalZOrder(-kp+bWeaveItemCount-i)  
+--                     for k=1,3 do
+--                         local card = GameCommon:getDiscardCardAndWeaveItemArray(0,viewID)
+--                         card:setScale(cardScale) 
+--                         card:setPosition(size.width/2,cardHeight/2+(k-1)*(cardHeight-15))
+--                         content:addChild(card)
+--                         card:setLocalZOrder(3-k)   
+--                     end
+--                 end
+--             end
+--         end
+--     end
+--     return node
+-- end
 
 --更新吃牌组合
 function TableLayer:setWeaveItemArray(wChairID, bWeaveItemCount, WeaveItemArray,pos,bool)
     GameCommon.player[wChairID].bWeaveItemCount = bWeaveItemCount
     GameCommon.player[wChairID].WeaveItemArray = WeaveItemArray
-    if  GameCommon.player[wChairID].wMingTF and bool == nil  then --如果已经明牌//刷新明牌
-        print('-->>>刷新weaveItem')
-        return self:setWeaveToMingPaiItemArray(wChairID, bWeaveItemCount, WeaveItemArray,pos)
-    end
+    -- if  GameCommon.player[wChairID].wMingTF and bool == nil  then --如果已经明牌//刷新明牌
+    --     print('-->>>刷新weaveItem')
+    --     return self:setWeaveToMingPaiItemArray(wChairID, bWeaveItemCount, WeaveItemArray,pos)
+    -- end
     local viewID = GameCommon:getViewIDByChairID(wChairID)
     local uiPanel_weaveItemArray = ccui.Helper:seekWidgetByName(self.root,string.format("Panel_weaveItemArray%d",viewID))
     uiPanel_weaveItemArray:removeAllChildren()
@@ -1835,12 +2116,12 @@ function TableLayer:setWeaveItemArray(wChairID, bWeaveItemCount, WeaveItemArray,
     local WeaveItemArray = GameCommon.player[wChairID].WeaveItemArray
     local node = nil
     if viewID == 1 then
-        local cardScale = 1.1
+        local cardScale = 1.0
         local cardWidth = 81 * cardScale
         local cardHeight = 114 * cardScale
         local beganX = cardWidth/2
         local beganY = cardHeight/2
-        local stepX = cardWidth*3
+        local stepX = cardWidth*3+5
         local stepY = 0
         for key = 1, bWeaveItemCount do
             local var = GameCommon.player[wChairID].WeaveItemArray[key]
@@ -1889,13 +2170,13 @@ function TableLayer:setWeaveItemArray(wChairID, bWeaveItemCount, WeaveItemArray,
         end
         
     elseif viewID == 2 then
-        local cardScale = 1
+        local cardScale = 0.85
         local cardWidth = 52 * cardScale
         local cardHeight = 45 * cardScale
         local beganX = 0
         local beganY = size.height-(cardHeight-10)*3
         local stepX = 0
-        local stepY = -((cardHeight-10)*3)
+        local stepY = -((cardHeight-10)*3)-15
         for key = 1, bWeaveItemCount do
             local var = GameCommon.player[wChairID].WeaveItemArray[key]
             local content = ccui.Layout:create()
@@ -1945,13 +2226,13 @@ function TableLayer:setWeaveItemArray(wChairID, bWeaveItemCount, WeaveItemArray,
             end
         end
     elseif viewID == 3 then
-        local cardScale = 1.2
+        local cardScale = 1.0
         local cardWidth = 43 * cardScale
         local cardHeight = 64 * cardScale
         local beganX = size.width-cardWidth*3
         local beganY = 0
         local stepX = 0
-        local stepY = -(cardWidth)*3
+        local stepY = -(cardWidth)*3-10
         for key = 1, bWeaveItemCount do
             local var = GameCommon.player[wChairID].WeaveItemArray[key]
             local content = ccui.Layout:create()
@@ -2003,13 +2284,13 @@ function TableLayer:setWeaveItemArray(wChairID, bWeaveItemCount, WeaveItemArray,
             end
         end
     elseif viewID == 4 then
-        local cardScale = 1
+        local cardScale = 0.85
         local cardWidth = 52 * cardScale
         local cardHeight = 47 * cardScale
         local beganX = 0
         local beganY = 0
         local stepX = 0
-        local stepY = (cardHeight-15)*3
+        local stepY = (cardHeight-15)*3+15
         for key = 1, bWeaveItemCount do
             local var = GameCommon.player[wChairID].WeaveItemArray[key]
             local content = ccui.Layout:create()
@@ -2116,7 +2397,7 @@ function TableLayer:showDiscardCard(wChairID, cbDiscardCount, bDiscardCard)
     local maxRow = 10
     local lastNode = nil
     if viewID == 1 then
-        local cardScale = 1.2
+        local cardScale = 1.0
         local cardWidth = 43 * cardScale
         local cardHeight = 63 * cardScale
         local beganX = cardWidth/2
@@ -2144,7 +2425,7 @@ function TableLayer:showDiscardCard(wChairID, cbDiscardCount, bDiscardCard)
         end
         
     elseif viewID == 2 then
-        local cardScale = 1.2
+        local cardScale = 1.0
         local cardWidth = 52 * cardScale
         local cardHeight = 42 * cardScale
         local beganX = cardWidth/2
@@ -2163,7 +2444,7 @@ function TableLayer:showDiscardCard(wChairID, cbDiscardCount, bDiscardCard)
         end
         
     elseif viewID == 3 then
-        local cardScale = 1.2
+        local cardScale = 1.0
         local cardWidth = 43 * cardScale
         local cardHeight = 64 * cardScale
         local beganX = size.width - cardWidth/2
@@ -2182,7 +2463,7 @@ function TableLayer:showDiscardCard(wChairID, cbDiscardCount, bDiscardCard)
         end
         
     elseif viewID == 4 then
-        local cardScale = 1.2
+        local cardScale = 1.0
         local cardWidth = 52 * cardScale
         local cardHeight = 42 * cardScale
         local beganX = size.width - cardWidth/2
@@ -2207,10 +2488,13 @@ end
 -------------------------------------------------------手牌-----------------------------------------------------
 --设置手牌
 function TableLayer:setHandCard(wChairID,cbCardCount,cbCardData)
-    if GameCommon.tableConfig.wKindID == 68 or  GameCommon.tableConfig.wKindID == 63 or  GameCommon.tableConfig.wKindID == 67  then
+    if GameCommon.tableConfig.wKindID == 68 or  GameCommon.tableConfig.wKindID == 63 or  GameCommon.tableConfig.wKindID == 67 or GameCommon.tableConfig.wKindID == 92 then
         local isAllHongZhong = true
         for i = 1, cbCardCount do
-            if cbCardData[i] ~= 0x31 then
+            if cbCardData[i] ~= 0x31 and GameCommon.tableConfig.wKindID ~= 92 then
+                isAllHongZhong = false
+                break
+            elseif GameCommon.tableConfig.wKindID == 92 and (GameCommon.cbKingCard~=nil and cbCardData[i] ~= GameCommon.cbKingCard[1] and cbCardData[i] ~= GameCommon.cbKingCard[2]) then
                 isAllHongZhong = false
                 break
             end
@@ -2226,6 +2510,22 @@ function TableLayer:setHandCard(wChairID,cbCardCount,cbCardData)
                 end
                 break
             end
+
+            if GameCommon.tableConfig.wKindID == 92 then 
+
+                local cbCardData_Tem = {}
+                for i = 1, cbCardCount do
+                    if ( GameCommon.cbKingCard~=nil and cbCardData[i] == GameCommon.cbKingCard[1] or cbCardData[i] == GameCommon.cbKingCard[2]) then
+                        -- local num = cbCardData[i]
+                        -- table.remove(cbCardData,i)
+                        table.insert(cbCardData_Tem,1,cbCardData[i])
+                    else
+                        table.insert(cbCardData_Tem,#cbCardData_Tem+1,cbCardData[i])
+                    end
+                end
+                cbCardData = cbCardData_Tem
+                local a = 1
+            end 
         end
     end
     GameCommon.player[wChairID].cbCardCount = cbCardCount
@@ -2247,9 +2547,9 @@ end
 function TableLayer:changeBgLayer()
 	local uiPanel_bg = ccui.Helper:seekWidgetByName(self.root, "Image_bg")
     local index = cc.UserDefault:getInstance():getIntegerForKey('kwxbg',0)
-    if index >= 0 and index <= 2 then
-    	uiPanel_bg:loadTexture(string.format("majiang/table/game_table_bg%d.jpg", index))
-    end
+    -- if index >= 0 and index <= 2 then
+    -- 	uiPanel_bg:loadTexture(string.format("majiang/table/game_table_bg%d.jpg", index))
+    -- end
 end
 
 --------------------------
@@ -2308,15 +2608,43 @@ function TableLayer:addOneHandCard(wChairID, cbCard, pos)
     if GameCommon.tableConfig.wKindID == 68 or  GameCommon.tableConfig.wKindID == 63 or  GameCommon.tableConfig.wKindID == 67 and cbCard == 0x31 then
         --红中麻将，红中放左边
         table.insert(GameCommon.player[wChairID].cbCardData,1,cbCard)
-    else
-        local isInsert = false
-        for i = 1, GameCommon.player[wChairID].cbCardCount do
-            if GameCommon.player[wChairID].cbCardData[i] and cbCard < GameCommon.player[wChairID].cbCardData[i] and ((GameCommon.tableConfig.wKindID ~= 68 and GameCommon.tableConfig.wKindID ~= 63 and   GameCommon.tableConfig.wKindID ~= 67) or GameCommon.player[wChairID].cbCardData[i] ~= 0x31) then
-                table.insert(GameCommon.player[wChairID].cbCardData,i,cbCard)
-                isInsert = true
-                break
+
+    elseif GameCommon.tableConfig.wKindID == 92 and (GameCommon.cbKingCard ~= nil and cbCard == GameCommon.cbKingCard[1] or cbCard == GameCommon.cbKingCard[2]) then
+        for j = 1 , 2 do
+            if GameCommon.cbKingCard[j] ~= 0 and  GameCommon.cbKingCard[j] == cbCard then 
+                --王牌麻将，王牌放左边
+                table.insert(GameCommon.player[wChairID].cbCardData,1,cbCard)
             end
         end
+    else
+        local isInsert = false
+        if GameCommon.tableConfig.wKindID ~= 92 then
+            for i = 1, GameCommon.player[wChairID].cbCardCount do
+                if GameCommon.player[wChairID].cbCardData[i] and cbCard < GameCommon.player[wChairID].cbCardData[i] and ((GameCommon.tableConfig.wKindID ~= 68 and GameCommon.tableConfig.wKindID ~= 63 and   GameCommon.tableConfig.wKindID ~= 67 ) or GameCommon.player[wChairID].cbCardData[i] ~= 0x31) then
+                    table.insert(GameCommon.player[wChairID].cbCardData,i,cbCard)
+                    isInsert = true
+                    break
+                end
+            end
+        else
+            if GameCommon.cbKingCard == nil then 
+                for i = 1, GameCommon.player[wChairID].cbCardCount do
+                    if GameCommon.player[wChairID].cbCardData[i] and cbCard < GameCommon.player[wChairID].cbCardData[i] then
+                        table.insert(GameCommon.player[wChairID].cbCardData,i,cbCard)
+                        isInsert = true
+                        break
+                    end
+                end
+            else
+                for i = 1, GameCommon.player[wChairID].cbCardCount do
+                    if GameCommon.player[wChairID].cbCardData[i] and cbCard < GameCommon.player[wChairID].cbCardData[i] and GameCommon.player[wChairID].cbCardData[i] ~= GameCommon.cbKingCard[1] and GameCommon.player[wChairID].cbCardData[i] ~= GameCommon.cbKingCard[2] then
+                        table.insert(GameCommon.player[wChairID].cbCardData,i,cbCard)
+                        isInsert = true
+                        break
+                    end
+                end
+            end 
+        end 
         if isInsert == false then
             GameCommon.player[wChairID].cbCardData[GameCommon.player[wChairID].cbCardCount+1] = cbCard
         end 
@@ -2368,17 +2696,43 @@ function TableLayer:addOneHandCard(wChairID, cbCard, pos)
     elseif GameCommon.tableConfig.wKindID == 67 and cbCard == 0x31 then
         table.insert(GameCommon.player[wChairID].cardNode,1,data)
     else
-        local isInsert = false
-        for key, var in pairs(GameCommon.player[wChairID].cardNode) do
-            if cbCard < var.data and ((GameCommon.tableConfig.wKindID ~= 68 and GameCommon.tableConfig.wKindID ~= 63 and GameCommon.tableConfig.wKindID ~= 67 ) or var.data ~= 0x31) then
-                table.insert(GameCommon.player[wChairID].cardNode,key,data) 
-                isInsert = true
-                break
-        	end
-        end
-        if isInsert == false then
-            table.insert(GameCommon.player[wChairID].cardNode,#GameCommon.player[wChairID].cardNode+1,data) 
-        end  
+        if GameCommon.tableConfig.wKindID ~= 92 then 
+            local isInsert = false
+            for key, var in pairs(GameCommon.player[wChairID].cardNode) do
+                if cbCard < var.data and ((GameCommon.tableConfig.wKindID ~= 68 and GameCommon.tableConfig.wKindID ~= 63 and GameCommon.tableConfig.wKindID ~= 67 ) or var.data ~= 0x31) then
+                    table.insert(GameCommon.player[wChairID].cardNode,key,data) 
+                    isInsert = true
+                    break
+                end
+            end
+            if isInsert == false then
+                table.insert(GameCommon.player[wChairID].cardNode,#GameCommon.player[wChairID].cardNode+1,data) 
+            end  
+
+        else
+            local isInsert = false
+            if GameCommon.cbKingCard == nil then 
+                for key, var in pairs(GameCommon.player[wChairID].cardNode) do
+                    if cbCard < var.data  then
+                        table.insert(GameCommon.player[wChairID].cardNode,key,data) 
+                        isInsert = true
+                        break
+                    end
+                end
+            else
+                for key, var in pairs(GameCommon.player[wChairID].cardNode) do
+                    if cbCard < var.data  and var.data ~= GameCommon.cbKingCard[1] and var.data ~= GameCommon.cbKingCard[2]  then
+                        table.insert(GameCommon.player[wChairID].cardNode,key,data) 
+                        isInsert = true
+                        break
+                    end
+                end 
+            end 
+            if isInsert == false then
+                table.insert(GameCommon.player[wChairID].cardNode,#GameCommon.player[wChairID].cardNode+1,data) 
+            end  
+        end 
+
     end
 end
 
@@ -2567,8 +2921,8 @@ function TableLayer:mingPaiOperator( wChairID,effectsType,isShowEndCard )
     local index = 0 
     local time = 0.1 
     local cardScale = 1.06
-    local cardWidth = 86 * cardScale
-    local cardHeight = 126 * cardScale
+    local cardWidth = 81 * cardScale
+    local cardHeight = 114 * cardScale
     local step = cardWidth
     local uiPanel_copyHandCard = ccui.Helper:seekWidgetByName(self.root,"Panel_copyHandCard")
     uiPanel_copyHandCard:removeAllChildren()
@@ -2675,8 +3029,8 @@ function TableLayer:mingPaiOperator( wChairID,effectsType,isShowEndCard )
         card:addTouchEventListener(function(sender,event) 
             if event == ccui.TouchEventType.began then   
                 uiImage_line:setVisible(false)                
-                self:setAllCardGray(nil,false)
-                self:setAllCardGray(card.data,true)
+                -- self:setAllCardGray(nil,false)
+                -- self:setAllCardGray(card.data,true)
                 if self.copyHandCard ~= nil then
                     self.copyHandCard.targetNode:setColor(cc.c3b(255,255,255))
                     self.copyHandCard = nil
@@ -2777,7 +3131,7 @@ function TableLayer:updateMinPaiCard( wChairID,effectsType,isShowEndCard )
     local time = 0.1 
 
     if viewID == 1 then 
-        local cardScale = 1.1
+        local cardScale = 1.0
         local cardWidth = 81 * cardScale
         local cardHeight = 114 * cardScale
         local step = cardWidth
@@ -2843,7 +3197,7 @@ function TableLayer:updateMinPaiCard( wChairID,effectsType,isShowEndCard )
             card:setTouchEnabled(false)
         end
     elseif viewID == 2 then
-        local cardScale = 1
+        local cardScale = 0.85
         local cardWidth = 52 * cardScale
         local cardHeight = 47 * cardScale
         local step = -(cardHeight-13)
@@ -2901,7 +3255,7 @@ function TableLayer:updateMinPaiCard( wChairID,effectsType,isShowEndCard )
             
         end
     elseif viewID == 3 then
-        local cardScale = 1.2
+        local cardScale = 1.0
         local cardWidth = 43 * cardScale
         local cardHeight = 63 * cardScale
         local step = -cardWidth+3
@@ -2961,7 +3315,7 @@ function TableLayer:updateMinPaiCard( wChairID,effectsType,isShowEndCard )
             end
         end
     elseif viewID == 4 then
-        local cardScale = 1
+        local cardScale = 0.85
         local cardWidth = 52 * cardScale
         local cardHeight = 47 * cardScale
         local step = cardHeight -15
@@ -3067,23 +3421,36 @@ function TableLayer:showHandCard(data)
         local uiImage_line = ccui.Helper:seekWidgetByName(self.root,"Image_line")
         uiImage_line:setVisible(false)
         local lineY = uiImage_line:getPositionY()
-        local cardScale = 1.06
-        local cardWidth = 93
-        local cardHeight = 133
+        local cardScale = 1
+        local cardWidth = 81
+        local cardHeight = 114
         local step = cardWidth
-        local began = cardWidth/2 + (14-cbCardCount-1) * cardWidth
+        local began = cardWidth/2 + (14-cbCardCount-1) * cardWidth +25
         if GameCommon.waitOutCardUser == wChairID then
-            began = cardWidth/2 + (14-cbCardCount) * cardWidth
+            began = cardWidth/2 + (14-cbCardCount) * cardWidth +25
         end
         for i=1,cbCardCount do
             local card = GameCommon:GetCardHand(cbCardData[i],viewID)
             if GameCommon.mBaoTingCard ~= nil and GameCommon.mBaoTingCard[1] ~= 0 then  
-                local liang = ccui.ImageView:create("game/game_baotingkuang.png")            
+                local liang = ccui.ImageView:create("common/ting.png")            
                 for j = 1 , 14 do
                     if GameCommon.mBaoTingCard[j] == cbCardData[i] then 
                         card:addChild(liang)
-                        liang:setPosition(liang:getParent():getContentSize().width/2,liang:getParent():getContentSize().height/2+5)
+                        liang:setPosition(18,85)
                         break
+                    end 
+                end 
+            end 
+            if GameCommon.tableConfig.wKindID == 92 then
+                if GameCommon.cbKingCard ~= nil and GameCommon.cbKingCard[1] ~= 0 then  
+                    local liang = ccui.ImageView:create("game/game_table_wangpai.png")            
+                    for j = 1 , 2 do
+                        if GameCommon.cbKingCard[j] ~= 0 and  GameCommon.cbKingCard[j] == cbCardData[i] then 
+                            card:addChild(liang)
+                            liang:setPosition(19,105)
+                            print("输出王牌显示++++++++++++",GameCommon.cbKingCard[j])
+                            --break
+                        end 
                     end 
                 end 
             end 
@@ -3108,6 +3475,10 @@ function TableLayer:showHandCard(data)
                     v:runAction(cc.Sequence:create(cc.DelayTime:create(i*0.05),cc.FadeIn:create(0.2)))
                 end
             end
+            if GameCommon.mINGang[wChairID]~= nil and GameCommon.mINGang[wChairID] == true then
+                card:setColor(cc.c3b(180,180,180))
+                card:setTouchEnabled(false)
+            end 
             card:addTouchEventListener(function(sender,event) 
                 local a = true
                 if event == ccui.TouchEventType.began then   
@@ -3117,9 +3488,20 @@ function TableLayer:showHandCard(data)
                     -- self:setAllCardGray(card.data,true)  
                     if GameCommon.mBaoTingCard ~= nil and GameCommon.mBaoTingCard[1] ~= 0 then  
                         for i = 1, 14 do 
+                            print("________",card.data,GameCommon.mBaoTingCard[i],i,GameCommon.mBTHuCard)
                             if card.data  ~= nil and card.data ~= 0x31 and card.data == GameCommon.mBaoTingCard[i] and GameCommon.mBTHuCard ~= nil then 
-                                self:huCardShow(0,i)
-                                a = false
+
+                                -- if GameCommon.tableConfig.wKindID == 92 then
+                                --     if GameCommon.cbKingCard ~= nil and GameCommon.cbKingCard[1] ~= 0 then                                        
+                                --         if  GameCommon.cbKingCard[1] ~= cbCardData[i] and GameCommon.cbKingCard[2] ~= cbCardData[i]  then 
+                                --             self:huCardShow(0,i)
+                                --             a = false
+                                --         end 
+                                --     end 
+                                -- else                                
+                                    self:huCardShow(0,i)
+                                    a = false
+                                -- end 
                             end 
                         end
                     end
@@ -3150,15 +3532,36 @@ function TableLayer:showHandCard(data)
                         card:setColor(cc.c3b(255,255,255))
                         if GameCommon.waitOutCardUser == GameCommon:getRoleChairID() and self.locationPos.y > lineY then
                             self.outData = {wChairID = wChairID, cbCardData = card.data, cardNode = card}
-                            EventMgr:dispatch(EventType.EVENT_TYPE_OPERATIONAL_OUT_CARD, self.outData)
-                            return
+
+                            if GameCommon.tableConfig.wKindID == 92 then
+                                if GameCommon.cbKingCard ~= nil and GameCommon.cbKingCard[1] ~= 0 then                                        
+                                    if  GameCommon.cbKingCard[1] ~= card.data and GameCommon.cbKingCard[2] ~= card.data then 
+                                            EventMgr:dispatch(EventType.EVENT_TYPE_OPERATIONAL_OUT_CARD, self.outData)
+                                            return
+                                    else
+                                        require("common.MsgBoxLayer"):create(0,nil,"不能出王牌")
+                                    end 
+                                end
+                            else
+                                EventMgr:dispatch(EventType.EVENT_TYPE_OPERATIONAL_OUT_CARD, self.outData)
+                                return
+                            end
                         end
                     end
                     if self.locationPos.y <= lineY then
                         if GameCommon.waitOutCardUser == GameCommon:getRoleChairID() and card:getPositionY() > card:getParent():getContentSize().height/2 then
                             self.outData = {wChairID = wChairID, cbCardData = card.data, cardNode = card}
-                            EventMgr:dispatch(EventType.EVENT_TYPE_OPERATIONAL_OUT_CARD, self.outData)
-                            return
+                            if GameCommon.tableConfig.wKindID == 92 then
+                                if GameCommon.cbKingCard ~= nil and GameCommon.cbKingCard[1] ~= 0 then                                        
+                                    if  GameCommon.cbKingCard[1] ~= card.data and GameCommon.cbKingCard[2] ~= card.data then 
+                                            EventMgr:dispatch(EventType.EVENT_TYPE_OPERATIONAL_OUT_CARD, self.outData)
+                                            return
+                                    end 
+                                end
+                            else
+                                EventMgr:dispatch(EventType.EVENT_TYPE_OPERATIONAL_OUT_CARD, self.outData)
+                                return
+                            end
                         else
                             local items = uiPanel_handCard:getChildren()
                             for key, var in pairs(items) do
@@ -3188,6 +3591,23 @@ function TableLayer:showHandCard(data)
             else
                 card = GameCommon:getDiscardCardAndWeaveItemArray(cbCardData[i],viewID)
             end
+
+            if GameCommon.tableConfig.wKindID == 92 then
+                if GameCommon.cbKingCard ~= nil and GameCommon.cbKingCard[1] ~= 0 then  
+                    local liang = ccui.ImageView:create("game/game_table_wangpai1.png")            
+                    for j = 1 , 2 do
+                        if GameCommon.cbKingCard[j] ~= 0 and  GameCommon.cbKingCard[j] == cbCardData[i] then 
+                            card:addChild(liang)
+                            liang:setPosition(30,26)
+                            liang:setScale(0.4)
+                            liang:setRotation(90)   
+                            print("输出王牌显示++++++++++++",GameCommon.cbKingCard[j])
+                            --break
+                        end 
+                    end 
+                end 
+            end 
+
             uiPanel_handCard:addChild(card)
             card:setScale(cardWidth/card:getContentSize().width, cardHeight/card:getContentSize().height)
             if i == cbCardCount and GameCommon.waitOutCardUser == wChairID then
@@ -3198,10 +3618,10 @@ function TableLayer:showHandCard(data)
             card.data = cbCardData[i]
         end
     elseif viewID == 3 then
-        local cardWidth = 43 * 1.2
-        local cardHeight = 63 * 1.2
+        local cardWidth = 43 * 1.0
+        local cardHeight = 63 * 1.0
         local step = -cardWidth + 3
-        local began = -(cbCardCount - 1) * step + cardWidth - cardWidth/2 
+        local began = -(cbCardCount - 1) * step + cardWidth - cardWidth/2 +140
         if GameCommon.waitOutCardUser == wChairID then
             began = began + step
         end  
@@ -3212,10 +3632,26 @@ function TableLayer:showHandCard(data)
             else
                 card = GameCommon:getDiscardCardAndWeaveItemArray(cbCardData[i],viewID)
             end
+
+            if GameCommon.tableConfig.wKindID == 92 then
+                if GameCommon.cbKingCard ~= nil and GameCommon.cbKingCard[1] ~= 0 then  
+                    local liang = ccui.ImageView:create("game/game_table_wangpai1.png")            
+                    for j = 1 , 2 do
+                        if GameCommon.cbKingCard[j] ~= 0 and  GameCommon.cbKingCard[j] == cbCardData[i] then 
+                            card:addChild(liang)
+                            liang:setPosition(26,44)
+                            liang:setScale(0.4)
+                            liang:setRotation(0)   
+                            print("输出王牌显示++++++++++++",GameCommon.cbKingCard[j])
+                            --break
+                        end 
+                    end 
+                end 
+            end 
             uiPanel_handCard:addChild(card)
             card:setScale(cardWidth/card:getContentSize().width, cardHeight/card:getContentSize().height)
             if i == cbCardCount and GameCommon.waitOutCardUser == wChairID then
-                card:setPosition(-cardWidth/2-10,size.height/2)
+                card:setPosition(began + step*(i-1)-10,size.height/2)
             else
                 card:setPosition(began + step*(i-1),size.height/2)
             end
@@ -3237,6 +3673,22 @@ function TableLayer:showHandCard(data)
             else
                 card = GameCommon:getDiscardCardAndWeaveItemArray(cbCardData[i],viewID)
             end
+
+            if GameCommon.tableConfig.wKindID == 92 then
+                if GameCommon.cbKingCard ~= nil and GameCommon.cbKingCard[1] ~= 0 then  
+                    local liang = ccui.ImageView:create("game/game_table_wangpai1.png")            
+                    for j = 1 , 2 do
+                        if GameCommon.cbKingCard[j] ~= 0 and  GameCommon.cbKingCard[j] == cbCardData[i] then 
+                            card:addChild(liang)
+                            liang:setPosition(22,30)
+                            liang:setScale(0.4)
+                            liang:setRotation(270)   
+                            print("输出王牌显示++++++++++++",GameCommon.cbKingCard[j])
+                            --break
+                        end 
+                    end 
+                end 
+            end 
             uiPanel_handCard:addChild(card)
             card:setLocalZOrder(cbCardCount - i)
             card:setScale(cardWidth/card:getContentSize().width, cardHeight/card:getContentSize().height)
@@ -3263,7 +3715,7 @@ function TableLayer:initUI()
     local uiText_time = ccui.Helper:seekWidgetByName(self.root,"Text_time")
     uiText_time:runAction(cc.RepeatForever:create(cc.Sequence:create(cc.CallFunc:create(function(sender,event) 
         local date = os.date("*t",os.time())
-        uiText_time:setString(string.format("%02d-%02d %02d:%02d:%02d",date.month,date.day,date.hour,date.min,date.sec))
+        uiText_time:setString(string.format("%d:%02d",date.hour,date.min))
     end),cc.DelayTime:create(1))))
     local uiImage_direction = ccui.Helper:seekWidgetByName(self.root,"Image_direction")
     --uiImage_direction:setVisible(false)
@@ -3313,6 +3765,10 @@ function TableLayer:initUI()
     -- end 
     --触摸
     self:touchAllUI(true)    
+
+    local uiImage_WP = ccui.Helper:seekWidgetByName(self.root,"Image_WP")
+    uiImage_WP:setVisible(false)
+    
     
     --卡牌层
     local uiImage_line = ccui.Helper:seekWidgetByName(self.root,"Image_line")
@@ -3554,12 +4010,20 @@ function TableLayer:initUI()
     local uiPanel_night = ccui.Helper:seekWidgetByName(self.root,"Panel_night")
     local UserDefault_MaJiangliangdu = cc.UserDefault:getInstance():getIntegerForKey(Default.UserDefault_MaJiangliangdu,0)
     if UserDefault_MaJiangliangdu == 0 then
-        uiPanel_night:setVisible(false)
     else
+        uiPanel_night:setVisible(false)
         uiPanel_night:setVisible(true)
     end
     Common:addTouchEventListener(ccui.Helper:seekWidgetByName(self.root,"Button_settings"),function() 
-        require("common.SceneMgr"):switchOperation(require("app.MyApp"):create():createView("SettingsLayer"))
+      --require("common.SceneMgr"):switchOperation(require("app.MyApp"):create():createView("SettingsLayer"))
+
+       -- local layer = require("game.majiang.MajiangSettingsLayer"):create(pBuffer)
+        local layer = require("app.MyApp"):create():createGame('game.majiang.MajiangSettingsLayer')
+      --  self:addChild(layer)
+
+    --   local path = string.format("game.anhua.AHSetting", APPNAME, name)
+    --   local box = require("app.MyApp"):create(GameCommon):createGame(path)
+    --   self:addChild(box)
     end)
     local uiButton_expression = ccui.Helper:seekWidgetByName(self.root,"Button_expression")
     uiButton_expression:setPressedActionEnabled(true)
@@ -3568,6 +4032,11 @@ function TableLayer:initUI()
             Common:palyButton()
             local box = require("app.MyApp"):create():createGame('game.majiang.KwxChat')
             self:addChild(box)
+
+            -- Common:palyButton()
+			-- local path = self:requireClass('AHChat')
+			-- local box = require("app.MyApp"):create():createGame(path)
+			-- self:addChild(box)
         end
     end
     uiButton_expression:addTouchEventListener(onEventExpression)
@@ -3617,23 +4086,11 @@ function TableLayer:initUI()
     Common:addTouchEventListener(uiButton_cancel,function() 
         require("common.SceneMgr"):switchScene(require("app.MyApp"):create():createView("HallLayer"),SCENE_HALL) 
     end)  
-    local uiButton_out = ccui.Helper:seekWidgetByName(self.root,"Button_out")
-    Common:addTouchEventListener(uiButton_out,function() 
-        require("common.MsgBoxLayer"):create(1,nil,"您确定离开房间?\n房主离开意味着房间被解散",function()
-            NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GR_USER,NetMsgId.REQ_GR_LEAVE_TABLE_USER,"")
-        end)
-    end)  
+
         
-    local uiButton_SignOut = ccui.Helper:seekWidgetByName(self.root,"Button_SignOut")
-    Common:addTouchEventListener(uiButton_SignOut,function() 
-        require("common.MsgBoxLayer"):create(1,nil,"您确定返回大厅?",function()
-            require("common.SceneMgr"):switchScene(require("app.MyApp"):create():createView("HallLayer"),SCENE_HALL) 
-        end)
-    end) 
+
     if CHANNEL_ID == 6 or  CHANNEL_ID  == 7  or CHANNEL_ID == 8 or  CHANNEL_ID  == 9  then
-    else
-        uiButton_SignOut:setVisible(true)
-        --uiButton_out:setPositionX(visibleSize.width*0.36)       
+    else   
         --uiButton_Invitation:setPositionX(visibleSize.width*0.64)  
     end 
     
@@ -3651,6 +4108,10 @@ function TableLayer:initUI()
     --结算层
     local uiPanel_end = ccui.Helper:seekWidgetByName(self.root,"Panel_end")
     uiPanel_end:setVisible(false)
+
+    ---杠牌层
+    local uiPanel_newgang = ccui.Helper:seekWidgetByName(self.root,"Panel_newgang")
+    uiPanel_newgang:setVisible(false)
     --胡牌提示 
     local uiPanel_hucardbg = ccui.Helper:seekWidgetByName(self.root,"Panel_hucardbg")    
     uiPanel_hucardbg:setVisible(false)  
@@ -3686,22 +4147,18 @@ function TableLayer:initUI()
             childUI:setVisible(true)            
             if StaticData.Hide[CHANNEL_ID].btn4 ~= 1 then
                 uiButton_Invitation:setVisible(false)
-                uiButton_out:setVisible(false)
             else
                 uiButton_Invitation:setVisible(true)
-                uiButton_out:setVisible(true)
             end
 
         elseif GameCommon.tableConfig.wCurrentNumber > 0 then
             -- local uiPanel_ready = ccui.Helper:seekWidgetByName(self.root,"Panel_ready")
             -- uiPanel_ready:setVisible(false)
             uiButton_Invitation:setVisible(false)
-            uiButton_out:setVisible(false)
-            uiButton_SignOut:setVisible(false)
+
         end 
         if StaticData.Hide[CHANNEL_ID].btn4 ~= 1 then
             uiButton_Invitation:setVisible(false)
-            uiButton_out:setPositionX(visibleSize.width*0.5)   
         -- else
         --     uiButton_Invitation:setVisible(true)
         end
@@ -3727,8 +4184,6 @@ function TableLayer:initUI()
         self:addVoice()
         uiButton_ready:setVisible(false)
         uiButton_Invitation:setVisible(false)
-        uiButton_out:setVisible(false)
-        uiButton_SignOut:setVisible(false)
         local uiListView_function = ccui.Helper:seekWidgetByName(self.root,"ListView_function")
         uiListView_function:removeItem(uiListView_function:getIndex(uiButton_disbanded))
         uiListView_function:removeItem(uiListView_function:getIndex(uiButton_position))  
@@ -3832,11 +4287,11 @@ function TableLayer:BaoTingCardShow(pBuffer)
         local items = uiPanel_handCard:getChildren()
         for k,v in pairs(items) do
             if GameCommon.mBaoTingCard ~= nil and GameCommon.mBaoTingCard[1] ~= 0 then  
-                local liang = ccui.ImageView:create("game/game_baotingkuang.png")            
+                local liang = ccui.ImageView:create("common/ting.png")            
                 for j = 1 , 14 do
                     if GameCommon.mBaoTingCard[j] == v.data then 
                         v:addChild(liang)
-                        liang:setPosition(liang:getParent():getContentSize().width/2,liang:getParent():getContentSize().height/2+5)
+                        liang:setPosition(18,85)
                         break
                     end 
                 end 
@@ -4117,7 +4572,7 @@ function TableLayer:updateGameState(state)
         roomnumbg:setVisible(false)
         local Image_title = ccui.Helper:seekWidgetByName(self.root,"Image_title")
         Image_title:setVisible(false)
-        if GameCommon.tableConfig.wKindID == 67 or GameCommon.tableConfig.wKindID == 63 or GameCommon.tableConfig.wKindID == 68 or GameCommon.tableConfig.wKindID == 46 or GameCommon.tableConfig.wKindID == 80  and  StaticData.Hide[CHANNEL_ID].btn16 == 1  then 
+        if GameCommon.tableConfig.wKindID == 67 or GameCommon.tableConfig.wKindID == 63 or GameCommon.tableConfig.wKindID == 68 or GameCommon.tableConfig.wKindID == 46 or GameCommon.tableConfig.wKindID == 80  or GameCommon.tableConfig.wKindID == 92 and  StaticData.Hide[CHANNEL_ID].btn16 == 1  then 
             local uiButton_chakan = ccui.Helper:seekWidgetByName(self.root,"Button_chakan")
             -- if CHANNEL_ID == 0 or  CHANNEL_ID  == 1 then 
             --     uiButton_chakan:setVisible(false)  
@@ -4192,14 +4647,6 @@ end
 
 --语音
 function TableLayer:addVoice()
-    local box = require("app.MyApp"):create():createView('YYChatLayer')
-    local Panel_ui = ccui.Helper:seekWidgetByName(self.root,"Panel_ui")
-    Panel_ui:addChild(box,-1)
-    box:setName('game_button_voice')
-
-    while true do
-        return
-    end
     self.tableVoice = {}
     local startVoiceTime = 0
     local maxVoiceTime = 15
@@ -4231,7 +4678,7 @@ function TableLayer:addVoice()
         local node = require("common.CircleLoadingBar"):create("game/tablenew_23.png")
         node:setColor(cc.c3b(0,0,0))
         uiButton_voice:addChild(node)
-        node:setPosition(node:getParent():getContentSize().width/2,node:getParent():getContentSize().height/2)
+        node:setPosition(node:getParent():getContentSize().width/2,node:getParent():getContentSize().height*0.6)
         node:start(1)
         uiButton_voice:setEnabled(false)
         uiButton_voice:stopAllActions()
@@ -4382,6 +4829,7 @@ function TableLayer:addVoice()
     onEventPlayVoice()
 end
 
+
 function TableLayer:OnUserChatVoice(event)
     if self.tableVoicePackages == nil then
         self.tableVoicePackages = {}
@@ -4412,7 +4860,8 @@ end
     
 function TableLayer:showPlayerInfo(infoTbl)       -- 查看玩家信息
     Common:palyButton()
-	require("common.SceneMgr"):switchOperation(require("app.MyApp"):create(infoTbl, self):createGame("game.majiang.KWXPeopleInfo"))
+    require("common.SceneMgr"):switchOperation(require("app.MyApp"):create(infoTbl, self):createGame("game.majiang.AHPersonInfoLayer"))
+
 end
 
 function TableLayer:showChat(pBuffer)
@@ -4428,8 +4877,8 @@ function TableLayer:showChat(pBuffer)
     uiImage_chat:runAction(cc.Sequence:create(cc.ScaleTo:create(0.1,1),cc.DelayTime:create(5),cc.Hide:create()))
     local wKindID = GameCommon.tableConfig.wKindID
   
-	local Chat = require("game.majiang.ChatConfig")
-	local data = Chat[pBuffer.dwSoundID-100]
+	local Chat = require("game.anhua.ChatConfig")
+	local data = Chat[pBuffer.dwSoundID]
 	local sound = nil
 	if data then
 		sound = data.sound
@@ -4437,7 +4886,7 @@ function TableLayer:showChat(pBuffer)
 	local soundData = nil
 	local soundFile = ''
 	if data then
-		soundData = sound[GameCommon.regionSound]
+		soundData = sound[GameCommon.language]
 		if soundData ~= nil then
 			soundFile = soundData[pBuffer.cbSex]
 		end
@@ -4475,29 +4924,81 @@ end
 
 --表情动画
 function TableLayer:playImage( pBuffer )
-    local name = 'emoji%d.png'
-	local imageName = 'majiang/ui/chat/emoj/';
-    self:removeChildByName('ZZx_IMAGE')
-    local image = ccui.ImageView:create(string.format(imageName .. name, pBuffer.wIndex))
-    image:setName('ZZx_IMAGE')
-    local viewID = GameCommon:getViewIDByChairID(pBuffer.wChairID)
-    local Panel_player = ccui.Helper:seekWidgetByName(self.root, string.format("Panel_player%d", viewID))
-    if Panel_player then
-        local Image_avatarFrame = Panel_player:getChildByName('Panel_playerInfo')
-        Image_avatarFrame:addChild(image)
-        image:setPosition(160/2,160/2)
-        if viewID == 1 then
-            image:setPosition(160,120)
-        elseif viewID == 2 then
-            image:setPosition(160,120)
-        elseif viewID == 3 then
-            image:setPosition(0,120)
-        elseif viewID == 4 then
-            image:setPosition(0,120)
-        end
-        local seq = cc.Sequence:create(cc.DelayTime:create(1),cc.RemoveSelf:create())
-        image:runAction(seq)
-    end
+    -- local name = 'emoji%d.png'
+	-- local imageName = 'majiang/ui/chat/emoj/';
+    -- self:removeChildByName('ZZx_IMAGE')
+    -- local image = ccui.ImageView:create(string.format(imageName .. name, pBuffer.wIndex))
+    -- image:setName('ZZx_IMAGE')
+    -- local viewID = GameCommon:getViewIDByChairID(pBuffer.wChairID)
+    -- local Panel_player = ccui.Helper:seekWidgetByName(self.root, string.format("Panel_player%d", viewID))
+    -- if Panel_player then
+    --     local Image_avatarFrame = Panel_player:getChildByName('Panel_playerInfo')
+    --     Image_avatarFrame:addChild(image)
+    --     image:setPosition(160/2,160/2)
+    --     if viewID == 1 then
+    --         image:setPosition(160,120)
+    --     elseif viewID == 2 then
+    --         image:setPosition(160,120)
+    --     elseif viewID == 3 then
+    --         image:setPosition(0,120)
+    --     elseif viewID == 4 then
+    --         image:setPosition(0,120)
+    --     end
+    --     local seq = cc.Sequence:create(cc.DelayTime:create(1),cc.RemoveSelf:create())
+    --     image:runAction(seq)
+    -- end
+    local viewID = GameCommon:getViewIDByChairID(pBuffer.wChairID, true)
+	local Panel_player = ccui.Helper:seekWidgetByName(self.root, string.format("Panel_player%d", viewID))
+	if Panel_player then
+		local Image_avatarFrame = Panel_player:getChildByName('Panel_playerInfo')
+		local size = Image_avatarFrame:getSize()
+		local endIndex = 0
+		--if pBuffer.wIndex == 1 then
+		
+		self:playerExportAnim(pBuffer.wIndex,Image_avatarFrame)
+
+		local Chat = require("game.anhua.Animation") [24]
+		local data = Chat[pBuffer.wIndex]
+		local sound = nil
+		if data then
+			sound = data.sound
+		end
+		local soundData = nil
+		if sound then
+			soundData = sound[0]
+		end
+		
+		if data ~= nil and soundData ~= "" then
+			require("common.Common"):playEffect(soundData)
+		end
+
+	end
+end
+
+function TableLayer:playerExportAnim( index,target )
+	local Animation = require("game.anhua.Animation")
+
+	local data = Animation[24]
+	local AnimationData = data[index]
+	if not AnimationData or not data then
+		return
+	end
+
+	local am = self:playDH(target,AnimationData.animFile,AnimationData.animName,AnimationData.playName)
+	am:setPosition(80,80)
+end
+
+function TableLayer:playDH( target, animFile,animName,playName)
+	ccs.ArmatureDataManager:getInstance():addArmatureFileInfo(animFile)
+	local armature = ccs.Armature:create(animName)
+	target:addChild(armature,100)
+	if playName and playName ~= '' then
+		armature:getAnimation():play(playName,-1,0)
+	end
+	armature:runAction(cc.Sequence:create(
+		cc.DelayTime:create(1.5),
+		cc.RemoveSelf:create()))
+	return armature
 end
 
 function TableLayer:showExperssion(pBuffer)
@@ -4613,37 +5114,38 @@ function TableLayer:EVENT_TYPE_SKIN_CHANGE(event)
     --     UserDefault_MaJiangpaizhuo = 0
     --     cc.UserDefault:getInstance():setIntegerForKey('kwxbg',UserDefault_MaJiangpaizhuo)
     -- end
-    self:changeBgLayer()
+
+    --self:changeBgLayer()  暂时注释
 
     -- uiPanel_bg:removeAllChildren()
     -- uiPanel_bg:addChild(ccui.ImageView:create(string.format("majiang/table/game_table_bg%d.jpg",UserDefault_MaJiangpaizhuo)))
 
     --亮度
-    local uiPanel_night = ccui.Helper:seekWidgetByName(self.root,"Panel_night")
-    local UserDefault_MaJiangliangdu = cc.UserDefault:getInstance():getIntegerForKey(Default.UserDefault_MaJiangliangdu,0)
-    if UserDefault_MaJiangliangdu == 0 then
-        uiPanel_night:setVisible(false)
-    else
-        uiPanel_night:setVisible(true)
-    end
+    -- local uiPanel_night = ccui.Helper:seekWidgetByName(self.root,"Panel_night")
+    -- local UserDefault_MaJiangliangdu = cc.UserDefault:getInstance():getIntegerForKey(Default.UserDefault_MaJiangliangdu,0)
+    -- if UserDefault_MaJiangliangdu == 0 then
+    --     uiPanel_night:setVisible(false)
+    -- else
+    --     uiPanel_night:setVisible(true)
+    -- end
         
     --牌背字体
-    for i = 0 , GameCommon.gameConfig.bPlayerCount-1 do
-        local wChairID = i
-        if GameCommon.player ~= nil and GameCommon.player[wChairID] ~= nil then
-            --self:showHandCard(wChairID,i)
+    -- for i = 0 , GameCommon.gameConfig.bPlayerCount-1 do
+    --     local wChairID = i
+    --     if GameCommon.player ~= nil and GameCommon.player[wChairID] ~= nil then
+    --         --self:showHandCard(wChairID,i)
 
-            self:showHandCard({wChairID = wChairID})
-            self:setWeaveItemArray(wChairID, GameCommon.player[wChairID].bWeaveItemCount, GameCommon.player[wChairID].WeaveItemArray)
-            self:setDiscardCard(wChairID, GameCommon.player[wChairID].cbDiscardCount, GameCommon.player[wChairID].cbDiscardCard)
-        end
-    end
-
-    local regionSound = cc.UserDefault:getInstance():getFloatForKey('volumeSelect', 1) 
-    if regionSound == 0 then
-        GameCommon.regionSound = 0
+    --         self:showHandCard({wChairID = wChairID})
+    --         self:setWeaveItemArray(wChairID, GameCommon.player[wChairID].bWeaveItemCount, GameCommon.player[wChairID].WeaveItemArray)
+    --         self:setDiscardCard(wChairID, GameCommon.player[wChairID].cbDiscardCount, GameCommon.player[wChairID].cbDiscardCard)
+    --     end
+    -- end
+    print("++++++++++++++++")
+    local language = cc.UserDefault:getInstance():getIntegerForKey('volumeSelect', 1) 
+    if language == 0 then
+        GameCommon.language = 0
     else 
-        GameCommon.regionSound = 1
+        GameCommon.language = 1
     end
 end
 --结算动画
@@ -4676,8 +5178,8 @@ function TableLayer:endAction(pBuffer)
             if count > 6 then 
                 cardScale =  0.8 
             end
-            local cardWidth = 90 * cardScale
-            local cardHeight = 133 * cardScale
+            local cardWidth = 81 * cardScale
+            local cardHeight = 114 * cardScale
             local stepX = cardWidth + 25
             local  beganX = visibleSize.width/2 - stepX*count/2 - cardWidth/2
             if   GameCommon.gameConfig.bMaType == 3 then  
@@ -4767,13 +5269,14 @@ function TableLayer:addLastCardFlagEft(node,chairid)
     self.flagNode =  ccui.ImageView:create('majiang/table/end_outcard_pos.png')
     node:addChild(self.flagNode)
     local viewid = GameCommon:getViewIDByChairID(chairid)
-
+    self.flagNode:setScale(0.6)
     local size = node:getContentSize()
-    local spos = cc.p(size.width / 2, size.height/2+6)
-    local epos = cc.p(size.width / 2, size.height)
+    local spos = cc.p(size.width / 2, size.height/2+36)
+    local epos = cc.p(size.width / 2, size.height+30)
     if viewid == 2 or viewid == 4 then
-        spos = cc.p(size.width / 2, size.height+6)
-        epos = cc.p(size.width / 2, size.height+2)
+        self.flagNode:setScale(0.4)
+        spos = cc.p(size.width / 2, size.height+20)
+        epos = cc.p(size.width / 2, size.height+10)
     end
     self.flagNode:stopAllActions()
     self.flagNode:setPosition(spos)
@@ -4869,50 +5372,26 @@ function TableLayer:getViewWorldPosByChairID(wChairID)
 	end
 end
 
-function TableLayer:playSketlAnim(sChairID, eChairID, index,indexEx)
-    print('-------->>>>>>>>>',sChairID, eChairID, index,indexEx);
-    local cusNode = cc.Director:getInstance():getNotificationNode()
-    if not cusNode then
-    	printInfo('global_node is nil!')
-    	return
-    end
-    -- local arr = cusNode:getChildren()
-    -- for i,v in ipairs(arr) do
-    --     v:setVisible(false)
-    -- end
-
-	local Animation = require("game.majiang.Animation")
-	local AnimCnf = Animation[220]
+function TableLayer:playSketlAnim(sChairID, eChairID, index)
+    print('-------->>>>>>>>>',sChairID, eChairID, index);
+	local Animation = require("game.anhua.Animation")
+	local AnimCnf = Animation[22]
 	
 	if not AnimCnf[index] then
 		return
 	end
-    
-    indexEx = indexEx or ''
-	local skele_key_name = 'kwxhudong_' .. index .. indexEx
 	local spos = self:getViewWorldPosByChairID(sChairID)
 	local epos = self:getViewWorldPosByChairID(eChairID)
-	local image = ccui.ImageView:create(AnimCnf[index].imageFile .. '.png')
-	self:addChild(image)
-	image:setPosition(spos)
-	local moveto = cc.MoveTo:create(0.6, cc.p(epos))
-	local callfunc = cc.CallFunc:create(function()
+	self.image = nil
+	local function playAm()
 		local path = AnimCnf[index].animFile
-		local skeletonNode = cusNode:getChildByName(skele_key_name)
-		if not skeletonNode then
-			skeletonNode = sp.SkeletonAnimation:create(path .. '.json', path .. '.atlas', 1)
-			cusNode:addChild(skeletonNode)
-			skeletonNode:setName(skele_key_name)
+		local animName = AnimCnf[index].animName
+		local playName = AnimCnf[index].playName
+		local am = self:playDH(self,path,animName,playName)
+		am:setPosition(epos.x,epos.y)
+		if self.image then
+			self.image:removeFromParent()
 		end
-		skeletonNode:setPosition(epos)
-		skeletonNode:setAnimation(0, 'animation', false)
-		skeletonNode:setVisible(true)
-		image:removeFromParent()
-
-		skeletonNode:registerSpineEventHandler(function(event)
-			skeletonNode:setVisible(false)
-		end, sp.EventType.ANIMATION_END)
-		
 		local soundData = AnimCnf[index]
 		local soundFile = ''
 		if soundData then
@@ -4924,8 +5403,26 @@ function TableLayer:playSketlAnim(sChairID, eChairID, index,indexEx)
 		if soundFile ~= "" then
 			require("common.Common"):playEffect(soundFile)
 		end
+	end
+
+	local callfunc = cc.CallFunc:create(function()
+		playAm()
 	end)
-	image:runAction(cc.Sequence:create(moveto, callfunc))
+
+	if sChairID == eChairID then
+		playAm()
+	else
+		--删除之前的
+		if self.image and not tolua.isnull(self.image) then
+			self.image:removeFromParent()
+		end
+		self.image = ccui.ImageView:create(AnimCnf[index].imageFile .. '.png')
+		local moveto = cc.MoveTo:create(0.6, cc.p(epos))
+		self:addChild(self.image)
+		self.image:setPosition(spos)
+		self.image:runAction(cc.Sequence:create(moveto, callfunc))
+	end
+
 end
 
 function TableLayer:playOneAnim(sChairID, eChairID, index,indexEx,rotation)
@@ -4982,91 +5479,12 @@ end
 
 --表情互动
 function TableLayer:playSkelStartToEndPos(sChairID, eChairID, index)
-	self.isOpen = cc.UserDefault:getInstance():getBoolForKey('kwxEffect', true) --是否接受别人的互动
-    print('-->>>>>>>>>>>>playSkelStartToEndPos = ',sChairID, eChairID, index)
-
-    --不需要同步
-    if index == 1 or index == 3 or index == 6 then
-        if GameCommon.meChairID ~= sChairID then
-            return
-        end
-    end
-
-    ---[[打炝动画特殊处理
-    if index == 1 then
-
-        if sChairID == eChairID then
-            -- 点自己发送
-            for i, v in pairs(GameCommon.player or {}) do
-                if v.wChairID ~= sChairID then
-                    local spos = self:getViewWorldPosByChairID(sChairID)
-                    local epos = self:getViewWorldPosByChairID(v.wChairID)
-                    local rotation = -math.atan((epos.y - spos.y)/ (epos.x - spos.x)) * 57.3
-                    print('rotation =11>>>>>>>> ', rotation)
-                    if GameCommon.meChairID ~= sChairID then
-                        if rotation < 0 then
-                            rotation = rotation + 180
-                        else
-                            local viewid = GameCommon:getViewIDByChairID(v.wChairID)
-                            print('点自己发送:',viewid)
-                            if viewid == 2 then
-                                rotation = rotation + 180
-                            end
-                        end
-                    end
-                    self:playSketlAnim(v.wChairID, v.wChairID, 9, v.wChairID)
-                    self:playOneAnim(sChairID, sChairID, 1, '_'..v.wChairID, rotation)
-                end
-            end
-
-        else
-            -- 点对应头像发送
-            local spos = self:getViewWorldPosByChairID(sChairID)
-            local epos = self:getViewWorldPosByChairID(eChairID)
-            local rotation = math.atan((epos.y - spos.y)/ (epos.x - spos.x)) * 57.3
-            print('rotation =22<<<<<<<< ', rotation)
-            if GameCommon.meChairID ~= sChairID then
-                if rotation > 0 then
-                    rotation = -(rotation + 180)
-                else
-                    local viewid = GameCommon:getViewIDByChairID(eChairID)
-                    print('点对应头像发送:',viewid)
-                    if viewid == 4 then
-                        rotation = -rotation
-                    else
-                        rotation = 180 - rotation
-                    end
-                end
-            else
-                rotation = -rotation
-            end
-            self:playSketlAnim(eChairID, eChairID, 9, eChairID)
-            self:playOneAnim(sChairID, sChairID, 1, '_'..eChairID,rotation)
-        end
-        return
-    end
-    --]]
-    
-	if GameCommon.meChairID == sChairID then --我发出
-		if sChairID == eChairID then
-			for i, v in pairs(GameCommon.player or {}) do
-				if v.wChairID ~= sChairID then
-					self:playSketlAnim(sChairID, v.wChairID, index, v.wChairID)
-				end
-			end
-		else
-			self:playSketlAnim(sChairID, eChairID, index)
-		end
+	if sChairID == eChairID  then
+		self:playSketlAnim(sChairID, eChairID, index)
 	else
-		if self.isOpen then
-			if sChairID == eChairID then
-				for i, v in pairs(GameCommon.player or {}) do
-					if v.wChairID ~= sChairID then
-						self:playSketlAnim(sChairID, v.wChairID, index, v.wChairID)
-					end
-				end
-			else
-				self:playSketlAnim(sChairID, eChairID, index)
+		for i, v in pairs(GameCommon.player or {}) do
+			if v.wChairID == eChairID then
+				self:playSketlAnim(sChairID, v.wChairID, index)
 			end
 		end
 	end
@@ -5141,7 +5559,7 @@ end
 
 function TableLayer:updatePaijuInfo( )
     local uiText_title = ccui.Helper:seekWidgetByName(self.root,"Text_majiang_paiju")
-    uiText_title:setString(string.format("%d/%d",GameCommon.tableConfig.wCurrentNumber,GameCommon.tableConfig.wTableNumber))    
+    uiText_title:setString(string.format("第%d/%d局",GameCommon.tableConfig.wCurrentNumber,GameCommon.tableConfig.wTableNumber))    
     local Text_majiang_roomnum = ccui.Helper:seekWidgetByName(self.root,"Text_majiang_roomnum")
     Text_majiang_roomnum:setString(GameCommon.tableConfig.wTbaleID)
 end
@@ -5149,7 +5567,7 @@ end
 --初始化明牌UI
 function TableLayer:initMingPaiUI( ... )
     local Button_cancle_minpai = ccui.Helper:seekWidgetByName(self.root,"Button_cancle_minpai")
-    Common:addTouchEventListener(Button_cancle_minpai,handler(self,self.cancleMingPai))
+   -- Common:addTouchEventListener(Button_cancle_minpai,handler(self,self.cancleMingPai))
     self.mingState = MingPaiState.None
     self.Button_comp_minpai = ccui.Helper:seekWidgetByName(self.root,"Button_comp_minpai")
     Common:addTouchEventListener(self.Button_comp_minpai,handler(self,self.completeMingPai))
@@ -5176,27 +5594,27 @@ function TableLayer:initMingPaiUI( ... )
     self.warningID = nil --警告声音id
 end
 
---取消明牌
-function TableLayer:cancleMingPai( )
-    self.Panel_mingpai:setVisible(false)
-    local uiPanel_operation = ccui.Helper:seekWidgetByName(self.root,"Panel_operation")
-    uiPanel_operation:setVisible(true)
-    self.mingPaiData:clearPush()
-    local uiPanel_weaveItemArray = ccui.Helper:seekWidgetByName(self.root,string.format("Panel_weaveItemArray1"))
-    uiPanel_weaveItemArray:removeAllChildren()
-    --恢复明牌
-    local wChairID = GameCommon:getRoleChairID()
-    self:showHandCard({wChairID = wChairID})
+-- --取消明牌
+-- function TableLayer:cancleMingPai( )
+--     self.Panel_mingpai:setVisible(false)
+--     local uiPanel_operation = ccui.Helper:seekWidgetByName(self.root,"Panel_operation")
+--     uiPanel_operation:setVisible(true)
+--     self.mingPaiData:clearPush()
+--     local uiPanel_weaveItemArray = ccui.Helper:seekWidgetByName(self.root,string.format("Panel_weaveItemArray1"))
+--     uiPanel_weaveItemArray:removeAllChildren()
+--     --恢复明牌
+--     local wChairID = GameCommon:getRoleChairID()
+--     self:showHandCard({wChairID = wChairID})
 
-    self:setWeaveItemArray(wChairID, GameCommon.player[wChairID].bWeaveItemCount, GameCommon.player[wChairID].WeaveItemArray)
+--     self:setWeaveItemArray(wChairID, GameCommon.player[wChairID].bWeaveItemCount, GameCommon.player[wChairID].WeaveItemArray)
 
     
-    --取消明牌隐藏自身
-    local uiPanel_player = ccui.Helper:seekWidgetByName(self.Panel_hu,string.format("Panel_player%d",1))
-    uiPanel_player:setVisible(false)
+--     --取消明牌隐藏自身
+--     local uiPanel_player = ccui.Helper:seekWidgetByName(self.Panel_hu,string.format("Panel_player%d",1))
+--     uiPanel_player:setVisible(false)
     
-    mingState = MingPaiState.None
-end
+--     mingState = MingPaiState.None
+-- end
 
 --完成明牌选择 进入胡口选择
 function TableLayer:completeMingPai()
@@ -5276,7 +5694,7 @@ function TableLayer:showHuPaiUI(wChairID, cardData,numbArray,isShowNumb )
                 index = index + 1
             end
         end
-        Image_hubg:setContentSize(cc.size( 75 + index * (cardWidth + delta),90))
+        Image_hubg:setContentSize(cc.size( 75 + index * (cardWidth + delta),86))
     elseif viewID == 2 then
         local cardScale = 0.7
         local cardWidth = 63 * cardScale

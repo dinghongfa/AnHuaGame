@@ -587,7 +587,17 @@ function RoomCreateLayer:onCreate(parameter)
             uiText_desc:setTextColor(cc.c3b(215,86,31))
         end  
     end 
-  
+
+    --首局随机庄家
+    local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(12),"ListView_parameter"):getItems()
+    Common:addCheckTouchEventListener(items,true)
+    if self.recordCreateParameter["bFirstZhuang"] == nil or self.recordCreateParameter["bFirstZhuang"] == 1 then
+        items[1]:setBright(true)
+        local uiText_desc = ccui.Helper:seekWidgetByName(items[2],"Text_desc")
+        if uiText_desc ~= nil then 
+            uiText_desc:setTextColor(cc.c3b(215,86,31))
+        end  
+    end 
 
     if self.showType == 3 then
         self.tableFriendsRoomParams = {[1] = {wGameCount = 1}}
@@ -811,6 +821,14 @@ function RoomCreateLayer:onEventCreate(nTableType)
     elseif items[2]:isBright() then
         tableParameter.bWuTong = 0
     end
+    tableParameter.bFirstZhuang = 1
+    local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(12),"ListView_parameter"):getItems()
+    if items[1]:isBright() then
+        tableParameter.bFirstZhuang = 1
+    else
+        tableParameter.bFirstZhuang = 0
+    end
+
     tableParameter.bLLSFlag = 1     --六六顺   默认1.是
     tableParameter.bQYSFlag = 1     --缺一色   默认1.是
     tableParameter.bWJHFlag = 1     --无将胡   默认1.是

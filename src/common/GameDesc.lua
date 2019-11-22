@@ -839,6 +839,9 @@ function GameDesc:getGameDesc(wKindID,data,tableConfig)
         if data.b4Add3 == 1 then
             desc = desc.."/可4带3"
         end
+        if data.b4Add2 == 1 then
+            desc = desc.."/可4带2"
+        end
         if data.bShowCardCount == 1 then
             desc = desc.."/显示牌数"
         end
@@ -1243,12 +1246,18 @@ function GameDesc:getGameDesc(wKindID,data,tableConfig)
         desc = desc.."爬坡"
       elseif data.bPaPo == 2 then
         desc = desc.."持续爬坡"
+      elseif data.bPaPo == 3 then
+        desc = desc.."爬2坡"
       end
 
       if data.bStartTun == 1 then
          desc = desc.."/加一囤"
       end
-      
+
+      if data.bStartBanker == 0 then
+         desc = desc.."\n首局随机做庄"
+      end
+    
       desc = desc..string.format("/%d胡起胡",data.bCanHuXi) 
     elseif wKindID == 78 then
         if data.bPlayerCount == 2 then
@@ -1329,6 +1338,9 @@ function GameDesc:getGameDesc(wKindID,data,tableConfig)
             --desc = desc.."/不接炮"
         elseif data.mHongNiao == 1 then
             desc = desc.."/红中加一码"
+        end
+        if data.bFirstZhuang == 1 then
+            desc = desc.."/首局随机做庄"
         end
 
     elseif wKindID == 79 then
@@ -1507,6 +1519,10 @@ function GameDesc:getGameDesc(wKindID,data,tableConfig)
             desc = desc.."/开4杠"
         elseif data.mKGNPFlag == 6 then
             desc = desc.."/开6杠"
+        end
+        
+        if data.bFirstZhuang == 1 then
+            desc = desc.."/首局随机做庄"
         end
 
     elseif wKindID == 81 then
@@ -1732,6 +1748,45 @@ function GameDesc:getGameDesc(wKindID,data,tableConfig)
 
         if data.bDaDaoEnd then
             desc = desc.."/大倒结束"
+        end
+    elseif wKindID == 92 then
+        if data.bPlayerCount == 2 then
+            desc = desc.."双人竞技"
+            -- if data.bWuTong == 0 then                       --//1.有筒  0.无筒 (默认有筒)
+            --     desc = desc.."/无筒"
+            -- elseif data.bWuTong == 1 then
+            --     desc = desc.."/有筒"
+            -- end  
+        elseif data.bPlayerCount == 3 then
+            desc = desc.."3人"
+        elseif data.bPlayerCount == 4 then
+            desc = desc.."4人"
+        end
+
+        if data.mQiWangFlag == 0 then
+            desc = desc.."/七王"
+        elseif data.mQiWangFlag == 1 then
+            desc = desc.."/四王"
+        end
+
+        if data.bMaCount == 1 then                    --//马数 2、4、6
+            desc = desc.."/1个鸟"
+        elseif data.bMaCount == 2 then
+            desc = desc.."/2个鸟"
+        elseif data.bMaCount == 3 then
+            desc = desc.."/3个鸟"
+        elseif data.bMaCount == 4 then
+            desc = desc.."/4个鸟"
+        end
+
+        if data.bDaiWangYing == 1 then
+            desc = desc.."/代王硬"
+        end
+        if data.bQGHu == 1 then
+            desc = desc.."/可抢杠胡"
+        end 
+        if data.bSJZhuang == 1 then
+            desc = desc.."/首局随机庄"
         end
     end
     

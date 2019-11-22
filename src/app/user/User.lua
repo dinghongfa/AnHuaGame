@@ -56,6 +56,8 @@ local User = {
 	isOpenUserEffect = true, --是否开启用户特效
 	localIp = 0,         --本地ip
 	szErWeiMaLogo = "",  --亲友圈名片
+	szXianLiaoCode = "",	--绑定闲聊
+	wPrivilege = 0,			--无特权 1GM特权
 }
 
 function User:onEnter()
@@ -125,6 +127,8 @@ function User:EVENT_TYPE_NET_RECV_MESSAGE(event)
 		self.dwDrawCount = netInstance.cppFunc:readRecvDWORD()
 		self.dwLastLoginIP = netInstance.cppFunc:readRecvDWORD()		
 		self.szErWeiMaLogo = netInstance.cppFunc:readRecvString(256)
+		self.szXianLiaoCode = netInstance.cppFunc:readRecvString(64)
+		self.wPrivilege = netInstance.cppFunc:readRecvWORD()
 		print('名片二维码：', self.szErWeiMaLogo)
 		self:saveLoginInfo()
         self:talkdata()
@@ -156,6 +160,8 @@ function User:EVENT_TYPE_NET_RECV_MESSAGE(event)
 		self.dwDrawCount = netInstance.cppFunc:readRecvDWORD()
 		self.dwLastLoginIP = netInstance.cppFunc:readRecvDWORD()
 		self.szErWeiMaLogo = netInstance.cppFunc:readRecvString(256)
+		self.szXianLiaoCode = netInstance.cppFunc:readRecvString(64)
+		self.wPrivilege = netInstance.cppFunc:readRecvWORD()
 		EventMgr:dispatch(EventType.SUB_CL_USER_INFO)
 		
 	elseif netID == NetMgr.NET_LOGIC and mainCmdID == NetMsgId.MDM_CL_LOGON and subCmdID == NetMsgId.SUB_CL_LOGON_ERROR then
@@ -166,6 +172,15 @@ function User:EVENT_TYPE_NET_RECV_MESSAGE(event)
 		data.szErrorDescribe = luaFunc:readRecvString(128)
 		NetMgr:getLogicInstance():closeConnect()
 		EventMgr:dispatch(EventType.SUB_CL_LOGON_ERROR, data)
+
+	elseif netID == NetMgr.NET_LOGIC and mainCmdID == NetMsgId.MDM_CL_USER and subCmdID == NetMsgId.SUB_CL_SET_USER_INFO then
+		local data = {}
+		data.wCode = netInstance.cppFunc:readRecvWORD()
+		data.dwUserID = netInstance.cppFunc:readRecvDWORD()
+		data.wType = netInstance.cppFunc:readRecvWORD()
+		data.szInfo = netInstance.cppFunc:readRecvString(256)
+		EventMgr:dispatch(EventType.SUB_CL_SET_USER_INFO, data)
+
 	else
 		
 		return
@@ -445,14 +460,18 @@ function User:requestLocation()
 		if xmlHttpRequest.status == 200 then
 			print("定位:", xmlHttpRequest.response)
 			local response = json.decode(xmlHttpRequest.response)
-			if response["province"] == "湖南省" then
+			if response["status"] == "1" then
+				local data = {}
+				data.info = response["info"]
+				data.infocode = response["infocode"]
+				data.province = response["province"]
+				data.city = response["city"]
+				data.adcode = response["adcode"]
+				data.rectangle = response["rectangle"]
+				self.city = data.province .. data.city
+				local regionsCity = string.sub(data.city, 1, 6)
 				for key, var in pairs(StaticData.Regions) do
-					local province = response["province"]
-					local city = response["city"]
-					self.city = province .. city
-					city = string.sub(city, 1, 6)
-					print(string.len(city))
-					if string.find(var.name, city) then
+					if string.find(var.name, regionsCity) then
 						if regionID == - 1 and StaticData.Hide[CHANNEL_ID].btn6 == 1 then
 							cc.UserDefault:getInstance():setIntegerForKey(Default.UserDefault_RegionID, var.id)
 						end
@@ -607,5 +626,127 @@ function User:requestUploadErWeiMa(url,data)
     xmlHttpRequest:registerScriptHandler(onHttpRequestCompleted)
     xmlHttpRequest:send(data)
 end
+
+--闲聊登陆或者绑定
+function User:xianLiaoLogin()
+	if PLATFORM_TYPE == cc.PLATFORM_OS_ANDROID then
+        local methodName = "xianLiaoLogin" 
+        local args = {  }  
+        local sigs = "(Ljava/lang/String;)V" 
+        luaj.callStaticMethod(self.className ,methodName,args , nil)
+
+	elseif PLATFORM_TYPE == cc.PLATFORM_OS_APPLE_REAL then
+        cus.JniControl:getInstance():xianLiaoLogin()
+	end
+end
+
+function cc.exports.xianLiaoLoginResult(code)
+ 	if code == "0" then
+ 		local xianLiaodata = {}
+		xianLiaodata.err_code = 100
+		xianLiaodata.err_msg = "授权失败"
+	 	local scene = cc.Director:getInstance():getRunningScene()
+        return scene:runAction(cc.Sequence:create(cc.DelayTime:create(1), cc.CallFunc:create(function(sender, event) EventMgr:dispatch(EventType.EVENT_TYPE_XIAN_LIAO_LOGIN, code) end)))
+    end
+
+    local scene = cc.Director:getInstance():getRunningScene()
+    return scene:runAction(cc.Sequence:create(cc.DelayTime:create(1), cc.CallFunc:create(function(sender, event) User:httpXianLiaoToken(code) end)))
+end
+
+function User:httpXianLiaoToken(code)
+    local url = string.format(HttpUrl.POST_URL_XianLiaoToken,StaticData.Channels[CHANNEL_ID].xianLiaoAppId,StaticData.Channels[CHANNEL_ID].xianLiaoAppSecret,code)
+    local xmlHttpRequest = cc.XMLHttpRequest:new()
+    xmlHttpRequest.responseType = cc.XMLHTTPREQUEST_RESPONSE_JSON
+    xmlHttpRequest:setRequestHeader("Content-Type","application/json; charset=utf-8")
+    xmlHttpRequest:open("POST",url)
+    local function onHttpRequestCompleted()
+        if xmlHttpRequest.status == 200 then
+        	local response = json.decode(xmlHttpRequest.response)
+        	local xianLiaodata = {}
+			xianLiaodata.err_code = response["err_code"]
+			xianLiaodata.err_msg = response["err_msg"]
+			if xianLiaodata.err_code == 0 then
+				xianLiaodata.data = {}
+				xianLiaodata.data.access_token = response["data"]["access_token"]
+				xianLiaodata.data.refresh_token = response["data"]["refresh_token"]
+				xianLiaodata.data.expires_in = response["data"]["expires_in"]
+				User:httpXianLiaoLogin(xianLiaodata)				
+				return
+			end
+			EventMgr:dispatch(EventType.EVENT_TYPE_XIAN_LIAO_LOGIN, xianLiaodata)
+			return
+        end
+        local xianLiaodata = {}
+        xianLiaodata.err_code = 101
+		xianLiaodata.err_msg = "获取TokenID失败"
+        EventMgr:dispatch(EventType.EVENT_TYPE_XIAN_LIAO_LOGIN, xianLiaodata)
+    end
+    xmlHttpRequest:registerScriptHandler(onHttpRequestCompleted)
+    xmlHttpRequest:send()
+end
+
+function User:httpXianLiaoLogin(xianLiaodata)
+	local xmlHttpRequest = cc.XMLHttpRequest:new()
+    xmlHttpRequest.responseType = cc.XMLHTTPREQUEST_RESPONSE_JSON
+    xmlHttpRequest:setRequestHeader("Content-Type","application/json; charset=utf-8")
+    xmlHttpRequest:open("POST",string.format(HttpUrl.POST_URL_XianLiaoLogin,xianLiaodata.data.access_token))
+    local function onHttpRequestCompleted()
+        if xmlHttpRequest.status == 200 then
+        	local response = json.decode(xmlHttpRequest.response)
+        	local xianLiaodata = {}
+			xianLiaodata.err_code = response["err_code"]
+			xianLiaodata.err_msg = response["err_msg"]
+			if xianLiaodata.err_code == 0 then
+				xianLiaodata.data = {}
+				xianLiaodata.data.openId = response["data"]["openId"]
+				xianLiaodata.data.nickName = response["data"]["nickName"]
+				xianLiaodata.data.originalAvatar = response["data"]["originalAvatar"]
+				xianLiaodata.data.smallAvatar = response["data"]["smallAvatar"]
+				xianLiaodata.data.gender = response["data"]["gender"]
+			end
+			EventMgr:dispatch(EventType.EVENT_TYPE_XIAN_LIAO_LOGIN, xianLiaodata)
+			return
+        end
+        local xianLiaodata = {}
+        xianLiaodata.err_code = 102
+		xianLiaodata.err_msg = "获取用户信息失败"
+        EventMgr:dispatch(EventType.EVENT_TYPE_XIAN_LIAO_LOGIN, xianLiaodata)
+    end
+    xmlHttpRequest:registerScriptHandler(onHttpRequestCompleted)
+    xmlHttpRequest:send()
+end
+
+function User:httpPhoneBind(szPhone)
+	local UserData = require("app.user.UserData")
+	local data = clone(UserData.Share.tableShareParameter[13])
+	local xmlHttpRequest = cc.XMLHttpRequest:new()
+    xmlHttpRequest.responseType = cc.XMLHTTPREQUEST_RESPONSE_JSON
+    xmlHttpRequest:setRequestHeader("Content-Type","application/json; charset=utf-8")
+    xmlHttpRequest:open("GET",string.format(data.szShareUrl,szPhone))
+    local function onHttpRequestCompleted()
+        if xmlHttpRequest.status == 200 then
+        	local response = json.decode(xmlHttpRequest.response)
+        	local data = {}
+        	data.code = response["code"]
+        	data.Msg = response["Msg"]
+        	data.phone_code = response["phone_code"]
+        	data.szPhone = szPhone
+            EventMgr:dispatch(EventType.EVENT_TYPE_BIND_PHONE, data)
+			return
+        end
+        local data = {}
+    	data.code = 101
+    	data.Msg = "发送验证码失败!"
+        EventMgr:dispatch(EventType.EVENT_TYPE_BIND_PHONE, data)
+    end
+    xmlHttpRequest:registerScriptHandler(onHttpRequestCompleted)
+    xmlHttpRequest:send()
+end
+
+function User:setUserInfo(wType, szInfo)
+	 NetMgr:getLogicInstance():sendMsgToSvr(NetMsgId.MDM_CL_USER, NetMsgId.REQ_CL_SET_USER_INFO,"wdwns",0,self.userID,wType,256,szInfo)
+end
+
+
 
 return User 

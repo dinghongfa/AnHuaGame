@@ -15,7 +15,7 @@ end)
 
 function DistanceAlarm:create(GameCommon)
     local view = DistanceAlarm.new()
-    view:onCreate(GameCommon)
+    view:onCreate(GameCommon.tableConfig.wKindID)
     local function onEventHandler(eventType)  
         if eventType == "enter" then  
             view:onEnter() 
@@ -52,7 +52,10 @@ function DistanceAlarm:onCreate(wKindID)
     local visibleSize = cc.Director:getInstance():getVisibleSize()
     
     if StaticData.Games[wKindID].type == 1 then
-        GameCommon = require("game.paohuzi.GameCommon")
+        --GameCommon = require("game.paohuzi.GameCommon")
+        if wKindID == 69 then 
+            GameCommon = require("game.anhua.GameCommon")
+        end 
     elseif StaticData.Games[wKindID].type == 2 then
         GameCommon = require("game.puke.PDKGameCommon")   
         if wKindID == 84 then

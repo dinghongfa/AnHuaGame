@@ -44,10 +44,6 @@ function NewClubRecord:onConfig(...)
 		{'Text_club_id'},
 		{'Panel_statics'},
 		{'Button_top_3'},
-		{'Image_BTButton'},
-		{'Button_Individual','onIndividual'},
-		{'Button_Friends','onFriends'},
-		{'Button_Statistics','onStatistics'}
 	}
 end
 
@@ -61,6 +57,8 @@ function NewClubRecord:onEnter(...)
 	EventMgr:registListener(EventType.SUB_CL_SUB_REPLAY, self, self.SUB_CL_SUB_REPLAY)
 	EventMgr:registListener(EventType.SUB_CL_MAIN_RECORD_FINISH, self, self.SUB_CL_MAIN_RECORD_FINISH)
 	EventMgr:registListener(EventType.RET_CL_MAIN_RECORD_TOTAL_SCORE,self, self.RET_CL_MAIN_RECORD_TOTAL_SCORE)
+
+	EventMgr:registListener(EventType.CLOSE_RECORDCLUB,self,self.close)
 end
 
 function NewClubRecord:onExit(...)
@@ -72,6 +70,7 @@ function NewClubRecord:onExit(...)
 	EventMgr:unregistListener(EventType.SUB_CL_MAIN_RECORD_FINISH, self, self.SUB_CL_MAIN_RECORD_FINISH)
 	EventMgr:unregistListener(EventType.SUB_CL_SUB_REPLAY_SHAREID, self, self.SUB_CL_SUB_REPLAY_SHAREID)
 	EventMgr:unregistListener(EventType.RET_CL_MAIN_RECORD_TOTAL_SCORE,self, self.RET_CL_MAIN_RECORD_TOTAL_SCORE)
+	EventMgr:unregistListener(EventType.CLOSE_RECORDCLUB,self,self.close)
 end
 
 function NewClubRecord:onCreate(params)
@@ -88,57 +87,23 @@ function NewClubRecord:onCreate(params)
 	self.adminID = self.clubData.dwUserID
 	self.clubName = self.clubData.szClubName
 	self.isLoadStatics = false
-
 	self:initUI()
 	self:initRecordData()
-	-- self.cellSize = cc.size(1038, 175) --宽 高
-	-- self.viewSize = cc.size(1060, 569)
-
-	self.cellSize = cc.size(1040, 175) --宽 高
-	self.viewSize = cc.size(1030, 580)
+	self.cellSize = cc.size(1053, 180) --宽 高
+	self.viewSize = cc.size(1050, 540)
 	self.listView = Common:_createList(self.viewSize, handler(self, self._itemUpdateCall), self.cellSize.width, self.cellSize.height, handler(self, self.getDataCount), nil, nil, nil, false)
-	self.listView:setPosition(cc.p(257,60))
+	self.listView:setPosition(cc.p(211,72))
 	self.Panel_record:addChild(self.listView)
-	self.listView:setBounceable(false)
-
+	self:createToggleButton(3,'Button_top_',handler(self,self.onClickTopRecord),1);
+	self:createToggleButton(3,'Button_statics_',handler(self,self.onClickToggleRecord),1)
 	self:reqRecord(DAY_TYPE.TODAY,RECORD_TYPE.PERSON_RECORD)
 	self:changePage(Page_State.RECORD_PAGE)
 	self:updateTop()
 	--计时器
 	schedule(self.listView, handler(self,self.checkReq), 0.6)
-
-	self:canGoTo()
-	
 end
 
---是否需要跳转
-function NewClubRecord:canGoTo( ... )
-	local defoutTop = 1
-	local defoutLeft = 1
-	--是否需要进行跳转 0不需要 1 需要
-	local canGo = cc.UserDefault:getInstance():getIntegerForKey("club_record_go",0)
-	if canGo == 1 then
-		--1个人战绩 2 亲友圈战绩
-		local page = cc.UserDefault:getInstance():getIntegerForKey("club_pageState",0)
-		defoutTop = page
-		--0今日1昨日2前日
-		local day = cc.UserDefault:getInstance():getIntegerForKey("club_day",0)
-		defoutLeft = day
-		self:createToggleButton(3,'Button_top_',handler(self,self.onClickTopRecord),defoutTop);
-		self:createToggleButton(3,'Button_statics_',handler(self,self.onClickToggleRecord),defoutLeft)
-		--跳转子页签
-		self:changePage(Page_State.DETAIL_PAGE)
-		self.ListView_details:removeAllChildren()
-		self.wKindID = cc.UserDefault:getInstance():getIntegerForKey("club_kwindID",0)
-		self.szMainGameID = cc.UserDefault:getInstance():getStringForKey("club_mainGameID",'')
-		self.totalScore = {}
-		UserData.Record:sendMsgGetSubRecord(self.szMainGameID)
-		cc.UserDefault:getInstance():setIntegerForKey("club_record_go",0)
-	else
-		self:createToggleButton(3,'Button_top_',handler(self,self.onClickTopRecord),defoutTop);
-		self:createToggleButton(3,'Button_statics_',handler(self,self.onClickToggleRecord),defoutLeft)
-	end
-end
+
 
 function NewClubRecord:initUI( ... )
 	self.allStatics = {}
@@ -149,9 +114,6 @@ function NewClubRecord:initUI( ... )
 	end
 	self.Button_close:setZOrder(100)
 	self.Button_top_3:setVisible(self.isAdmin)
-	if self.isAdmin == false then 
-		self.Button_top_3:setVisible(self.clubData.bIsStatisticsVisible)
-	end 
 end
 
 function NewClubRecord:updateTop(  )
@@ -229,34 +191,6 @@ function NewClubRecord:onCallOtherReplay( ... )
 	self:addChild(box)
 end
 
-function NewClubRecord:onIndividual()
-	self:changeDay(DAY_TYPE.TODAY)
-	self.Image_BTButton:loadTexture("zhanji/gerenzhanji_fs8.png")
-end 
-
-function NewClubRecord:onFriends()
-	if not self.isAdmin then
-		require("common.MsgBoxLayer"):create(0,self,"您不是群主或管理员")
-		return
-	end
-	self:chageRecord(RECORD_TYPE.CLUB_RECORD)
-	self.Image_BTButton:loadTexture("zhanji/qinyouquan_fs8.png")
-end 
-
-function NewClubRecord:onStatistics()
-	if not self.isAdmin then
-		require("common.MsgBoxLayer"):create(0,self,"您不是群主或管理员")
-		return
-	end
-	if not self.isLoadStatics then
-		local box = require("app.MyApp"):create(self.clubData,self.isAdmin):createView('StatisticsLayer')
-		self.Panel_statics:addChild(box)
-		self.isLoadStatics = true
-	end
-	self:changePage(Page_State.STATICS_PAGE)
-	self.Image_BTButton:loadTexture("zhanji/tongji_fs8.png")
-end 
-
 function NewClubRecord:onClickTopRecord( sender )
 	if sender:getName() == 'Button_top_2' and not self.isAdmin then
 		require("common.MsgBoxLayer"):create(0,self,"您不是群主或管理员")
@@ -279,11 +213,26 @@ function NewClubRecord:onClickTopRecord( sender )
 	elseif sender:getName() == 'Button_top_2' then --亲友圈
 		self:chageRecord(RECORD_TYPE.CLUB_RECORD)
 	elseif sender:getName() == 'Button_top_3' then
+
+		-- if CHANNEL_ID == 6 or
+		-- CHANNEL_ID == 7 then
+		-- 	local box = require("app.MyApp"):create(self.clubID,self.isAdmin):createView('ClubStatisticsLayer')
+		-- 	self.csb:addChild(box,100)
+		-- 	--require("common.SceneMgr"):switchTips(require("app.MyApp"):create(self.clubID,self.isAdmin):createView("ClubStatisticsLayer"))
+		-- else
+		-- 	if not self.isLoadStatics then
+		-- 		local box = require("app.MyApp"):create(self.clubData,self.isAdmin):createView('StatisticsLayer')
+		-- 		self.Panel_statics:addChild(box)
+		-- 		self.isLoadStatics = true
+		-- 	end
+		-- end
+
 		if not self.isLoadStatics then
 			local box = require("app.MyApp"):create(self.clubData,self.isAdmin):createView('StatisticsLayer')
 			self.Panel_statics:addChild(box)
 			self.isLoadStatics = true
 		end
+
 		self:changePage(Page_State.STATICS_PAGE)
 	end
 	print('点击了',sender:getName())
@@ -291,6 +240,10 @@ end
 
 function NewClubRecord:onClose(  )
 	self:gotoPage()
+end
+
+function NewClubRecord:close()
+	self:removeFromParent()
 end
 
 function NewClubRecord:addButtonEventListener(button, callback,isAction)
@@ -444,17 +397,7 @@ end
 --回放
 function NewClubRecord:reBackPlay(sender)
 	print("回放", sender:getName())
-	self:saveRecord()
 	UserData.Record:sendMsgGetMainReplay(sender:getName())            --回放
-end
-
---保存数据
-function NewClubRecord:saveRecord( ... )
-	cc.UserDefault:getInstance():setIntegerForKey("club_record_go",1)
-	cc.UserDefault:getInstance():setIntegerForKey("club_pageState",self.recordType)
-	cc.UserDefault:getInstance():setIntegerForKey("club_day",self.dayType)
-	cc.UserDefault:getInstance():setIntegerForKey("club_kwindID",self.wKindID)
-	cc.UserDefault:getInstance():setStringForKey("club_mainGameID",self.szMainGameID)
 end
 
 function NewClubRecord:showRecordData( )
@@ -607,13 +550,13 @@ function NewClubRecord:setScoreColor( text,type )
 		return
 	end
 	if type == 0 then --正分数
-		text:setColor(cc.c3b(124,164,46))
+		text:setColor(cc.c3b(231,0,0))
 	elseif type == 1 then --0
 		text:setColor(cc.c3b(231,0,0))
 	elseif type == 2 then  --负分数
-		text:setColor(cc.c3b(210,86,31))
+		text:setColor(cc.c3b(38,134,0))
 	elseif type == 3 then --标题
-		text:setColor(cc.c3b(109,58,44))
+		text:setColor(cc.c3b(127,71,46))
 	end
 end
 
@@ -662,7 +605,6 @@ function NewClubRecord:updateChildItem( item,index )
 end
 
 function NewClubRecord:checkReq( dt )
-	--隔一秒请求
 	if self:isBottom() then
 		if self.reqState[self.recordType][self.dayType] == 1 then
 			self.reqState[self.recordType][self.dayType] = 0
@@ -785,7 +727,7 @@ function NewClubRecord:isBottom(  )
 		return false
 	end
 	local curX = self.listView:getContentOffset().y --当前的偏移值
-	return curX > -2
+	return curX > 5
 end
 
 ---------------server---
@@ -843,6 +785,8 @@ function NewClubRecord:SUB_CL_MAIN_RECORD_FINISH(event)
 	local data = event._usedata
 	local lType = self:getLocalTypeRecord(data.cbType)
 	local lDay = self:getLoalTypeDay(data.cbDay)
+	dump(data,'fx-------------->>')
+	print(data.cbDay,lDay,lType)
 	if not data.isFinish then
 		self.reqState[self.recordType][self.dayType] = 1
 	else
@@ -850,36 +794,18 @@ function NewClubRecord:SUB_CL_MAIN_RECORD_FINISH(event)
 	end
 	if self.cacheData[lType][lDay] then
 		print('-->>>插入',lDay)
-		local count = #self.cacheData[lType][lDay]
 		for _,v in ipairs(self.cacheData[lType][lDay]) do
 			self:insertRecordData(lDay,lType,v)
 		end
 		self.cacheData[lType][lDay] = {}
 		print('结束协议')
 		--当前位置刷新数据
-		local point = self.listView:getContentOffset()
 		self:reloadData()
 		if self.isCanBottom then
-			self.listView:setContentOffset(cc.p(0,-point.y-count * (180 - 2)), false)
+			self.listView:setContentOffset(cc.p(0,0), false)
 		end
 		self.isCanBottom = true
 	end
-end
-
---跳转到指定的cell
---index cell的index
---animated 如果为true则以MoveTo滚动的方式延迟到达指定的cell
-function NewClubRecord:scrollToCell(index, animated)
-    local point = self.listView:getContentOffset()
-    local size = self.listView:getContentSize()
-    local direction = self.listView:getDirection()
-    if direction == kCCScrollViewDirectionHorizontal then
-        point.x = -((index - 1) * size.width)
-    else
-        index = self.numberOfCells - index + 1
-        point.y = -((index - 1) * size.height)
-    end
-    self.listView:setContentOffset(point, animated)
 end
 
 --战绩总分刷新

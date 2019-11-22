@@ -36,19 +36,18 @@ function DaiLiLayer:onCreate(parames)
 
     local Button_copy1 = ccui.Helper:seekWidgetByName(self.root,"Button_copy1")
     Common:addTouchEventListener(Button_copy1,function() 
-        UserData.User:copydata("dxxqp668") 
+        UserData.User:copydata("ahdl168") 
         require("common.MsgBoxLayer"):create(0,nil,"复制成功！")
     end)
 
     local Button_copy2 = ccui.Helper:seekWidgetByName(self.root,"Button_copy2")
     Common:addTouchEventListener(Button_copy2,function() 
-        UserData.User:copydata("dxxqp668") 
+        UserData.User:copydata("ahdl168") 
         require("common.MsgBoxLayer"):create(0,nil,"复制成功！")
-    end)
-
+    end) 
     local Button_copy3 = ccui.Helper:seekWidgetByName(self.root,"Button_copy3")
     Common:addTouchEventListener(Button_copy3,function() 
-        UserData.User:copydata("dxxqp168") 
+        UserData.User:copydata("安化游戏大厅") 
         require("common.MsgBoxLayer"):create(0,nil,"复制成功！")
     end)
 

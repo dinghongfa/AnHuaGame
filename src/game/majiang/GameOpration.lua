@@ -58,6 +58,10 @@ function GameOpration:onCreate(pBuffer,opTtype)
         self:showWCWD(pBuffer)
     elseif opTtype == 3 then
         self:showBIHUXIAOHU(pBuffer)
+    elseif opTtype == 4 then
+        self:showQiShowHU(pBuffer)
+    elseif opTtype == 5 then
+        self:showBIHU(pBuffer)
     else
         self:showOpration(pBuffer)
     end
@@ -68,7 +72,7 @@ function GameOpration:onCreate(pBuffer,opTtype)
     uiListView_OprationTypes:setVisible(false)
 
     uiListView_Opration:refreshView()
-    uiListView_Opration:setPositionX(cc.Director:getInstance():getVisibleSize().width*0.82-uiListView_Opration:getInnerContainerSize().width)
+    uiListView_Opration:setPositionX(cc.Director:getInstance():getVisibleSize().width*0.75-uiListView_Opration:getInnerContainerSize().width)
     uiListView_Opration:setDirection(ccui.ScrollViewDir.none)
 end
 
@@ -117,7 +121,7 @@ function GameOpration:showOpration(pBuffer)
         end)
     end
     --补
-    if Bit:_and(cbOperateCode,GameCommon.WIK_FILL) ~= 0 then
+    if Bit:_and(cbOperateCode,GameCommon.WIK_FILL) ~= 0 and GameCommon.tableConfig.wKindID ~= 92 then
         local img = "majiang/ui/operate/n_playLabel_3.png"
         local item = ccui.Button:create(img,img,img)
         uiListView_Opration:pushBackCustomItem(item)
@@ -257,10 +261,46 @@ function GameOpration:showOpration(pBuffer)
     end
 end
 
+function GameOpration:showBIHU(pBuffer)
+
+    --刚开必胡
+    local uiListView_Opration = ccui.Helper:seekWidgetByName(self.root,"ListView_Opration")
+    local img = "majiang/ui/operate/n_playLabel_17.png"
+    local item = ccui.Button:create(img,img,img)
+    uiListView_Opration:pushBackCustomItem(item)
+    Common:addTouchEventListener(item,function() 
+        self:dealHu(pBuffer)
+    end)
+    if  pBuffer.mUserWCWDActionEx ~= nil then 
+        mUserWCWDActionEx = pBuffer.mUserWCWDActionEx
+    end 
+    -- if Bit:_and(GameCommon.cbOperateCode,GameCommon.WIK_WD) ~= 0  or mUserWCWDActionEx == 1   then
+    --     local img = ccui.ImageView:create("yongzhou/ui/end_play_wangdiao.png")
+    --     item:addChild(img)
+    --     img:setPosition(img:getParent():getContentSize().width/2,img:getParent():getContentSize().height)
+    -- elseif Bit:_and(GameCommon.cbOperateCode,GameCommon.WIK_WC) ~= 0   or mUserWCWDActionEx == 2  then
+    --     local img = ccui.ImageView:create("yongzhou/ui/end_play_wangchuang.png")
+    --     item:addChild(img)
+    --     img:setPosition(img:getParent():getContentSize().width/2,img:getParent():getContentSize().height)
+    -- else
+    -- end
+
+    ccs.ArmatureDataManager:getInstance():addArmatureFileInfo("game/xuanzhuanxing/xuanzhuanxing.ExportJson")
+    local armature=ccs.Armature:create("xuanzhuanxing")
+    armature:getAnimation():playWithIndex(0)
+    item:addChild(armature)
+    armature:setPosition(armature:getParent():getContentSize().width/2,armature:getParent():getContentSize().height/2)
+
+    for key, var in pairs(uiListView_Opration:getItems()) do
+        var:setScale(0.0)
+        var:runAction(cc.Sequence:create(cc.Sequence:create(cc.ScaleTo:create(0, 1))))
+    end
+end 
+
 function GameOpration:showHaiDi()
     --海底
     local uiListView_Opration = ccui.Helper:seekWidgetByName(self.root,"ListView_Opration")
-    local img = "game/op_yaohaidi.png"
+    local img = "majiang/ui/operate/n_playLabel_17.png"
     local item = ccui.Button:create(img,img,img)
     uiListView_Opration:pushBackCustomItem(item)
     Common:addTouchEventListener(item,function() 
@@ -355,6 +395,37 @@ function GameOpration:showBIHUXIAOHU(pBuffer)
         self:removeFromParent()
     end)
 
+end 
+
+function GameOpration:showQiShowHU(pBuffer)
+    --起手四王胡牌
+    local uiListView_Opration = ccui.Helper:seekWidgetByName(self.root,"ListView_Opration")
+    local img = "game/op_hu.png"
+    local item = ccui.Button:create(img,img,img)
+    uiListView_Opration:pushBackCustomItem(item)
+    Common:addTouchEventListener(item,function() 
+        NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GF_GAME,NetMsgId.SUB_C_FourKing,"b",1)
+        self:removeFromParent()
+    end)
+    --过
+    local img = "majiang/ui/operate/n_playLabel_8.png"
+    local item = ccui.Button:create(img,img,img)
+    uiListView_Opration:pushBackCustomItem(item)
+    Common:addTouchEventListener(item,function()
+        if GameCommon.IsOfHu == 1 then 
+            require("common.MsgBoxLayer"):create(1,nil,"是否放弃胡牌？",function()  
+                NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GF_GAME,NetMsgId.SUB_C_FourKing,"b",0)  --GameCommon.bUserOpreaCount
+                self:removeFromParent()         
+            end)   
+        else
+            NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GF_GAME,NetMsgId.SUB_C_FourKing,"b",0)
+            self:removeFromParent()
+        end 
+    end)
+    for key, var in pairs(uiListView_Opration:getItems()) do
+        var:setScale(0.0)
+        var:runAction(cc.Sequence:create(cc.Sequence:create(cc.ScaleTo:create(0, 1))))
+    end
 end 
 function GameOpration:dealChi(pBuffer)
     local cbOperateCard = pBuffer.cbActionCard
@@ -469,14 +540,14 @@ function GameOpration:deal65Chi(pBuffer)
         end
     end
     cbCardList[cbOperateCard] = cbCardList[cbOperateCard]+1 
-    if(cbCardList[49]~= 0 and cbCardList[50]~= 0 and cbCardList[51]~= 0 )and (cbOperateCard == 49 or cbOperateCard == 50 or cbOperateCard == 51 or cbOperateCard == 70 or cbOperateCard == 80) then 
+    if(cbCardList[49]~= 0 and cbCardList[50]~= 0 and cbCardList[51]~= 0 )and (cbOperateCard == 49 or cbOperateCard == 50 or cbOperateCard == 51 or cbOperateCard == 70 or cbOperateCard == 80 or cbOperateCard == 92 ) then 
         local ChiCard = {}
         ChiCard[1] = 49 
         ChiCard[2] = 50 
         ChiCard[3] = 51 
         table.insert(tableChiCard,#tableChiCard+1,{cbWeaveKind = GameCommon.WIK_LEFT,cbCenterCard = cbOperateCard,m_ChiCard = ChiCard ,cbPublicCard = 0,wProvideUser = wResumeUser})
     end     
-    if(cbCardList[49]~= 0 and cbCardList[50]~= 0 and cbCardList[52]~= 0 )and (cbOperateCard == 49 or cbOperateCard == 50 or cbOperateCard == 52 or cbOperateCard == 70 or cbOperateCard == 80) then 
+    if(cbCardList[49]~= 0 and cbCardList[50]~= 0 and cbCardList[52]~= 0 )and (cbOperateCard == 49 or cbOperateCard == 50 or cbOperateCard == 52 or cbOperateCard == 70 or cbOperateCard == 80 or cbOperateCard == 92) then 
         local ChiCard = {}
         ChiCard[1] = 49 
         ChiCard[2] = 50 
@@ -490,7 +561,7 @@ function GameOpration:deal65Chi(pBuffer)
         ChiCard[3] = 52
         table.insert(tableChiCard,#tableChiCard+1,{cbWeaveKind = GameCommon.WIK_LEFT,cbCenterCard = cbOperateCard,m_ChiCard = ChiCard ,cbPublicCard = 0,wProvideUser = wResumeUser})
     end    
-    if(cbCardList[50]~= 0 and cbCardList[51]~= 0 and cbCardList[52]~= 0 )and (cbOperateCard == 50 or cbOperateCard == 51 or cbOperateCard == 52 or cbOperateCard == 70 or cbOperateCard == 80) then 
+    if(cbCardList[50]~= 0 and cbCardList[51]~= 0 and cbCardList[52]~= 0 )and (cbOperateCard == 50 or cbOperateCard == 51 or cbOperateCard == 52 or cbOperateCard == 70 or cbOperateCard == 80 or cbOperateCard == 92) then 
         local ChiCard = {}
         ChiCard[1] = 50 
         ChiCard[2] = 51 

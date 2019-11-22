@@ -73,6 +73,8 @@ local NetMsgId = {
     SUB_CL_USER_PROP                = 12002,                           --用户道具
     REQ_CL_USER_INFO                = 1200,                            --请求用户信息
     SUB_CL_USER_INFO                = 12000,                           --用户信息
+    REQ_CL_SET_USER_INFO            = 1201,                            --设置用户信息
+    SUB_CL_SET_USER_INFO            = 12001,                           --设置用户信息
     
     --充值
     MDM_CL_RECHARGE                 = 130,                            --商城消息
@@ -148,7 +150,6 @@ local NetMsgId = {
     MDM_CL_CLUB                         = 160,                             --亲友圈
 --    REQ_GET_CLUB_LIST                   = 1600,                            --获取亲友圈列表
 --    RET_GET_CLUB_LIST                   = 16000,                           --返回亲友圈列表
-    RET_GET_CLUB_MEMBER_FINISH          = 16039,                              --返回亲友圈成员列表完成
     RET_GET_CLUB_MEMBER_EX_FINISH       = 16040,                            --返回亲友圈以外可以导入的成员	                            
     REQ_JOIN_CLUB                       = 1601,                            --请求加入亲友圈
     RET_JOIN_CLUB                       = 16001,                           --返回加入亲友圈
@@ -158,8 +159,9 @@ local NetMsgId = {
     RET_REMOVE_CLUB_MEMBER              = 16003,                           --返回删除亲友圈成员
     REQ_GET_CLUB_TABLE                  = 1604,                            --获取亲友圈桌子列表
     RET_GET_CLUB_TABLE                  = 16004,                           --返回亲友圈桌子列表
-    REQ_GET_CLUB_MEMBER                 = 1605,                            --获取亲友圈成员列表
-    RET_GET_CLUB_MEMBER                 = 16005,                           --返回亲友圈成员列表
+    REQ_GET_CLUB_MEMBER                 = 2305,                            --获取亲友圈成员列表
+    RET_GET_CLUB_MEMBER                 = 23005,                           --返回亲友圈成员列表
+    RET_GET_CLUB_MEMBER_FINISH          = 23006,                              --返回亲友圈成员列表完成
 --    REQ_SETTINGS_CLUB                   = 1606,                            --设置亲友圈桌子信息
 --    RET_SETTINGS_CLUB                   = 16006,                           --返回设置亲友圈桌子信息
     --REQ_CREATE_CLUB                     = 1607,                            --请求创建亲友圈
@@ -206,8 +208,12 @@ local NetMsgId = {
     RET_UPDATE_CLUB_ROOMCARD            = 16038,                           --返回亲友圈的房卡
     REQ_GET_CLUB_APPLICATION_RECORD     = 1643,                            --获取亲友圈的申请记录
     RET_GET_CLUB_APPLICATION_RECORD     = 16043,                           --返回亲友圈的申请记录
-    REQ_FIND_CLUB_MEMBER                = 1641,                            --查看亲友圈成员列表
-    RET_FIND_CLUB_MEMBER                = 16041,                           --查看亲友圈成员列表
+    REQ_FIND_CLUB_MEMBER                = 2309,                            --查看亲友圈成员列表
+    RET_FIND_CLUB_MEMBER                = 23009,                           --查看亲友圈成员列表
+
+    REQ_CLUB_MEMBER_INFO                = 2322,                            --请求成员信息
+    RET_CLUB_MEMBER_INFO                = 23022,                           --返回成员信息
+    RET_CLUB_MEMBER_INFO_FINISH         = 23023,                           --返回成员信息完成
     
     REQ_GET_CLUB_OPERATE_RECORD         = 1651,                            --获取俱乐部操作记录
     RET_GET_CLUB_OPERATE_RECORD         = 16051,                           --返回俱乐部操作记录
@@ -227,12 +233,40 @@ local NetMsgId = {
     RET_SETTINGS_CLUB_PLAY              = 22020,                           --返回设置亲友圈玩法
     REQ_REFRESH_CLUB_PLAY3              = 2221,                            --请求刷新俱乐部玩法
     RET_REFRESH_CLUB_PLAY               = 22021,                           --返回刷新俱乐部玩法
+
+    REQ_SETTINGS_CONFIG                 = 2222,                             --请求合伙人配置
+    RET_SETTINGS_CONFIG                 = 22022,                            --返回合伙人配置
+    REQ_SETTINGS_PARTNER                = 2223,                             --请求合伙人设置
+    RET_SETTINGS_PAPTNER                = 22023,                            --返回合伙人设置
+    REQ_PARTNER_EARNINGS                = 2225,                             --请求合伙人总收益
+    RET_PARTNER_EARNINGS                = 22025,                            --返回合伙人总收益
+    REQ_PARTNER_PAGE_EARNINGS           = 2226,                             --请求合伙人收益分页
+    RET_PARTNER_PAGE_EARNINGS           = 22026,                            --返回合伙人收益分页
+    RET_PARTNER_PAGE_EARNINGS_FINISH    = 22027,                            --返回合伙人收益分页完成
+
+    REQ_CLUB_PLAYER_COUNT                   = 2228,                        --请求合伙人玩家总统计
+    RET_CLUB_PLAYER_COUNT                   = 22028,                       --返回合伙人玩家总统计
+    REQ_CLUB_PAGE_PLAYER_COUNT              = 2229,                        --请求合伙人玩家分页统计
+    RET_CLUB_PAGE_PLAYER_COUNT              = 22029,                       --返回合伙人玩家分页统计
+    RET_CLUB_PAGE_PLAYER_COUNT_FINISH       = 22030,                       --返回合伙人玩家分页统计完成
+    REQ_CLUB_PLAYER_COUNT_DETAILS           = 2231,                        --请求我的玩家详情
+    RET_CLUB_PLAYER_COUNT_DETAILS           = 22031,                       --返回我的玩家详情
+    RET_CLUB_PLAYER_COUNT_DETAILS_FINISH    = 22032,                       --返回我的玩家详情完成
+
+    REQ_CLUB_PARTNER_COUNT                  = 2233,                        --请求合伙人总统计
+    RET_CLUB_PARTNER_COUNT                  = 22033,                       --返回合伙人总统计
+    REQ_CLUB_PAGE_PARTNER_COUNT             = 2234,                        --请求合伙人统计分页
+    RET_CLUB_PAGE_PARTNER_COUNT             = 22034,                       --返回合伙人统计分页
+    RET_CLUB_PAGE_PARTNER_COUNT_FINISH      = 22035,                       --返回合伙人统计分页完成
+    REQ_CLUB_PARTNER_COUNT_DETAILS          = 2236,                        --请求合伙人统计详情
+    RET_CLUB_PARTNER_COUNT_DETAILS          = 22036,                       --返回合伙人统计详情
+    RET_CLUB_PARTNER_COUNT_DETAILS_FINISH   = 22037,                       --返回合伙人统计详情完成
     
-    REQ_GET_CLUB_MEMBER_FATIGUE_RECORD  = 1677,                            --请求俱乐部成员疲劳值记录
-    RET_GET_CLUB_MEMBER_FATIGUE_RECORD  = 16077,                           --返回俱乐部成员疲劳值记录
-    RET_GET_CLUB_MEMBER_FATIGUE_RECORD_FINISH = 16078,                     --返回俱乐部成员疲劳值记录
-    REQ_UPDATE_CLUB_PLAYER_INFO         = 1695,                            --刷新用户所在俱乐部信息
-    RET_UPDATE_CLUB_PLAYER_INFO         = 16095,                           --刷新用户所在俱乐部信息
+    REQ_GET_CLUB_MEMBER_FATIGUE_RECORD  = 2303,                            --请求俱乐部成员疲劳值记录
+    RET_GET_CLUB_MEMBER_FATIGUE_RECORD  = 23003,                           --返回俱乐部成员疲劳值记录
+    RET_GET_CLUB_MEMBER_FATIGUE_RECORD_FINISH = 23004,                     --返回俱乐部成员疲劳值记录
+    REQ_UPDATE_CLUB_PLAYER_INFO         = 2301,                            --刷新用户所在俱乐部信息
+    RET_UPDATE_CLUB_PLAYER_INFO         = 23001,                           --刷新用户所在俱乐部信息
 
     REQ_GET_CLUB_ONLINE_MEMBER          = 35,                              --获取亲友圈在线成员
     RET_GET_CLUB_ONLINE_MEMBER          = 138,                             --获取亲友圈在线成员
@@ -261,28 +295,37 @@ local NetMsgId = {
 
     -----------------------------------------
     --合伙人
-    REQ_SETTINGS_CLUB_MEMBER            = 1664,                            --请求修改亲友圈成员
-    RET_SETTINGS_CLUB_MEMBER            = 16064,                           --返回修改亲友圈成员
+    REQ_SETTINGS_CLUB_MEMBER            = 2302,                            --请求修改亲友圈成员
+    RET_SETTINGS_CLUB_MEMBER            = 23002,                           --返回修改亲友圈成员
     REQ_SETTINGS_CLUB_PARTNER           = 1665,                            --请求修改亲友圈合伙人
     RET_SETTINGS_CLUB_PARTNER           = 16065,                           --返回修改亲友圈合伙人
-    REQ_GET_CLUB_PARTNER                = 1666,                            --请求亲友圈合伙人
-    RET_GET_CLUB_PARTNER                = 16066,                           --返回亲友圈合伙人
-    RET_GET_CLUB_PARTNER_FINISH         = 16067,                           --返回亲友圈合伙人
-    REQ_GET_CLUB_PARTNER_MEMBER         = 1668,                            --请求亲友圈合伙人成员
-    RET_GET_CLUB_PARTNER_MEMBER         = 16068,                           --返回亲友圈合伙人成员
-    RET_GET_CLUB_PARTNER_MEMBER_FINISH  = 16069,                           --返回亲友圈合伙人成员
+    REQ_GET_CLUB_PARTNER                = 2311,                            --请求亲友圈合伙人
+    RET_GET_CLUB_PARTNER                = 23011,                           --返回亲友圈合伙人
+    RET_GET_CLUB_PARTNER_FINISH         = 23012,                           --返回亲友圈合伙人
+    REQ_GET_CLUB_PARTNER_MEMBER         = 2313,                            --请求亲友圈合伙人成员
+    RET_GET_CLUB_PARTNER_MEMBER         = 23013,                           --返回亲友圈合伙人成员
+    RET_GET_CLUB_PARTNER_MEMBER_FINISH  = 23014,                           --返回亲友圈合伙人成员
+    REQ_GET_PARTNER_MEMBER              = 2224,                            --获取合伙人名下成员
     REQ_GET_CLUB_NOT_PARTNER_MEMBER     = 1670,                            --请求亲友圈非合伙人成员
     RET_GET_CLUB_NOT_PARTNER_MEMBER     = 16070,                           --返回亲友圈非合伙人成员
     RET_GET_CLUB_NOT_PARTNER_MEMBER_FINISH = 16071,                        --返回亲友圈非合伙人成员
     REQ_FIND_CLUB_NOT_PARTNER_MEMBER    = 1672,                            --请求查找亲友圈非合伙人成员
     RET_FIND_CLUB_NOT_PARTNER_MEMBER    = 16072,                           --返回查找亲友圈非合伙人成员
-    REQ_FIND_CLUB_PARTNER_MEMBER        = 1674,                            --查找亲友圈合伙人成员
-    RET_FIND_CLUB_PARTNER_MEMBER        = 16074,                           --返回查找亲友圈合伙人成员
+    REQ_FIND_CLUB_PARTNER_MEMBER        = 2310,                            --查找亲友圈合伙人成员
+    RET_FIND_CLUB_PARTNER_MEMBER        = 23010,                           --返回查找亲友圈合伙人成员
 
-    REQ_GET_CLUB_FATIGUE_STATISTICS     = 2212,                            --亲友圈疲劳值统计
-    RET_GET_CLUB_FATIGUE_STATISTICS     = 22012,                           --亲友圈疲劳值统计
-    REQ_GET_CLUB_FATIGUE_DETAILS        = 2213,                            --亲友圈疲劳值详情
-    RET_GET_CLUB_FATIGUE_DETAILS        = 22013,                           --亲友圈疲劳值详情
+    REQ_GET_CLUB_FATIGUE_STATISTICS     = 2307,                            --亲友圈疲劳值统计
+    RET_GET_CLUB_FATIGUE_STATISTICS     = 23007,                           --亲友圈疲劳值统计
+    REQ_GET_CLUB_FATIGUE_DETAILS        = 2308,                            --亲友圈疲劳值详情
+    RET_GET_CLUB_FATIGUE_DETAILS        = 23008,                           --亲友圈疲劳值详情
+
+    REQ_CLUB_GROUP_INVITE               = 2315,                            --请求发起合群
+    RET_CLUB_GROUP_INVITE               = 23015,                           --返回合群
+    REQ_CLUB_GROUP_INVITE_LOG           = 2316,                            --请求合群记录
+    RET_CLUB_GROUP_INVITE_LOG           = 23016,                           --返回合群记录
+    REQ_CLUB_GROUP_INVITE_REPLY         = 2317,                            --合群回复
+    RET_CLUB_GROUP_INVITE_REPLY         = 23017,                           --合群回复
+
 
 
     --竞技
@@ -346,6 +389,7 @@ local NetMsgId = {
     SUB_GR_LOGON_USERID = 2,        --I D 登录
     SUB_GR_USER_COME = 100,         --用户进入
     REQ_GR_CREATE_TABLE             = 32,                                  --请求创建桌子
+    REQ_GR_CREATE_TABLE_INVITE      = 39,                                  --请求创建桌子
     SUB_C_GAME_CONFIG = 100,    --是否翻省（永州扯胡子）
     REQ_CS_GAME_CONFIG  = 100,                                              --请求游戏配置
     RET_SC_GAME_CONFIG  = 1001,                                              --返回游戏配置
@@ -504,6 +548,9 @@ local NetMsgId = {
     SUB_S_OPERATE_RESULT = 108,     --操作命令
     SUB_S_CASTDICE_NOTIFY = 109,    --掷骰操作
     SUB_S_CASTDICE_RESULT = 110,    --掷骰操作
+
+    SUB_S_CASTDICE_RESULT_92 = 1100,    --掷骰操作(92专业)
+    
     SUB_S_GAME_END_MAJIANG = 111,           --游戏结束
     SUB_S_OPERATE_HAIDI = 113,      --海底操作
     SUB_S_GAME_END_TIPS_MAJIANG = 115,      --游戏胡牌提示
@@ -527,6 +574,7 @@ local NetMsgId = {
     SUB_S_SEND_PIAO_RESULT  =   119,--长沙麻将飘分结果
     SUB_S_OPERATE_MAIFEN = 118,     --接受买飘数据（宜春麻将） 
     SUB_C_MaiFen = 8 ,              --发送买飘数据（宜春麻将）
+    SUB_S_SEND_PIAO_RESULTWD = 156,   --接受买飘数据（王钓麻将） 
 
     SUB_S_SHANG_LOU = 157, --上楼
         
@@ -628,6 +676,25 @@ local NetMsgId = {
         SDH_SUB_C_OUT_CARD              = 4,                               --出牌
         SDH_SUB_C_GIVEUP_GAME           = 5,                               --投降
         SDH_SUB_C_LOOK_RECORD_CARD      = 6,                               --历史出牌
+
+
+        -- 换三皮
+        REC_SUB_S_SEND_CARD_HSP            = 103,                             --发牌
+        REC_SUB_S_BETTING_HSP              = 105,                             --押注
+        REC_SUB_C_BETTING_HSP              = 1005,                            --请求押注
+        REC_SUB_S_YAZHU_RETURN             = 113,                             --返回押注操作结果
+        REC_SUB_C_SHOW_HSP                 = 1009,                            --请求亮牌
+        REC_SUB_S_SHOW_RESULT_HSP          = 110,                             --亮牌
+
+        REC_SUB_S_GAME_SCORE_USP           = 1130,                            --返回押注分数显示 
+
+        REC_SUB_C_GONGPU				   = 1010,							  --公铺请求开始
+        REC_SUB_S_GONGPU_RESULT			   = 114,							  --返回公铺请求成功结果
+
+        --92 安化麻将特有消息
+        SUB_S_KING_CARD                    = 155,								--王牌数据
+        SUB_S_STARTHU_FOURKING             = 156,								--四王起手胡  
+        SUB_C_FourKing                     = 15	,							    --客户端起手四王操作
         
 }
 
