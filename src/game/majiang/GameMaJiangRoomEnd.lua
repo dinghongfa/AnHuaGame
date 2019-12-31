@@ -167,7 +167,11 @@ function GameMaJiangRoomEnd:updatePlayerInfo(pBuffer)
 		local uiimage_player = ccui.Helper:seekWidgetByName(item, "image_player")
 		Common:requestUserAvatar(tScoreInfo.dwUserID, tScoreInfo.player.szPto, uiimage_player, "clip")
 		local uiname = ccui.Helper:seekWidgetByName(item, "name")
-		uiname:setString(tScoreInfo.player.szNickName)
+
+        local name = Common:getShortName(tScoreInfo.player.szNickName,8,6)
+        uiname:setString(name)
+
+		-- uiname:setString(tScoreInfo.player.szNickName)
 		uiname:setColor(cc.c3b(139, 105, 20))
 		local uiid = ccui.Helper:seekWidgetByName(item, "id")
 		uiid:setString(string.format("ID:%d", tScoreInfo.dwUserID))

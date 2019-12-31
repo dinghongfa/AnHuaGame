@@ -91,6 +91,10 @@ function InterfaceCreateRoomNode:SUB_GR_CREATE_TABLE_FAILED(event)
         require("common.MsgBoxLayer"):create(2,nil,"防沉迷配置错误,请联系群主重新设置!")
     elseif errorID == 23 then
         require("common.MsgBoxLayer"):create(2,nil,"亲友圈玩法不存在,请重新刷新亲友圈!")
+    elseif errorID == 24 then
+        require("common.MsgBoxLayer"):create(2,nil,"您的元宝不足,请及时充值!")
+    elseif errorID == 25 then
+        require("common.MsgBoxLayer"):create(2,nil,"防沉迷值已达下限!")
     elseif errorID == 30 then
         require("common.MsgBoxLayer"):create(2,nil,"该房间有距离限制,请开启定位!")
     else

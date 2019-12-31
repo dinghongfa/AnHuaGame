@@ -522,7 +522,7 @@ function PDKTableLayer:showHandCard(wChairID,effectsType,isShowEndCard)
     local cardScale = 1
     local cardWidth = 180 * cardScale    
     if viewID ~= 1 then
-        cardScale = 0.7
+        cardScale = 0.5
         cardWidth = 120 * cardScale 
     end
     local cardHeight = 231 * cardScale
@@ -943,9 +943,16 @@ function PDKTableLayer:initUI()
     end
     local uiButton_return = ccui.Helper:seekWidgetByName(self.root,"Button_return")
     Common:addTouchEventListener(uiButton_return,function() 
-        require("common.MsgBoxLayer"):create(1,nil,"您确定返回大厅?",function()
-            require("common.SceneMgr"):switchScene(require("app.MyApp"):create():createView("HallLayer"),SCENE_HALL) 
-        end)
+        local randCeil = GameCommon.tableConfig.wCurrentNumber or 0
+        if randCeil == 0 then        
+            --require("common.MsgBoxLayer"):create(1,nil,"您确定离开房间?\n房主离开意味着房间被解散",function()
+                NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GR_USER,NetMsgId.REQ_GR_LEAVE_TABLE_USER,"")
+            --end)
+        else
+            require("common.MsgBoxLayer"):create(1,nil,"您确定返回大厅?",function()
+                require("common.SceneMgr"):switchScene(require("app.MyApp"):create():createView("HallLayer"),SCENE_HALL) 
+            end)
+        end 
     end)
     --结算层
     local uiPanel_end = ccui.Helper:seekWidgetByName(self.root,"Panel_end")

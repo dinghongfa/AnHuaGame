@@ -700,15 +700,15 @@ function GameLayer:readBuffer(luaFunc, mainCmdID, subCmdID)
             _tagMsg.pBuffer.szPeriodData = luaFunc:readRecvBuffer(_tagMsg.pBuffer.dwPeriodSize) --文件数据
             self.tableLayer:OnUserChatVoice(_tagMsg.pBuffer) 
             return true
-        -- elseif subCmdID == NetMsgId.SUB_GF_USER_VOICE_YAYA then
-        --     _tagMsg.pBuffer.version = luaFunc:readRecvByte()               --版本号
-        --     _tagMsg.pBuffer.wChairID = luaFunc:readRecvWORD()               --版本号
-        --     _tagMsg.pBuffer.dwTime = luaFunc:readRecvDWORD()               --时间
-        --     _tagMsg.pBuffer.szVoiceSign = luaFunc:readRecvString(64) 
-        --     if _tagMsg.pBuffer.version == 1 then
-        --         self.tableLayer:showYYChat(_tagMsg.pBuffer) 
-        --     end   
-        --     return true
+        elseif subCmdID == NetMsgId.SUB_GF_USER_VOICE_YAYA then
+            _tagMsg.pBuffer.version = luaFunc:readRecvByte()               --版本号
+            _tagMsg.pBuffer.wChairID = luaFunc:readRecvWORD()               --版本号
+            _tagMsg.pBuffer.dwTime = luaFunc:readRecvDWORD()               --时间
+            _tagMsg.pBuffer.szVoiceSign = luaFunc:readRecvString(64) 
+            --if _tagMsg.pBuffer.version == 1 then
+                --self.tableLayer:showYYChat(_tagMsg.pBuffer) 
+            --end   
+            return true
         else
             --print("not found this subCmdID : %d",subCmdID)
             return false

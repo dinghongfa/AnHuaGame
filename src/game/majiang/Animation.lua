@@ -291,15 +291,15 @@ local Animation = {
         [0] = {
              png = "majiang/ui/operate/tile_cs_hu_0.png",
              sound = {
-                 [0] = "majiang/sound/putonghua/man/gang.mp3",
-                 [1] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [0] = "majiang/sound/putonghua/man/hu.mp3",
+                 [1] = "majiang/sound/putonghua/woman/hu.mp3",
              }
          },
          [1] = {
              png = "majiang/ui/operate/tile_cs_hu_0.png",
              sound = {
-                 [0] = "majiang/sound/anhua/man/gang.mp3",
-                 [1] = "majiang/sound/anhua/woman/gang.mp3",
+                 [0] = "majiang/sound/anhua/man/hu.mp3",
+                 [1] = "majiang/sound/anhua/woman/hu.mp3",
              }
          },
      },

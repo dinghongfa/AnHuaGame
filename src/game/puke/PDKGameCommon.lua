@@ -240,7 +240,7 @@ function PDKGameCommon:playAnimation(root,id, wChairID)
             require("common.Common"):playEffect(AnimationData.sound[PDKGameCommon.player[wChairID].cbSex])
         end  
     end
-    if (id == "我赢啦" or id == "赢")and( CHANNEL_ID == 6 or CHANNEL_ID == 7)  then 
+    if (id == "我赢啦" or id == "赢") then 
         require("common.Common"):playEffect("common/win.mp3")
     end 
 end

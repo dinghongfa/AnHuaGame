@@ -548,6 +548,11 @@ function GameLayer:readBuffer(luaFunc, mainCmdID, subCmdID)
             _tagMsg.pBuffer.HuCardInfo.wDType = luaFunc:readRecvDWORD()--名堂数据 
             _tagMsg.pBuffer.HuCardInfo.dwMingTang = luaFunc:readRecvDWORD()
             
+            _tagMsg.pBuffer.cbHuangFanCount = luaFunc:readRecvByte()  --黄番
+            _tagMsg.pBuffer.bLeftCardDataEx = {}                      --剩余扑克
+            for i = 1 , 64 do
+                _tagMsg.pBuffer.bLeftCardDataEx[i] = luaFunc:readRecvByte()
+            end  
         elseif subCmdID == NetMsgId.SUB_S_SITFAILED then
             _tagMsg.pBuffer.wErrorCode = luaFunc:readRecvWORD() --错误代码
             _tagMsg.pBuffer.lScore = luaFunc:readRecvLong()     --积分
@@ -844,7 +849,10 @@ function GameLayer:OnGameMessageRun(_tagMsg)
             self:runAction(cc.Sequence:create(cc.DelayTime:create(0.5),cc.CallFunc:create(function(sender,event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))
 
         elseif subCmdID == NetMsgId.SUB_S_SEND_CARD then
-            self.tableLayer:doAction(GameCommon.ACTION_SEND_CARD, pBuffer)
+            self:runAction(cc.Sequence:create(cc.DelayTime:create(0.5),
+                cc.CallFunc:create(function(sender,event) 
+                self.tableLayer:doAction(GameCommon.ACTION_SEND_CARD, pBuffer)  
+            end)))
 
         elseif subCmdID == NetMsgId.SUB_S_CLIENTERROR then
             local wChairID = GameCommon:getRoleChairID()
@@ -867,10 +875,10 @@ function GameLayer:OnGameMessageRun(_tagMsg)
             self:updatePlayerlScore()
             self.tableLayer:updateGameState(GameCommon.GameState_Over)
             self.tableLayer:doAction(GameCommon.ACTION_HU_CARD, {cbReason = pBuffer.cbReason, cbHuCard = pBuffer.cbHuCard, wWinUser = pBuffer.wWinUser, wProvideUser = pBuffer.wProvideUser})
-            if pBuffer.bLeftCardCount > 22 then
-                pBuffer.bLeftCardCount = 22
-            end
-            self.tableLayer:showLeftCardCount(pBuffer.bLeftCardCount, pBuffer.bLeftCardData)
+            -- if pBuffer.bLeftCardCount > 22 then
+            --     pBuffer.bLeftCardCount = 22
+            -- end
+            self.tableLayer:showLeftCardCount(pBuffer.bLeftCardCount, pBuffer.bLeftCardDataEx)
             local index = 0
             for i = 1, GameCommon.gameConfig.bPlayerCount do
                 local cbCardIndex = {}

@@ -487,10 +487,10 @@ end
 
 function GameEndLayer:getWeaveItemArray(var)
     
-   local cardScale = 0.65
+   local cardScale = 0.6
     local cardWidth = 81 * cardScale
     local cardHeight = 114 * cardScale
-    local size = cc.size(cardWidth*3+15,cardHeight)
+    local size = cc.size(cardWidth*3+5,cardHeight)
     local content = ccui.Layout:create()
     content:setContentSize(size)
     local cbCardList = {}

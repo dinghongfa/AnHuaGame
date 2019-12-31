@@ -1328,6 +1328,8 @@ function GameDesc:getGameDesc(wKindID,data,tableConfig)
             desc = desc.."/4个码"
         elseif data.bMaCount == 6 then
             desc = desc.."/6个码"
+        elseif data.bMaCount == 8 then
+            desc = desc.."/8个码"
         end
         if data.mNiaoType == 1 then                  --//1.一鸟一分、2.一鸟两分
             desc = desc.."/一鸟一分"

@@ -87,6 +87,10 @@ function InterfaceJoinRoomNode:SUB_GR_JOIN_TABLE_FAILED(event)
         require("common.MsgBoxLayer"):create(2,nil,"您的疲劳值不够,请联系群主!")
     elseif data.wErrorCode == 27 then
         require("common.MsgBoxLayer"):create(2,nil,"亲友圈玩法不存在,请重新刷新亲友圈!")
+    elseif data.wErrorCode == 28 then
+        require("common.MsgBoxLayer"):create(2,nil,"您的元宝不足,请及时充值!")
+    elseif data.wErrorCode == 29 then
+        require("common.MsgBoxLayer"):create(2,nil,"防沉迷值已达下限!")
     elseif data.wErrorCode == 30 then
         require("common.MsgBoxLayer"):create(2,nil,"该房间有距离限制,请开启定位!")
     elseif data.wErrorCode == 31 then

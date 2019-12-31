@@ -42,10 +42,10 @@ function NewClubInputFatigueLayer:onCreate(param)
     self.callback = param[3]
 
     if self.flag == 1 then
-        self.Text_user_info:setString(self.data.name .. ' ID:' .. self.data.userID .. ' 疲劳值:' .. self.data.fatigue)
+        self.Text_user_info:setString(string.format('%s ID:%d 疲劳值:%d', self.data.name, self.data.userID, self.data.fatigue))
         self.Text_flag:setString('加')
     elseif self.flag == 2 then
-        self.Text_user_info:setString(self.data.name .. ' ID:' .. self.data.userID .. ' 疲劳值:' .. self.data.fatigue)
+        self.Text_user_info:setString(string.format('%s ID:%d 疲劳值:%d', self.data.name, self.data.userID, self.data.fatigue))
         self.Text_flag:setString('减')
     elseif self.flag == 3 then
         self.Text_flag:setVisible(false)
@@ -54,6 +54,9 @@ function NewClubInputFatigueLayer:onCreate(param)
         else
             self.Text_user_info:setString('元宝最低限度：' .. self.data .. ' (输入数量必须从小到大)')
         end
+    elseif self.flag == 4 then
+        self.Text_flag:setVisible(false)
+        self.Text_user_info:setString('请设置0~100百分比')
     end
 
 	self:initNumberArea()
@@ -64,7 +67,7 @@ end
 
 function NewClubInputFatigueLayer:onYes()
 	local roomNumber = ""
-    for i = 1 , 6 do
+    for i = 1 , 8 do
         local numName = string.format("Text_number%d", i)
         local Text_number = ccui.Helper:seekWidgetByName(self.Image_input, numName)
         if Text_number:getString() ~= "" then
@@ -75,6 +78,11 @@ function NewClubInputFatigueLayer:onYes()
     local inputVal = tonumber(roomNumber) or 0
     if self.flag == 3 and self.data > inputVal then
         require("common.MsgBoxLayer"):create(0,nil,"输入数量应大于最低值!")
+        return
+    end
+
+    if self.flag == 4 and inputVal > 100 then
+        require("common.MsgBoxLayer"):create(0,nil,"百分比值不能超过100!")
         return
     end
 
@@ -113,7 +121,7 @@ end
 
 --重置数字
 function NewClubInputFatigueLayer:resetNumber()
-    for i = 1 , 6 do
+    for i = 1 , 8 do
         local numName = string.format("Text_number%d", i)
         local Text_number = ccui.Helper:seekWidgetByName(self.Image_input, numName)
         if Text_number then
@@ -125,13 +133,13 @@ end
 --输入数字
 function NewClubInputFatigueLayer:inputNumber(num)
     local roomNumber = ""
-    for i = 1 , 6 do
+    for i = 1 , 8 do
         local numName = string.format("Text_number%d", i)
         local Text_number = ccui.Helper:seekWidgetByName(self.Image_input, numName)
         if Text_number:getString() == "" then
             Text_number:setString(tostring(num))
             roomNumber = roomNumber .. Text_number:getString()
-            if i == 6 then
+            if i == 8 then
                 -- UserData.Guild:addClubMember(self.clubData.dwClubID, tonumber(roomNumber), UserData.User.userID)
             end
             break
@@ -143,7 +151,7 @@ end
 
 --删除数字
 function NewClubInputFatigueLayer:deleteNumber()
-    for i = 6 , 1 , -1 do
+    for i = 8 , 1 , -1 do
         local numName = string.format("Text_number%d", i)
         local Text_number = ccui.Helper:seekWidgetByName(self.Image_input, numName)
         if Text_number:getString() ~= "" then

@@ -123,7 +123,7 @@ function ShareLayer:onCreate(params)
         Common:addTouchEventListener(item,onEventShare(item.cbTargetType))
     else
         local uiPanel_contents = ccui.Helper:seekWidgetByName(self.root,"Panel_contents")
-        local margin = (uiPanel_contents:getContentSize().width-items[1]:getContentSize().width*#items)/(#items+1) + 60
+        local margin = (uiPanel_contents:getContentSize().width-items[1]:getContentSize().width*#items)/(#items+1)
         uiListView_btn:refreshView()
         uiListView_btn:setItemsMargin(margin)--间距
         uiListView_btn:setContentSize(cc.size(items[1]:getContentSize().width*#items + margin*(#items-1) ,uiPanel_contents:getContentSize().height))

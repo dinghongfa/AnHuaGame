@@ -632,8 +632,7 @@ function TableLayer:doAction(action,pBuffer)
                     local isHaveMingTang = false
 
                     --名堂动画
-                    local mingTangArr = pBuffer.wChiHuKind[i]
-
+                --    local mingTangArr = pBuffer.wChiHuKind[i]
                     -- for i=16,30 do
                     --     local mFanItem = mingTangArr[i]
                     --     if mFanItem and not isHaveMingTang then
@@ -707,64 +706,65 @@ function TableLayer:doAction(action,pBuffer)
                     local CHR_QI_WANG				  =	0x0400									--七王
 
                     local MTAction = {}
-                    if Bit:_and(pBuffer.wChiHuKind[i],CHR_QING_YI_SE) ~= 0 then
-                        local MT = "清一色"
-                        table.insert(MTAction, #MTAction, MT)
-                        isHaveMingTang = true
-                    end
+                    if pBuffer.wChiHuKind~= nil  then 
+                        if Bit:_and(pBuffer.wChiHuKind[i],CHR_QING_YI_SE) ~= 0 then
+                            local MT = "清一色"
+                            table.insert(MTAction, #MTAction, MT)
+                            isHaveMingTang = true
+                        end
             
-                    if Bit:_and(pBuffer.wChiHuKind[i],CHR_YING_ZHUANG) ~= 0  then  
-                        local MT = "硬庄"
-                        table.insert(MTAction, #MTAction, MT) 
-                        isHaveMingTang = true
-                    end
+                        if Bit:_and(pBuffer.wChiHuKind[i],CHR_YING_ZHUANG) ~= 0  then  
+                            local MT = "硬庄"
+                            table.insert(MTAction, #MTAction, MT) 
+                            isHaveMingTang = true
+                        end
                
-                    if Bit:_and(pBuffer.wChiHuKind[i],CHK_QI_XIAO_DUI) ~= 0 then
-                        local MT = "七对"
-                        table.insert(MTAction, #MTAction, MT)
-                        isHaveMingTang = true
-                    end
+                        if Bit:_and(pBuffer.wChiHuKind[i],CHK_QI_XIAO_DUI) ~= 0 then
+                            local MT = "七对"
+                            table.insert(MTAction, #MTAction, MT)
+                            isHaveMingTang = true
+                        end
                
-                    if Bit:_and(pBuffer.wChiHuKind[i],CHR_QIANG_GANG_HU) ~= 0   then
-                        local MT = "抢杠胡"
-                        table.insert(MTAction, #MTAction, MT)
-                        isHaveMingTang = true
-                    end
+                        if Bit:_and(pBuffer.wChiHuKind[i],CHR_QIANG_GANG_HU) ~= 0   then
+                            local MT = "抢杠胡"
+                            table.insert(MTAction, #MTAction, MT)
+                            isHaveMingTang = true
+                        end
 
-                    if Bit:_and(pBuffer.wChiHuKind[i],CHR_GANG) ~= 0  then
-                        local MT = "杠上开花"
-                        table.insert(MTAction, #MTAction, MT)
-                        isHaveMingTang = true
-                    end
+                        if Bit:_and(pBuffer.wChiHuKind[i],CHR_GANG) ~= 0  then
+                            local MT = "杠上开花"
+                            table.insert(MTAction, #MTAction, MT)
+                            isHaveMingTang = true
+                        end
 
-                    if Bit:_and(pBuffer.wChiHuKind[i],CHR_GANG_SHANG_PAO) ~= 0   then
-                        local MT = "杠上炮"
-                        table.insert(MTAction, #MTAction, MT)
-                        isHaveMingTang = true
-                    end
+                        if Bit:_and(pBuffer.wChiHuKind[i],CHR_GANG_SHANG_PAO) ~= 0   then
+                            local MT = "杠上炮"
+                            table.insert(MTAction, #MTAction, MT)
+                            isHaveMingTang = true
+                        end
 
-                    if Bit:_and(pBuffer.wChiHuKind[i],CHR_QI_WANG) ~= 0   then
-                        local MT = "七王"
-                        table.insert(MTAction, #MTAction, MT)
-                        isHaveMingTang = true
-                    else
-                        if Bit:_and(pBuffer.wChiHuKind[i],CHR_LIU_WANG) ~= 0   then
-                            local MT = "六王"
+                        if Bit:_and(pBuffer.wChiHuKind[i],CHR_QI_WANG) ~= 0   then
+                            local MT = "七王"
                             table.insert(MTAction, #MTAction, MT)
                             isHaveMingTang = true
                         else
-                            if Bit:_and(pBuffer.wChiHuKind[i],CHR_SI_WANG) ~= 0 then
-                                local MT = "四王"
+                            if Bit:_and(pBuffer.wChiHuKind[i],CHR_LIU_WANG) ~= 0   then
+                                local MT = "六王"
                                 table.insert(MTAction, #MTAction, MT)
                                 isHaveMingTang = true
-                            elseif Bit:_and(pBuffer.wChiHuKind[i],CHR_SAN_WANG) ~= 0  then
-                                    local MT = "三王"
+                            else
+                                if Bit:_and(pBuffer.wChiHuKind[i],CHR_SI_WANG) ~= 0 then
+                                    local MT = "四王"
                                     table.insert(MTAction, #MTAction, MT)
                                     isHaveMingTang = true
-                            end    
-                        end           
-                    end   
-
+                                elseif Bit:_and(pBuffer.wChiHuKind[i],CHR_SAN_WANG) ~= 0  then
+                                        local MT = "三王"
+                                        table.insert(MTAction, #MTAction, MT)
+                                        isHaveMingTang = true
+                                end    
+                            end           
+                        end   
+                    end 
 
                     for key, var in pairs(MTAction) do
                         print("+++++++++++三王++++++",key,var)
@@ -1692,7 +1692,7 @@ end
 --     local WeaveItemArray = GameCommon.player[wChairID].WeaveItemArray
 --     local node = nil
 --     if viewID == 1 then
---         local cardScale = 1.1
+--         local cardScale = 1.05
 --         local cardWidth = 81 * cardScale
 --         local cardHeight = 144 * cardScale
 --         local beganX = cardWidth/2
@@ -2116,7 +2116,7 @@ function TableLayer:setWeaveItemArray(wChairID, bWeaveItemCount, WeaveItemArray,
     local WeaveItemArray = GameCommon.player[wChairID].WeaveItemArray
     local node = nil
     if viewID == 1 then
-        local cardScale = 1.0
+        local cardScale = 1.00
         local cardWidth = 81 * cardScale
         local cardHeight = 114 * cardScale
         local beganX = cardWidth/2
@@ -2232,7 +2232,7 @@ function TableLayer:setWeaveItemArray(wChairID, bWeaveItemCount, WeaveItemArray,
         local beganX = size.width-cardWidth*3
         local beganY = 0
         local stepX = 0
-        local stepY = -(cardWidth)*3-10
+        local stepY = -(cardWidth)*3-5
         for key = 1, bWeaveItemCount do
             local var = GameCommon.player[wChairID].WeaveItemArray[key]
             local content = ccui.Layout:create()
@@ -2841,7 +2841,7 @@ function TableLayer:setMinPaiWeaveItemArray( wChairID, bWeaveItemCount, WeaveIte
     local bWeaveItemCount = GameCommon.player[wChairID].bWeaveItemCount
     local WeaveItemArray = GameCommon.player[wChairID].WeaveItemArray
     local node = nil
-    local cardScale = 1
+    local cardScale = 1.00
     local cardWidth = 81 * cardScale
     local cardHeight = 144 * cardScale
     local beganX = cardWidth/2
@@ -2920,10 +2920,10 @@ function TableLayer:mingPaiOperator( wChairID,effectsType,isShowEndCard )
     local anchorPoint = uiPanel_handCard:getAnchorPoint()
     local index = 0 
     local time = 0.1 
-    local cardScale = 1.06
+    local cardScale = 1.05
     local cardWidth = 81 * cardScale
     local cardHeight = 114 * cardScale
-    local step = cardWidth
+    local step = cardWidth*cardScale
     local uiPanel_copyHandCard = ccui.Helper:seekWidgetByName(self.root,"Panel_copyHandCard")
     uiPanel_copyHandCard:removeAllChildren()
     self.copyHandCard = nil
@@ -3131,10 +3131,10 @@ function TableLayer:updateMinPaiCard( wChairID,effectsType,isShowEndCard )
     local time = 0.1 
 
     if viewID == 1 then 
-        local cardScale = 1.0
+        local cardScale = 1.05
         local cardWidth = 81 * cardScale
         local cardHeight = 114 * cardScale
-        local step = cardWidth
+        local step = cardWidth*cardScale
         local uiPanel_copyHandCard = ccui.Helper:seekWidgetByName(self.root,"Panel_copyHandCard")
         uiPanel_copyHandCard:removeAllChildren()
         self.copyHandCard = nil
@@ -3421,13 +3421,13 @@ function TableLayer:showHandCard(data)
         local uiImage_line = ccui.Helper:seekWidgetByName(self.root,"Image_line")
         uiImage_line:setVisible(false)
         local lineY = uiImage_line:getPositionY()
-        local cardScale = 1
-        local cardWidth = 81
-        local cardHeight = 114
+        local cardScale = 1.05
+        local cardWidth = 81*cardScale
+        local cardHeight = 114*cardScale
         local step = cardWidth
-        local began = cardWidth/2 + (14-cbCardCount-1) * cardWidth +25
+        local began = 81/2 + (14-cbCardCount-1) * 81 + (14-cbCardCount)/3*5
         if GameCommon.waitOutCardUser == wChairID then
-            began = cardWidth/2 + (14-cbCardCount) * cardWidth +25
+            began = 81/2 + (14-cbCardCount) * 81 + (14-cbCardCount)/3*5
         end
         for i=1,cbCardCount do
             local card = GameCommon:GetCardHand(cbCardData[i],viewID)
@@ -3474,10 +3474,12 @@ function TableLayer:showHandCard(data)
                     v:setOpacity(0)
                     v:runAction(cc.Sequence:create(cc.DelayTime:create(i*0.05),cc.FadeIn:create(0.2)))
                 end
-            end
-            if GameCommon.mINGang[wChairID]~= nil and GameCommon.mINGang[wChairID] == true then
-                card:setColor(cc.c3b(180,180,180))
-                card:setTouchEnabled(false)
+            end   
+            if GameCommon.tableConfig.wKindID == 92 then
+                if GameCommon.mINGang~= nil and GameCommon.mINGang[wChairID]~= nil and GameCommon.mINGang[wChairID] == true then
+                    card:setColor(cc.c3b(180,180,180))
+                    card:setTouchEnabled(false)
+                end 
             end 
             card:addTouchEventListener(function(sender,event) 
                 local a = true
@@ -3618,10 +3620,10 @@ function TableLayer:showHandCard(data)
             card.data = cbCardData[i]
         end
     elseif viewID == 3 then
-        local cardWidth = 43 * 1.0
-        local cardHeight = 63 * 1.0
+        local cardWidth = 43 * 1.1
+        local cardHeight = 63 * 1.1
         local step = -cardWidth + 3
-        local began = -(cbCardCount - 1) * step + cardWidth - cardWidth/2 +140
+        local began = (cbCardCount - 1) * 43+(14-cbCardCount)/3*4 + 43 - 43/2 +160
         if GameCommon.waitOutCardUser == wChairID then
             began = began + step
         end  
@@ -4101,9 +4103,16 @@ function TableLayer:initUI()
     end)
     local uiButton_return = ccui.Helper:seekWidgetByName(self.root,"Button_return")
     Common:addTouchEventListener(uiButton_return,function() 
-        require("common.MsgBoxLayer"):create(1,nil,"您确定返回大厅?",function()
-            require("common.SceneMgr"):switchScene(require("app.MyApp"):create():createView("HallLayer"),SCENE_HALL) 
-        end)
+        local randCeil = GameCommon.tableConfig.wCurrentNumber or 0
+        if randCeil == 0 then        
+            --require("common.MsgBoxLayer"):create(1,nil,"您确定离开房间?\n房主离开意味着房间被解散",function()
+                NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GR_USER,NetMsgId.REQ_GR_LEAVE_TABLE_USER,"")
+            --end)
+        else
+            require("common.MsgBoxLayer"):create(1,nil,"您确定返回大厅?",function()
+                require("common.SceneMgr"):switchScene(require("app.MyApp"):create():createView("HallLayer"),SCENE_HALL) 
+            end)
+        end 
     end)
     --结算层
     local uiPanel_end = ccui.Helper:seekWidgetByName(self.root,"Panel_end")
@@ -4231,16 +4240,16 @@ function TableLayer:initUI()
     local Button_clubTable = ccui.Helper:seekWidgetByName(self.root,"Button_clubTable")
     local Button_expression = ccui.Helper:seekWidgetByName(self.root,"Button_expression")
     local Panel_ui = ccui.Helper:seekWidgetByName(self.root,"Panel_ui")
-    local Button_chatVoice = Panel_ui:getChildByName('game_button_voice')
+   -- local Button_chatVoice = Panel_ui:getChildByName('game_button_voice')
     if GameCommon.tableConfig.nTableType == TableType_ClubRoom and GameCommon.tableConfig.nTableType ~= TableType_Playback then
         if GameCommon.gameState == GameCommon.GameState_Start or GameCommon.tableConfig.wCurrentNumber > 0 then
             Button_clubTable:setVisible(false)
             Button_expression:setVisible(true)
-            Button_chatVoice:setVisible(true)
+    --        Button_chatVoice:setVisible(true)
         else
             Button_clubTable:setVisible(true)
             Button_expression:setVisible(false)
-            Button_chatVoice:setVisible(false)
+    --        Button_chatVoice:setVisible(false)
         end
 
         Common:addTouchEventListener(Button_clubTable,function()
@@ -4631,16 +4640,16 @@ function TableLayer:updateGameState(state)
     local Button_clubTable = ccui.Helper:seekWidgetByName(self.root,"Button_clubTable")
     local Button_expression = ccui.Helper:seekWidgetByName(self.root,"Button_expression")
     local Panel_ui = ccui.Helper:seekWidgetByName(self.root,"Panel_ui")
-    local Button_chatVoice = Panel_ui:getChildByName('game_button_voice')
+--    local Button_chatVoice = Panel_ui:getChildByName('game_button_voice')
     if GameCommon.tableConfig.nTableType == TableType_ClubRoom and GameCommon.tableConfig.nTableType ~= TableType_Playback then
         if GameCommon.gameState == GameCommon.GameState_Start or GameCommon.tableConfig.wCurrentNumber > 0 then
             Button_clubTable:setVisible(false)
             Button_expression:setVisible(true)
-            Button_chatVoice:setVisible(true)
+--            Button_chatVoice:setVisible(true)
         else
             Button_clubTable:setVisible(true)
             Button_expression:setVisible(false)
-            Button_chatVoice:setVisible(false)
+--            Button_chatVoice:setVisible(false)
         end
     end
 end
@@ -5340,7 +5349,7 @@ function TableLayer:getZNNumOrTime(bufferData)
     end
 
     local index = 0
-    for i = 1, 6 do
+    for i = 1, 8 do
         local data = bufferData[i]
         if data ~= 0 and  data ~= 255  then
             index = index + 1

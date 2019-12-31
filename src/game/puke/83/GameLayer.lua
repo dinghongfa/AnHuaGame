@@ -84,6 +84,9 @@ function GameLayer:startGame(...)
     -- else
     --     PDKGameCommon.MAX_COUNT = 15
     -- end
+
+    PDKGameCommon.regionSound = 0
+
     self.tableLayer = PDKTableLayer:create(self.root)
     self:addChild(self.tableLayer)
     self.tableLayer:initUI()
@@ -220,6 +223,43 @@ function GameLayer:readBuffer(luaFunc, mainCmdID, subCmdID)
             _tagMsg.pBuffer.gameDesc = GameDesc:getGameDesc(PDKGameCommon.tableConfig.wKindID,PDKGameCommon.gameConfig,PDKGameCommon.tableConfig)
             _tagMsg.pBuffer.cbOrigin = luaFunc:readRecvByte() --解散原因
             
+        elseif subCmdID == NetMsgId.SUB_GR_GAME_STATISTICS then
+            _tagMsg.pBuffer.dwUserCount = luaFunc:readRecvDWORD()                       --用户总数
+			_tagMsg.pBuffer.dwDataCount = luaFunc:readRecvDWORD()                       --数据条数
+            _tagMsg.pBuffer.tScoreInfo = {}                                             --统计信息
+            _tagMsg.pBuffer.statistics = {}                                             --统计
+			_tagMsg.pBuffer.bigWinner = 0
+			_tagMsg.pBuffer.bigWinerScore = 0
+            for i = 1, 8 do
+                _tagMsg.pBuffer.statistics[i] = {}
+				_tagMsg.pBuffer.tScoreInfo[i] = {}
+				_tagMsg.pBuffer.tScoreInfo[i].dwUserID = luaFunc:readRecvDWORD()        --用户ID
+				_tagMsg.pBuffer.tScoreInfo[i].player = PDKGameCommon:getUserInfoByUserID(_tagMsg.pBuffer.tScoreInfo[i].dwUserID)
+				_tagMsg.pBuffer.tScoreInfo[i].totalScore = luaFunc:readRecvLong()       --用户总积分
+
+                for j=1,16 do
+                    _tagMsg.pBuffer.statistics[i][j] = luaFunc:readRecvByte()        --用户ID
+                    print("+++++++好友房大结算+++++++",i,j,_tagMsg.pBuffer.statistics[i][j])
+                end
+
+			end
+			_tagMsg.pBuffer.dwTableOwnerID = luaFunc:readRecvDWORD()                    --房主ID
+			_tagMsg.pBuffer.szOwnerName = luaFunc:readRecvString(32)                    --房主名字
+            _tagMsg.pBuffer.szGameID = luaFunc:readRecvString(32)                    --结算唯一标志
+            _tagMsg.pBuffer.GameCommon = PDKGameCommon
+			_tagMsg.pBuffer.tableConfig = PDKGameCommon.tableConfig
+			_tagMsg.pBuffer.gameConfig = PDKGameCommon.gameConfig
+            _tagMsg.pBuffer.gameDesc = GameDesc:getGameDesc(PDKGameCommon.tableConfig.wKindID, PDKGameCommon.gameConfig, PDKGameCommon.tableConfig)
+            _tagMsg.pBuffer.cbOrigin = luaFunc:readRecvByte() --解散原因  
+            _tagMsg.pBuffer.lHuXi = {}
+            for i = 1, 8 do
+                _tagMsg.pBuffer.lHuXi[i] = luaFunc:readRecvLong() --胡息
+            end   
+            _tagMsg.pBuffer.lMaxScore = {}
+            for i = 1, 8 do
+                _tagMsg.pBuffer.lMaxScore[i] = luaFunc:readRecvLong() --最大分  
+            end
+            local a = 1
         elseif subCmdID == NetMsgId.SUB_GR_USER_CONNECT then
             local luaFunc = NetMgr:getGameInstance().cppFunc
             local dwUserID=luaFunc:readRecvDWORD()
@@ -606,7 +646,17 @@ function GameLayer:OnGameMessageRun(_tagMsg)
     local pBuffer = _tagMsg.pBuffer
     
     if mainCmdID == NetMsgId.MDM_GR_USER then   
-        if subCmdID == NetMsgId.SUB_GR_USER_STATISTICS  then  --and DDZGameCommon.tableConfig.wCurrentNumber ~= 0
+        -- if subCmdID == NetMsgId.SUB_GR_USER_STATISTICS  then  --and DDZGameCommon.tableConfig.wCurrentNumber ~= 0
+        --     self:removeAllChildren()
+        --     local path = self:requireClass('PDKGameRoomEnd')
+        --     local box = require("app.MyApp"):create(pBuffer):createGame(path)
+        --     self:addChild(box)
+        -- else
+        --     return print("error, not found this :",mainCmdID, subCmdID)
+        -- end
+
+        if subCmdID == NetMsgId.SUB_GR_GAME_STATISTICS then
+            self:updatePlayerlScore()
             self:removeAllChildren()
             local path = self:requireClass('PDKGameRoomEnd')
             local box = require("app.MyApp"):create(pBuffer):createGame(path)
@@ -654,12 +704,12 @@ function GameLayer:OnGameMessageRun(_tagMsg)
             self.tableLayer:doAction(NetMsgId.SUB_S_USER_PASS_CARD_PDK,pBuffer)
    
         elseif subCmdID == NetMsgId.SUB_S_BOMB_PDK then     
-            for i = 0 , PDKGameCommon.gameConfig.bPlayerCount do
-                if PDKGameCommon.player[i] ~= nil then
-                    PDKGameCommon.player[i].lScore = PDKGameCommon.player[i].lScore + pBuffer.lBombScore[i+1]
-                end
-            end
-            self:updatePlayerlScore()
+            -- for i = 0 , PDKGameCommon.gameConfig.bPlayerCount do
+            --     if PDKGameCommon.player[i] ~= nil then
+            --         PDKGameCommon.player[i].lScore = PDKGameCommon.player[i].lScore + pBuffer.lBombScore[i+1]
+            --     end
+            -- end
+            --self:updatePlayerlScore()
             self:runAction(cc.Sequence:create(cc.DelayTime:create(0),cc.CallFunc:create(function(sender,event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))
         elseif subCmdID == NetMsgId.SUB_S_WARN_INFO_PDK then
             self.tableLayer:doAction(NetMsgId.SUB_S_WARN_INFO_PDK,pBuffer)
@@ -747,7 +797,7 @@ function GameLayer:OnGameMessageRun(_tagMsg)
             for i = 1, PDKGameCommon.gameConfig.bPlayerCount do
                 PDKGameCommon.player[i-1].bUserWarn = pBuffer.bUserWarn[i]
                 PDKGameCommon.player[i-1].bUserCardCount = pBuffer.bUserCardCount[i]
-                PDKGameCommon.player[i-1].lScore = PDKGameCommon.player[i-1].lScore + pBuffer.lUserScore[i]
+                --PDKGameCommon.player[i-1].lScore = PDKGameCommon.player[i-1].lScore + pBuffer.lUserScore[i]
             end
             self:updatehandplate()
             self.tableLayer:setHandCard(wChairID,PDKGameCommon.player[wChairID].bUserCardCount,pBuffer.bCardData)

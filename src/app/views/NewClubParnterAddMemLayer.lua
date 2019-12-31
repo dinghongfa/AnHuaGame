@@ -45,27 +45,28 @@ end
 
 function NewClubParnterAddMemLayer:onAddMem()
 	local roomNumber = ""
-    for i = 1 , 6 do
+    for i = 1 , 8 do
         local numName = string.format("Text_number%d", i)
         local Text_number = ccui.Helper:seekWidgetByName(self.Image_inputFrame, numName)
         if Text_number:getString() == "" then
-            if self.isMegeClub then
-                require("common.MsgBoxLayer"):create(0,nil,"输入亲友圈ID不正确")
-            else
-                require("common.MsgBoxLayer"):create(0,nil,"输入玩家ID不正确")
-            end
-            return
+            break;
         else
             roomNumber = roomNumber .. Text_number:getString()
         end
     end
 
-    if self.isMegeClub then
-        UserData.Guild:sendClubGroupInvite(self.clubData.dwClubID, UserData.User.userID, tonumber(roomNumber))
-    else
-        UserData.Guild:addClubMember(self.clubData.dwClubID, tonumber(roomNumber), UserData.User.userID)
+    local inputId = tonumber(roomNumber)
+    if not inputId then
+        require("common.MsgBoxLayer"):create(0,nil,"输入ID不正确!")
+        return
     end
-	self:resetNumber()
+
+    if self.isMegeClub then
+        UserData.Guild:sendClubGroupInvite(self.clubData.dwClubID, UserData.User.userID, inputId)
+    else
+        UserData.Guild:addClubMember(self.clubData.dwClubID, inputId, UserData.User.userID)
+    end
+    self:resetNumber()
 end
 
 function NewClubParnterAddMemLayer:RET_CLUB_GROUP_INVITE(event)
@@ -120,7 +121,7 @@ end
 
 --重置数字
 function NewClubParnterAddMemLayer:resetNumber()
-    for i = 1 , 6 do
+    for i = 1 , 8 do
         local numName = string.format("Text_number%d", i)
         local Text_number = ccui.Helper:seekWidgetByName(self.Image_inputFrame, numName)
         if Text_number then
@@ -132,13 +133,13 @@ end
 --输入数字
 function NewClubParnterAddMemLayer:inputNumber(num)
     local roomNumber = ""
-    for i = 1 , 6 do
+    for i = 1 , 8 do
         local numName = string.format("Text_number%d", i)
         local Text_number = ccui.Helper:seekWidgetByName(self.Image_inputFrame, numName)
         if Text_number:getString() == "" then
             Text_number:setString(tostring(num))
             roomNumber = roomNumber .. Text_number:getString()
-            if i == 6 then
+            if i == 8 then
                 -- UserData.Guild:addClubMember(self.clubData.dwClubID, tonumber(roomNumber), UserData.User.userID)
             end
             break
@@ -150,7 +151,7 @@ end
 
 --删除数字
 function NewClubParnterAddMemLayer:deleteNumber()
-    for i = 6 , 1 , -1 do
+    for i = 8 , 1 , -1 do
         local numName = string.format("Text_number%d", i)
         local Text_number = ccui.Helper:seekWidgetByName(self.Image_inputFrame, numName)
         if Text_number:getString() ~= "" then

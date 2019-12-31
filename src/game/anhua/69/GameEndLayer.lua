@@ -731,8 +731,8 @@ function GameEndLayer:showDiPai(pBuffer)
     local uiListView_diPai1 = ccui.Helper:seekWidgetByName(self.root,"ListView_diPai1")
     local uiListView_diPai2 = ccui.Helper:seekWidgetByName(self.root,"ListView_diPai2")
     for i = 1, pBuffer.bLeftCardCount do
-        if pBuffer.bLeftCardData[i] ~= 0 then
-            local item = GameCommon:GetCardHand(pBuffer.bLeftCardData[i],true)
+        if pBuffer.bLeftCardDataEx[i] ~= 0 then
+            local item = GameCommon:GetCardHand(pBuffer.bLeftCardDataEx[i],true)
             if i<= 17 then
                 uiListView_diPai1:pushBackCustomItem(item)
             else

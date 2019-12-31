@@ -472,7 +472,7 @@ function GameOperation:onCreate(opType, cbOperateCode, cbOperateCard, cbCardInde
 		end
 	end
 	
-	self.layout = cc.UserDefault:getInstance():getIntegerForKey('HHlayout',1)
+	self.layout = cc.UserDefault:getInstance():getIntegerForKey('HHlayout',0)
 	self.isLeft = self.layout ~= 1
 
 	self:changeLayout()

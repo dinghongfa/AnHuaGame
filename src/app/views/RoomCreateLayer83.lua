@@ -80,6 +80,19 @@ function RoomCreateLayer:onCreate(parameter)
     --选择人数
     local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(1),"ListView_parameter"):getItems()
     Common:addCheckTouchEventListener(items,false,function(index) 
+        local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(5),"ListView_parameter"):getItems()
+        if index == 2 then
+            items[1]:setBright(false)
+            items[1]:setEnabled(false)
+            items[1]:setColor(cc.c3b(170,170,170))
+            local uiText_desc = ccui.Helper:seekWidgetByName(items[1],"Text_desc")
+            if uiText_desc ~= nil then 
+                uiText_desc:setTextColor(cc.c3b(109,58,44))
+            end
+        else
+            items[1]:setEnabled(true)
+            items[1]:setColor(cc.c3b(255,255,255))      
+        end 
         -- local uiPanel_wanFaContents = ccui.Helper:seekWidgetByName(self.root,"Panel_wanFaContents")
         -- local items  = uiPanel_wanFaContents:getChildren()
         -- if index == 2 then
@@ -211,10 +224,11 @@ function RoomCreateLayer:onCreate(parameter)
             local isHaveDefault = false
             for key, var in pairs(items_9) do
                 var:setEnabled(true)
+                var:setBright(true)
                 var:setColor(cc.c3b(255,255,255))
                 local uiText_desc = ccui.Helper:seekWidgetByName(var,"Text_desc")
                 if uiText_desc ~= nil then 
-                    uiText_desc:setTextColor(cc.c3b(109,58,44))
+                    uiText_desc:setTextColor(cc.c3b(238,105,40))
                 end
                 -- if var:isBright() then
                 --     isHaveDefault = true
@@ -302,19 +316,29 @@ function RoomCreateLayer:onCreate(parameter)
     local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(5),"ListView_parameter"):getItems()
     Common:addCheckTouchEventListener(items,true)
     --首局黑桃3必出
-    if self.recordCreateParameter["bStartCard"] ~= nil and self.recordCreateParameter["bStartCard"] == 0x03 then
-        items[1]:setBright(true)
-        local uiText_desc = ccui.Helper:seekWidgetByName(items[1],"Text_desc")
-        if uiText_desc ~= nil then 
-            uiText_desc:setTextColor(cc.c3b(215,86,31))
-        end
-    else
+    if self.recordCreateParameter["bPlayerCount"] ~= nil and self.recordCreateParameter["bPlayerCount"] == 2 then
         items[1]:setBright(false)
+        items[1]:setEnabled(false)
+        items[1]:setColor(cc.c3b(170,170,170))
         local uiText_desc = ccui.Helper:seekWidgetByName(items[1],"Text_desc")
         if uiText_desc ~= nil then 
             uiText_desc:setTextColor(cc.c3b(109,58,44))
         end
-    end
+    else
+        if self.recordCreateParameter["bStartCard"] ~= nil and self.recordCreateParameter["bStartCard"] == 0x03 then
+            items[1]:setBright(true)
+            local uiText_desc = ccui.Helper:seekWidgetByName(items[1],"Text_desc")
+            if uiText_desc ~= nil then 
+                uiText_desc:setTextColor(cc.c3b(215,86,31))
+            end
+        else
+            items[1]:setBright(false)
+            local uiText_desc = ccui.Helper:seekWidgetByName(items[1],"Text_desc")
+            if uiText_desc ~= nil then 
+                uiText_desc:setTextColor(cc.c3b(109,58,44))
+            end
+        end
+    end 
     local uiText_desc = ccui.Helper:seekWidgetByName(items[2],"Text_desc")
     --三A或三K炸弹
     if self.recordCreateParameter["bThreeBomb"] ~= nil and self.recordCreateParameter["bThreeBomb"] == 1 then
@@ -423,7 +447,7 @@ function RoomCreateLayer:onCreate(parameter)
     Common:addCheckTouchEventListener(items,true)
 
 
-    if self.recordCreateParameter["b4Add2"] ~= nil and self.recordCreateParameter["b4Add2"] == 0 then
+    if self.recordCreateParameter["b4Add2"] == nil or self.recordCreateParameter["b4Add2"] == 1 then
         items[1]:setBright(true)
         local uiText_desc = ccui.Helper:seekWidgetByName(items[1],"Text_desc")
         if uiText_desc ~= nil then 
@@ -431,7 +455,7 @@ function RoomCreateLayer:onCreate(parameter)
         end
     end
 
-    if self.recordCreateParameter["b4Add3"] ~= nil and self.recordCreateParameter["b4Add3"] == 0 then
+    if self.recordCreateParameter["b4Add3"] == nil or self.recordCreateParameter["b4Add3"] == 1 then
         items[2]:setBright(true)
         local uiText_desc = ccui.Helper:seekWidgetByName(items[2],"Text_desc")
         if uiText_desc ~= nil then 

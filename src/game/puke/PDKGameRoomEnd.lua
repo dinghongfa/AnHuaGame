@@ -119,9 +119,16 @@ function PDKGameRoomEnd:initPlayerInfo( ... )
 		local total_score = self:seekWidgetByNameEx(item,'total_score')
 		local total_score_1 = self:seekWidgetByNameEx(item,'total_score_1')
 
+		local score1 = self:seekWidgetByNameEx(item,'score1')
+		local score2 = self:seekWidgetByNameEx(item,'score2')
+		local score3 = self:seekWidgetByNameEx(item,'score3')
+		score1:setText(self.pBuffer.lMaxScore[i])
+		score2:setText(self.pBuffer.statistics[i][14])
+		score3:setText(self.pBuffer.statistics[i][1])
+
 	--	local ListView_score = self:seekWidgetByNameEx(item,'ListView_score')
 		for i=1,self.pBuffer.dwDataCount do
-			if data.lScore[i] then
+			--if data.lScore[i] then
 				-- local score_item = self.Panel_text_template:clone()
 				-- local round = self:seekWidgetByNameEx(score_item,'Text_round')
 				-- local score = self:seekWidgetByNameEx(score_item,'Text_score')
@@ -129,7 +136,7 @@ function PDKGameRoomEnd:initPlayerInfo( ... )
 				-- setNameColor(score,data.lScore[i])
 				-- ListView_score:pushBackCustomItem(score_item)
 				-- ListView_score:refreshView()
-			end
+			--end
 		end
 
 		-- for i = 1 , 3 do 

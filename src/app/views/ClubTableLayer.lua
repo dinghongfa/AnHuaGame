@@ -69,6 +69,7 @@ function ClubTableLayer:onCreate(parames)
             end)
         else
             uiButton_join:removeAllChildren()
+            cc.UserDefault:getInstance():setIntegerForKey('club_quick_game_playwayid', data.wTableSubType)
             uiButton_join:addChild(require("app.MyApp"):create(data.dwTableID):createView("InterfaceJoinRoomNode"))
         end
     end)

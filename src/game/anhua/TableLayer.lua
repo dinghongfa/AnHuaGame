@@ -472,7 +472,7 @@ function TableLayer:doAction(action, pBuffer)
 		uiPanel_tipsCard:addChild(uiSendOrOutCardNode)
 		uiSendOrOutCardNode:setPosition(uiPanel_stacks:getPosition())
 		uiSendOrOutCardNode:setScale(0)
-		local time = 0.6
+		local time = 0.2
 		if cbCardData == GameCommon.CardData_WW then
 			time = 1.2
 		end
@@ -563,7 +563,7 @@ function TableLayer:doAction(action, pBuffer)
 		end
 		self:showCountDown(wChairID)
 		GameCommon:playAnimation(self.root, GameLogic:SwitchToCardIndex(cbCardData), wChairID)
-		self:runAction(cc.Sequence:create(cc.DelayTime:create(0.4), cc.CallFunc:create(function(sender, event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))
+		self:runAction(cc.Sequence:create(cc.DelayTime:create(0.1), cc.CallFunc:create(function(sender, event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))
 		
 	elseif action == GameCommon.ACTION_WD then
 		local wChairID = pBuffer.wCurrentUser
@@ -2264,7 +2264,18 @@ function TableLayer:initUI()
 	
 	local uiButton_return = ccui.Helper:seekWidgetByName(self.root, "Button_return")
 	Common:addTouchEventListener(uiButton_return, function()
-		self:backToHall()
+		--self:backToHall()
+
+        local randCeil = GameCommon.tableConfig.wCurrentNumber or 0
+        if randCeil == 0 then        
+            --require("common.MsgBoxLayer"):create(1,nil,"您确定离开房间?\n房主离开意味着房间被解散",function()
+                NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GR_USER,NetMsgId.REQ_GR_LEAVE_TABLE_USER,"")
+            --end)
+        else
+            require("common.MsgBoxLayer"):create(1,nil,"您确定返回大厅?",function()
+                require("common.SceneMgr"):switchScene(require("app.MyApp"):create():createView("HallLayer"),SCENE_HALL) 
+            end)
+        end 
 	end)
 
 	local uiButton_cancel = ccui.Helper:seekWidgetByName(self.root,"Button_cancel")  --取消按钮

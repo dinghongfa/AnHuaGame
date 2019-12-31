@@ -400,7 +400,7 @@ end
 function GameOpration:showQiShowHU(pBuffer)
     --起手四王胡牌
     local uiListView_Opration = ccui.Helper:seekWidgetByName(self.root,"ListView_Opration")
-    local img = "game/op_hu.png"
+    local img = "majiang/ui/operate/n_playLabel_17.png"
     local item = ccui.Button:create(img,img,img)
     uiListView_Opration:pushBackCustomItem(item)
     Common:addTouchEventListener(item,function() 
@@ -412,15 +412,15 @@ function GameOpration:showQiShowHU(pBuffer)
     local item = ccui.Button:create(img,img,img)
     uiListView_Opration:pushBackCustomItem(item)
     Common:addTouchEventListener(item,function()
-        if GameCommon.IsOfHu == 1 then 
+        -- if GameCommon.IsOfHu == 1 then 
             require("common.MsgBoxLayer"):create(1,nil,"是否放弃胡牌？",function()  
                 NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GF_GAME,NetMsgId.SUB_C_FourKing,"b",0)  --GameCommon.bUserOpreaCount
                 self:removeFromParent()         
             end)   
-        else
-            NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GF_GAME,NetMsgId.SUB_C_FourKing,"b",0)
-            self:removeFromParent()
-        end 
+        -- else           
+        --     NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GF_GAME,NetMsgId.SUB_C_FourKing,"b",0)
+        --     self:removeFromParent()
+        -- end 
     end)
     for key, var in pairs(uiListView_Opration:getItems()) do
         var:setScale(0.0)

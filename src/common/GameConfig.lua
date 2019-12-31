@@ -218,7 +218,10 @@ function GameConfig:getParameter(wKindID,luaFunc)
         data.bThreeEx = luaFunc:readRecvByte()             --0 三带两张  1 三带1张、2张、不带
         data.b4Add2 = luaFunc:readRecvByte()                --是否可4带2        0无      1有
         data.bHostedTime = luaFunc:readRecvByte()                --是否可4带2        0无      1有
-        haveReadByte = 19    --已读长度，每次增加或者减少都要修改该值，Byte1个字节 WORD2个字节 DWORD4个字节
+        data.bHostedSession = luaFunc:readRecvByte()                 --托管局数
+        data.bDistanceLimit = luaFunc:readRecvByte()                 --托管局数
+        haveReadByte = 21    --已读长度，每次增加或者减少都要修改该值，Byte1个字节 WORD2个字节 DWORD4个字节
+
     elseif wKindID == 84 then 
         data.bPlayerCount = luaFunc:readRecvByte()          --参与游戏的人数   
         data.bShowCardCount = luaFunc:readRecvByte()          --是否显示牌数量    0无      1有
@@ -744,7 +747,10 @@ function GameConfig:getParameter(wKindID,luaFunc)
         data.mHongNiao = luaFunc:readRecvByte()             --//1.无红中加一码、0.无	
         data.bWuTong = luaFunc:readRecvByte()               --//1.有筒  0.无筒 (默认有筒)
         data.bFirstZhuang = luaFunc:readRecvByte()          --//1.首局随机庄家
-        haveReadByte = 13
+
+        data.bHostedTime = luaFunc:readRecvByte()                 --托管时间
+        data.bHostedSession = luaFunc:readRecvByte()                 --托管局数
+        haveReadByte = 15
     elseif wKindID == 79 then 
         data.bPlayerCount = luaFunc:readRecvByte()          --参与游戏的人数
         data.mLaiZiCount = luaFunc:readRecvByte()           --0.无红中  1.四红中   （默认无红中）

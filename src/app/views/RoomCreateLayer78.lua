@@ -537,6 +537,12 @@ function RoomCreateLayer:onCreate(parameter)
         if uiText_desc ~= nil then 
             uiText_desc:setTextColor(cc.c3b(215,86,31))
         end    
+    elseif self.recordCreateParameter["bMaCount"] ~= nil and self.recordCreateParameter["bMaCount"] == 8 then
+        items[4]:setBright(true)
+        local uiText_desc = ccui.Helper:seekWidgetByName(items[4],"Text_desc")
+        if uiText_desc ~= nil then 
+            uiText_desc:setTextColor(cc.c3b(215,86,31))
+        end    
     else
         --if self.recordCreateParameter["bQGHu"] ~= nil and self.recordCreateParameter["bMaCount"] == 6 then
         items[3]:setBright(true)
@@ -794,6 +800,8 @@ function RoomCreateLayer:onEventCreate(nTableType)
         tableParameter.bMaCount = 4
     elseif items[3]:isBright() then
         tableParameter.bMaCount = 6
+    elseif items[4]:isBright() then
+        tableParameter.bMaCount = 8
     end
     tableParameter.bWuTong = 1
     local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(10),"ListView_parameter"):getItems()
