@@ -37,10 +37,7 @@ function NewRecord:onConfig(...)
 		{'Panel_details'},
 		{'ListView_details'},
 		{'Image_detail_template'},
-		{'Button_record','onCallOtherReplay'},
-		{"Button_choice", "onchoice"},
-		{"Button_Ordinary", "onOrdinary"},
-		{"Button_friends", "onfriends"}
+		{'Button_record','onCallOtherReplay'}
 	}
 end
 
@@ -76,72 +73,29 @@ function NewRecord:onCreate(params)
 	self.oldTips = nil
 	self:initUI()
 	self:initRecordData()
-	self.cellSize = cc.size(1020, 175) --宽 高
-	self.viewSize = cc.size(1018, 480)
+	self.cellSize = cc.size(1053, 180) --宽 高
+	self.viewSize = cc.size(1050, 540)
 	self.listView = Common:_createList(self.viewSize, handler(self, self._itemUpdateCall), self.cellSize.width, self.cellSize.height, handler(self, self.getDataCount), nil, nil, nil, false)
-	self.listView:setPosition(cc.p(240,90))
-	self.listView:setBounceable(false)
+	self.listView:setPosition(cc.p(211,72))
 	self.Panel_record:addChild(self.listView)
+	self:createToggleButton(2,'Button_top_',handler(self,self.onClickTopRecord),1);
+	self:createToggleButton(3,'Button_statics_',handler(self,self.onClickToggleRecord),1)
 	self:reqRecord(DAY_TYPE.TODAY,RECORD_TYPE.PERSON_RECORD)
 	self:changePage(Page_State.RECORD_PAGE)
 
 	--计时器
 	schedule(self.listView, handler(self,self.checkReq), 0.6)
-
-	self:canGoTo()
-
-	if stype == 1 then 
-		self.Button_choice:setBright(true)
-		
-		self.Button_Ordinary:setBright(true)
-		self.Button_friends:setBright(false)
-		--self:switchUI(1)
-		self:chageRecord(RECORD_TYPE.PERSON_RECORD)
-	else
-		self.Button_choice:setBright(false)
-		
-		self.Button_Ordinary:setBright(false)
-		self.Button_friends:setBright(true)
-		self:chageRecord(RECORD_TYPE.CLUB_RECORD)
-        --self:switchUI(2)
-    end 
-end
-
---是否需要跳转
-function NewRecord:canGoTo( ... )
-	local defoutTop = 1
-	local defoutLeft = 1
-	--是否需要进行跳转 0不需要 1 需要
-	local canGo = cc.UserDefault:getInstance():getIntegerForKey("record_hall",0)
-	if canGo == 1 then
-		--1个人战绩 2 亲友圈战绩
-		local page = cc.UserDefault:getInstance():getIntegerForKey("hall_pageState",0)
-		defoutTop = page
-		--0今日1昨日2前日
-		local day = cc.UserDefault:getInstance():getIntegerForKey("hall_day",0)
-		defoutLeft = day
-		self:createToggleButton(2,'Button_top_',handler(self,self.onClickTopRecord),defoutTop);
-		self:createToggleButton(3,'Button_statics_',handler(self,self.onClickToggleRecord),defoutLeft)
-		--跳转子页签
-		self:changePage(Page_State.DETAIL_PAGE)
-		self.ListView_details:removeAllChildren()
-		self.wKindID = cc.UserDefault:getInstance():getIntegerForKey("hall_kwindID",0)
-		self.szMainGameID = cc.UserDefault:getInstance():getStringForKey("hall_mainGameID",'')
-		self.totalScore = {}
-		UserData.Record:sendMsgGetSubRecord(self.szMainGameID)
-		cc.UserDefault:getInstance():setIntegerForKey("record_hall",0)
-	else
-		self:createToggleButton(2,'Button_top_',handler(self,self.onClickTopRecord),defoutTop);
-		self:createToggleButton(3,'Button_statics_',handler(self,self.onClickToggleRecord),defoutLeft)
-	end
 end
 
 function NewRecord:initUI( ... )
 	self.allStatics = {}
+	self.allStaticsEx = {}
 	for i=1,3 do
 		local score 	= self:seekWidgetByNameEx(self.Panel_record,'Text_score_' .. i)
 		local personScore = self:seekWidgetByNameEx(score,'Text_score')
+		local Text_scoreEx = self:seekWidgetByNameEx(score,'Text_scoreEx')
 		table.insert( self.allStatics,personScore)
+		table.insert(self.allStaticsEx, Text_scoreEx)
 	end
 	self.Button_close:setZOrder(100)
 end
@@ -238,32 +192,6 @@ end
 function NewRecord:onClose(  )
 	self:gotoPage()
 end
-
-function NewRecord:onchoice()
-    if self.Button_choice:isBright() == true then 
-		self.Button_choice:setBright(false)
-		--self:switchUI(2)
-		self:chageRecord(RECORD_TYPE.CLUB_RECORD)
-    else
-        self.Button_choice:setBright(true)
-		--self:switchUI(1)
-		self:chageRecord(RECORD_TYPE.PERSON_RECORD)
-    end 
-end 
-
-function NewRecord:onOrdinary()
-	self.Button_choice:setBright(true)
-	self.Button_Ordinary:setBright(true)
-	self.Button_friends:setBright(false)
-	self:chageRecord(RECORD_TYPE.PERSON_RECORD)
-end 
-
-function NewRecord:onfriends()
-	self.Button_choice:setBright(false)
-	self.Button_Ordinary:setBright(false)
-	self.Button_friends:setBright(true)
-	self:chageRecord(RECORD_TYPE.CLUB_RECORD)
-end 
 
 function NewRecord:addButtonEventListener(button, callback,isAction)
 	isAction = isAction or false
@@ -365,10 +293,12 @@ function NewRecord:createSubRecord( data )
 		local child = self:seekWidgetByNameEx(target,'Image_detail_' .. i)
 		local Text_playername = self:seekWidgetByNameEx(child,'Text_playername');
 		local score = self:seekWidgetByNameEx(target_child,'Text_score_' .. i)
+		local scoreEx = self:seekWidgetByNameEx(target_child,'Text_scoreex_' .. i)
 		local Text_total_score_1 = self:seekWidgetByNameEx(target,'Text_total_score_' .. i)
 		local isHave = i <= data.wChairCount
 		child:setVisible(isHave)
 		score:setVisible(isHave)
+		scoreEx:setVisible(isHave)
 		Text_total_score_1:setVisible(isHave)
 		if isHave then
 			local name = Common:getShortName(data.szNickName[i],8,6)
@@ -379,6 +309,9 @@ function NewRecord:createSubRecord( data )
 			self.totalScore[i] = self.totalScore[i] + data.lScore[i]
 			self:setStrColor(score,data.lScore[i],'分')
 			self:setStrColor(Text_total_score_1,self.totalScore[i],'分')
+			-- scoreEx:setString('赛:' .. data.fUserScore[i])
+			-- scoreEx:setColor(cc.c3b(231, 112, 41))
+			self:setStrColor(scoreEx,data.fUserScore[i],nil,'赛:')
 		end
 		local Panel_click = self:seekWidgetByNameEx(child,'Panel_click')
 		self:addLayerEventListener(Panel_click,handler(self,self.showClickName))
@@ -406,16 +339,7 @@ end
 --回放
 function NewRecord:reBackPlay(sender)
 	print("回放", sender:getName())
-	self:saveRecord()
 	UserData.Record:sendMsgGetMainReplay(sender:getName())            --回放
-end
-
-function NewRecord:saveRecord( ... )
-	cc.UserDefault:getInstance():setIntegerForKey("record_hall",1)
-	cc.UserDefault:getInstance():setIntegerForKey("hall_pageState",self.recordType)
-	cc.UserDefault:getInstance():setIntegerForKey("hall_day",self.dayType)
-	cc.UserDefault:getInstance():setIntegerForKey("hall_kwindID",self.wKindID)
-	cc.UserDefault:getInstance():setStringForKey("hall_mainGameID",self.szMainGameID)
 end
 
 function NewRecord:showRecordData( )
@@ -545,13 +469,17 @@ function NewRecord:setColor( text,value )
 	text:setString(value)
 end
 
-function NewRecord:setStrColor( text,value,str )
+function NewRecord:setStrColor( text,value,str,strEx )
 	if value < 0 then
 		self:setScoreColor(text,2)
 	else
 		self:setScoreColor(text,0)
 	end
-	text:setString(value .. str)
+	if str then
+		text:setString(value .. str)
+	else
+		text:setString(strEx .. value)
+	end
 end
 
 
@@ -560,13 +488,13 @@ function NewRecord:setScoreColor( text,type )
 		return
 	end
 	if type == 0 then --正分数
-		text:setColor(cc.c3b(124,164,46))
+		text:setColor(cc.c3b(231,0,0))
 	elseif type == 1 then --0
 		text:setColor(cc.c3b(231,0,0))
 	elseif type == 2 then  --负分数
-		text:setColor(cc.c3b(210,86,31))
+		text:setColor(cc.c3b(38,134,0))
 	elseif type == 3 then --标题
-		text:setColor(cc.c3b(109,58,44))
+		text:setColor(cc.c3b(127,71,46))
 	end
 end
 
@@ -663,6 +591,7 @@ function NewRecord:updateNameItem( item,data )
 		local name_player = target:getChildByName('Image_' .. i)
 		local text_playername = name_player:getChildByName('Text_playername')
 		local text_score = name_player:getChildByName('Text_score')
+		local text_score_ex = name_player:getChildByName('Text_scoreEx')
 		local Panel_click = name_player:getChildByName('Panel_click')
 		local userID = data.dwUserIDEx[i]
 		local isHave = userID ~= 0
@@ -678,6 +607,9 @@ function NewRecord:updateNameItem( item,data )
 			text_playername:setString(name)
 			self:setScoreColor(text_playername,3)
 			self:setColor(text_score,data.lScoreEx[i])
+			-- text_score_ex:setString('赛:' .. data.fAllUserScoreScore[i])
+			-- text_score_ex:setColor(cc.c3b(231, 112, 41))
+			self:setStrColor(text_score_ex,data.fAllUserScoreScore[i],nil,'赛:')
 		end
 	end
 end
@@ -687,6 +619,15 @@ function NewRecord:updateTotalScore( today,another,eve )
 	self:setColor(self.allStatics[1],today)
 	self:setColor(self.allStatics[2],another)
 	self:setColor(self.allStatics[3],eve)
+end
+
+function NewRecord:updateTotalScoreEx( today,another,eve )
+	self:setColor(self.allStaticsEx[1],today)
+	self:setColor(self.allStaticsEx[2],another)
+	self:setColor(self.allStaticsEx[3],eve)
+	self.allStaticsEx[1]:setString('赛:' .. self.allStaticsEx[1]:getString())
+	self.allStaticsEx[2]:setString('赛:' .. self.allStaticsEx[2]:getString())
+	self.allStaticsEx[3]:setString('赛:' .. self.allStaticsEx[3]:getString())
 end
 
 function NewRecord:showClickName( sender,state )
@@ -738,7 +679,7 @@ function NewRecord:isBottom(  )
 		return false
 	end
 	local curX = self.listView:getContentOffset().y --当前的偏移值
-	return curX > -2
+	return curX > 5
 end
 
 -------server
@@ -772,17 +713,15 @@ function NewRecord:SUB_CL_MAIN_RECORD_FINISH(event)
 	end
 	if self.cacheData[lType][lDay] then
 		print('-->>>插入',lDay)
-		local count = #self.cacheData[lType][lDay]
 		for _,v in ipairs(self.cacheData[lType][lDay]) do
 			self:insertRecordData(lDay,lType,v)
 		end
 		self.cacheData[lType][lDay] = {}
 		print('结束协议')
 		--当前位置刷新数据
-		local point = self.listView:getContentOffset()
 		self:reloadData()
 		if self.isCanBottom then
-			self.listView:setContentOffset(cc.p(0,-point.y-count * (180 - 2)), false)
+			self.listView:setContentOffset(cc.p(0,0), false)
 		end
 		self.isCanBottom = true
 	end
@@ -792,6 +731,7 @@ end
 function NewRecord:RET_CL_MAIN_RECORD_TOTAL_SCORE( event )
 	local data = event._usedata
 	self:updateTotalScore(data.lScore[0],data.lScore[1],data.lScore[2])
+	self:updateTotalScoreEx(data.fScore[0],data.fScore[1],data.fScore[2])
 end
 
 function NewRecord:SUB_CL_SUB_RECORD( event )
@@ -802,6 +742,10 @@ end
 function NewRecord:SUB_CL_SUB_REPLAY_SHAREID(event)
 	local param = event._usedata
 	local data = clone(UserData.Share.tableShareParameter[5])
+	if not data then
+		print('===未配置Share.tableShareParameter')
+		return
+	end
 	data.cbTargetType = 2
 	data.szShareTitle = string.format(data.szShareTitle, StaticData.Games[self.wKindID].name, param.szShareID)
 	data.szShareUrl = string.format("%s&Account=%s&channelID=%d", data.szShareUrl, UserData.User.szAccount, CHANNEL_ID)

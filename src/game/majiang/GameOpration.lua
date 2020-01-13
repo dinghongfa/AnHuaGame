@@ -122,6 +122,7 @@ function GameOpration:showOpration(pBuffer)
     end
     --补
     if Bit:_and(cbOperateCode,GameCommon.WIK_FILL) ~= 0 and GameCommon.tableConfig.wKindID ~= 92 then
+        GameCommon.iNOoutcard = true
         local img = "majiang/ui/operate/n_playLabel_3.png"
         local item = ccui.Button:create(img,img,img)
         uiListView_Opration:pushBackCustomItem(item)
@@ -131,6 +132,7 @@ function GameOpration:showOpration(pBuffer)
     end
     --杠
     if Bit:_and(cbOperateCode,GameCommon.WIK_GANG) ~= 0 then
+        GameCommon.iNOoutcard = true 
         local img = "majiang/ui/operate/n_playLabel_6.png"
         local item = ccui.Button:create(img,img,img)
         uiListView_Opration:pushBackCustomItem(item)
@@ -241,6 +243,8 @@ function GameOpration:showOpration(pBuffer)
         Common:addTouchEventListener(item,function() 
             print('-->>>>>>>>>>>>>112xxxxxxx',GameCommon.IsOfHu)
             if GameCommon.IsOfHu == 1 then 
+                GameCommon.IsOfHu = 0
+                GameCommon.iNOoutcard = false 
                 require("common.MsgBoxLayer"):create(1,nil,"是否放弃胡牌？",function()  
                     print('-->>>sendxxxx')
                     NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GF_GAME,NetMsgId.SUB_C_OPERATE_CARD,"wb",GameCommon.WIK_NULL,0)
@@ -313,6 +317,8 @@ function GameOpration:showHaiDi()
     uiListView_Opration:pushBackCustomItem(item)
     Common:addTouchEventListener(item,function()
         if GameCommon.IsOfHu == 1 then 
+            GameCommon.IsOfHu = 0
+            GameCommon.iNOoutcard = false 
             require("common.MsgBoxLayer"):create(1,nil,"是否放弃胡牌？",function()  
                 NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GF_GAME,NetMsgId.SUB_C_OPERATE_CARD,"wb",GameCommon.WIK_NULL,0)  --GameCommon.bUserOpreaCount
                 self:removeFromParent()         
@@ -367,6 +373,8 @@ function GameOpration:showWCWD(pBuffer)
         -- NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GF_GAME,NetMsgId.SUB_C_WDWC,"w",0)
         -- self:removeFromParent()
         if GameCommon.IsOfHu == 1 then 
+            GameCommon.IsOfHu = 0
+            GameCommon.iNOoutcard = false 
             require("common.MsgBoxLayer"):create(1,nil,"是否放弃胡牌？",function() 
                 print('-->>>sendxxxx')
                 NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GF_GAME,NetMsgId.SUB_C_OPERATE_CARD,"wb",GameCommon.WIK_NULL,0)

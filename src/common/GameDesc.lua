@@ -885,6 +885,26 @@ function GameDesc:getGameDesc(wKindID,data,tableConfig)
         if data.bThreeEx == 1 then
             desc = desc.."/三带一"
         end
+
+        if data.bHostedTime == 1 then
+            desc = desc.."/一分钟托管"
+        elseif data.bHostedTime == 2 then
+            desc = desc.."/两分钟托管"
+        elseif data.bHostedTime == 3 then
+            desc = desc.."/三分钟托管"
+        elseif data.bHostedTime == 5 then
+            desc = desc.."/五分钟托管"
+        elseif data.bHostedTime == 0 then
+            desc = desc.."/无托管"
+        end
+
+        if data.bHostedSession == 1 then
+            desc = desc.."/单局托管"
+        elseif data.bHostedSession == 3 then
+            desc = desc.."/三局托管"
+        elseif data.bHostedSession >= 6 then
+            desc = desc.."/全局托管"
+        end
         if data.bSpringMinCount ~= 0 then
             desc = desc..string.format("/%d张全关",data.bSpringMinCount)
         end    
@@ -1251,12 +1271,32 @@ function GameDesc:getGameDesc(wKindID,data,tableConfig)
       end
 
       if data.bStartTun == 1 then
-         desc = desc.."/加一囤"
+         desc = desc.."加一囤"
       end
 
       if data.bStartBanker == 0 then
-         desc = desc.."\n首局随机做庄"
+         desc = desc.."/首局随机做庄"
       end
+
+      if data.bHostedTime == 1 then
+        desc = desc.."\n一分钟托管"
+    elseif data.bHostedTime == 2 then
+        desc = desc.."\n两分钟托管"
+    elseif data.bHostedTime == 3 then
+        desc = desc.."\n三分钟托管"
+    elseif data.bHostedTime == 5 then
+        desc = desc.."\n五分钟托管"
+    elseif data.bHostedTime == 0 then
+        desc = desc.."\n无托管"
+    end
+
+    if data.bHostedSession == 1 then
+        desc = desc.."/单局托管"
+    elseif data.bHostedSession == 3 then
+        desc = desc.."/三局托管"
+    elseif data.bHostedSession >= 6 then
+        desc = desc.."/全局托管"
+    end
     
       desc = desc..string.format("/%d胡起胡",data.bCanHuXi) 
     elseif wKindID == 78 then
@@ -1343,6 +1383,26 @@ function GameDesc:getGameDesc(wKindID,data,tableConfig)
         end
         if data.bFirstZhuang == 1 then
             desc = desc.."/首局随机做庄"
+        end
+
+        if data.bHostedTime == 1 then
+            desc = desc.."/一分钟托管"
+        elseif data.bHostedTime == 2 then
+            desc = desc.."/两分钟托管"
+        elseif data.bHostedTime == 3 then
+            desc = desc.."/三分钟托管"
+        elseif data.bHostedTime == 5 then
+            desc = desc.."/五分钟托管"
+        elseif data.bHostedTime == 0 then
+            desc = desc.."/无托管"
+        end
+
+        if data.bHostedSession == 1 then
+            desc = desc.."/单局托管"
+        elseif data.bHostedSession == 3 then
+            desc = desc.."/三局托管"
+        elseif data.bHostedSession >= 6 then
+            desc = desc.."/全局托管"
         end
 
     elseif wKindID == 79 then
@@ -1525,6 +1585,26 @@ function GameDesc:getGameDesc(wKindID,data,tableConfig)
         
         if data.bFirstZhuang == 1 then
             desc = desc.."/首局随机做庄"
+        end
+
+        if data.bHostedTime == 1 then
+            desc = desc.."/一分钟托管"
+        elseif data.bHostedTime == 2 then
+            desc = desc.."/两分钟托管"
+        elseif data.bHostedTime == 3 then
+            desc = desc.."/三分钟托管"
+        elseif data.bHostedTime == 5 then
+            desc = desc.."/五分钟托管"
+        elseif data.bHostedTime == 0 then
+            desc = desc.."/无托管"
+        end
+
+        if data.bHostedSession == 1 then
+            desc = desc.."/单局托管"
+        elseif data.bHostedSession == 3 then
+            desc = desc.."/三局托管"
+        elseif data.bHostedSession >= 6 then
+            desc = desc.."/全局托管"
         end
 
     elseif wKindID == 81 then
@@ -1789,6 +1869,25 @@ function GameDesc:getGameDesc(wKindID,data,tableConfig)
         end 
         if data.bSJZhuang == 1 then
             desc = desc.."/首局随机庄"
+        end
+        if data.bHostedTime == 1 then
+            desc = desc.."/一分钟托管"
+        elseif data.bHostedTime == 2 then
+            desc = desc.."/两分钟托管"
+        elseif data.bHostedTime == 3 then
+            desc = desc.."/三分钟托管"
+        elseif data.bHostedTime == 5 then
+            desc = desc.."/五分钟托管"
+        elseif data.bHostedTime == 0 then
+            desc = desc.."/无托管"
+        end
+
+        if data.bHostedSession == 1 then
+            desc = desc.."/单局托管"
+        elseif data.bHostedSession == 3 then
+            desc = desc.."/三局托管"
+        elseif data.bHostedSession >= 6 then
+            desc = desc.."/全局托管"
         end
     end
     

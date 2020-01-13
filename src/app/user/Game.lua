@@ -28,6 +28,7 @@ local Game = {
     tableGames = {},                --游戏列表
     tableSortGames = {},            --游戏列表已排序
     talbeCommonGames = {},          --常玩游戏列表     
+    tableCommonPlayways = {},       --亲友圈常玩玩法
  }
 
 function Game:onEnter()
@@ -136,11 +137,7 @@ function Game:EVENT_TYPE_NET_RECV_MESSAGE(event)
         data.wCellScore = luaFunc:readRecvWORD()            --用户 倍率
         data.wTableNumber = luaFunc:readRecvWORD()          --总局数
         data.wCurrentNumber = luaFunc:readRecvWORD()        --当前局数
-        local haveReadByte = 0
-        data.tableParameter, haveReadByte = require("common.GameConfig"):getParameter(data.wKindID,luaFunc)
-        if haveReadByte < 128 then
-            luaFunc:readRecvBuffer(128-haveReadByte)
-        end
+        data.tableParameter = require("common.GameConfig"):getParameter(data.wKindID,luaFunc)
         data.szGameID = luaFunc:readRecvString(32)
         EventMgr:dispatch(EventType.SUB_GR_MATCH_TABLE_ING,data)
         
@@ -163,13 +160,13 @@ function Game:EVENT_TYPE_NET_RECV_MESSAGE(event)
         data.wCellScore = luaFunc:readRecvWORD()            --用户 倍率
         data.wTableNumber = luaFunc:readRecvWORD()          --总局数
         data.wCurrentNumber = luaFunc:readRecvWORD()        --当前局数
-        local haveReadByte = 0
-        data.tableParameter, haveReadByte = require("common.GameConfig"):getParameter(data.wKindID,luaFunc)
-        if haveReadByte < 128 then
-            luaFunc:readRecvBuffer(128-haveReadByte)
-        end
+        data.tableParameter = require("common.GameConfig"):getParameter(data.wKindID,luaFunc)
         data.szGameID = luaFunc:readRecvString(32)
+        data.szTableName = luaFunc:readRecvString(32)
+        data.dwPlayID = luaFunc:readRecvDWORD()
+        data.wTableCellDenominator = luaFunc:readRecvWORD()        --房间倍率分母
         EventMgr:dispatch(EventType.SUB_GR_USER_ENTER,data)
+        self:addCommonPlayways(data.dwPlayID)
  
     elseif netID == NetMgr.NET_GAME and mainCmdID == NetMsgId.MDM_GR_USER and subCmdID == NetMsgId.SUB_GR_JOIN_TABLE_FAILED then 
         local luaFunc = NetMgr:getGameInstance().cppFunc
@@ -265,13 +262,60 @@ function Game:loadGameData()
 end
 Game:loadGameData()
 
---常玩游戏
-function Game:addCommonGames(wKindID)
-    for key, var in pairs(self.talbeCommonGames) do
-    	if var == wKindID then
-            table.remove(self.talbeCommonGames,key)
+
+--亲有圈常玩玩法
+function Game:addCommonPlayways(dwPlayID)
+    print('xxxxxxxxxxxxxxx', dwPlayID)
+    for key, var in pairs(self.tableCommonPlayways) do
+    	if var == dwPlayID then
+            table.remove(self.tableCommonPlayways,key)
             break
     	end
+    end
+    table.insert(self.tableCommonPlayways,1,dwPlayID)
+    local delCount = #self.tableCommonPlayways - 6
+    printInfo(self.tableCommonPlayways)
+    for i = 1, delCount do
+        table.remove(self.tableCommonPlayways,#self.tableCommonPlayways)
+    end
+    self:saveCommonPlayways()
+end
+
+function Game:saveCommonPlayways()
+    if #self.tableCommonPlayways <= 0 then
+        return
+    end
+    local data = json.encode(self.tableCommonPlayways)
+    local fp = io.open(FileName.tableCommonPlayways,"wb+")
+    fp:write(data)
+    fp:close()
+end
+
+function Game:loadCommonPlayways()
+	self.tableCommonPlayways = {}
+    if cc.FileUtils:getInstance():isFileExist(FileName.tableCommonPlayways) == true then
+        local fileData = cc.FileUtils:getInstance():getStringFromFile(FileName.tableCommonPlayways)
+        local jsonData = {}
+        if fileData ~= nil and fileData ~= "" then
+            jsonData = json.decode(fileData)     
+            for key, var in pairs(jsonData) do
+                table.insert(self.tableCommonPlayways,#self.tableCommonPlayways+1,var)
+                if #self.tableCommonPlayways >= 6 then
+                    break
+                end
+            end   
+        end
+    end
+end
+Game:loadCommonPlayways()
+
+--创房常玩游戏
+function Game:addCommonGames(wKindID)
+    for key, var in pairs(self.talbeCommonGames) do
+        if var == wKindID then
+            table.remove(self.talbeCommonGames,key)
+            break
+        end
     end
     table.insert(self.talbeCommonGames,1,wKindID)
     local delCount = #self.talbeCommonGames - 6
@@ -293,7 +337,7 @@ function Game:saveCommonGames()
 end
 
 function Game:loadCommonGames()
-	self.talbeCommonGames = {}
+    self.talbeCommonGames = {}
     if cc.FileUtils:getInstance():isFileExist(FileName.talbeCommonGames) == true then
         local fileData = cc.FileUtils:getInstance():getStringFromFile(FileName.talbeCommonGames)
         local jsonData = {}
@@ -310,13 +354,13 @@ function Game:loadCommonGames()
     if #self.talbeCommonGames <= 0 then
         for key, var in pairs(self.tableSortGames) do
             table.insert(self.talbeCommonGames,#self.talbeCommonGames+1,var)
-        	if #self.talbeCommonGames >= 6 then
-        	   break
-        	end
+            if #self.talbeCommonGames >= 6 then
+               break
+            end
         end
     end
     for key, var in pairs(self.talbeCommonGames) do
-    	printInfo(var)
+        printInfo(var)
     end
 end
 Game:loadCommonGames()
@@ -434,24 +478,7 @@ function Game:overVoice()
     end
 end
 
--- --语音回调
--- function cc.exports.voiceformSdkEventHandler(eventtype, response)
--- 	printInfo("voiceformSdkEventHandler:语音url地址回调")
--- 	local data = {}
--- 	data.eventtype = eventtype
---     data.response = response
--- 	if eventtype == 'UpLoad' then
---         cc.Director:getInstance():getRunningScene():runAction(cc.Sequence:create(cc.DelayTime:create(0),cc.CallFunc:create(function(sender,event) 
---              print('-->>>事件分发：12112311', eventtype, response)
---             local event = cc.EventCustom:new('VOICE_SDK_EVENT')
---             event._usedata = data
---             cc.Director:getInstance():getEventDispatcher():dispatchEvent(event)
---         end)))
--- 	end
--- end
-
 function cc.exports.overVoice(parameters)
-    print('fx-----cc.exports.overVoice------',parameters)
     if Game.voiceCallback then
         local scene = cc.Director:getInstance():getRunningScene()
         scene:runAction(cc.Sequence:create(cc.DelayTime:create(0),cc.CallFunc:create(function(sender,event) Game.voiceCallback(parameters) end)))

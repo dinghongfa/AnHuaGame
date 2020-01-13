@@ -214,6 +214,17 @@ function GameMaJiangRoomEnd:updatePlayerInfo(pBuffer)
 			uitotal_score_1:setText(string.format("%d", tScoreInfo.totalScore))
 		end
 		--self:updatePlayerStatics(item, pBuffer.statistics[i],tScoreInfo.totalScore)
+		uitotal_score:setVisible(false)
+		uitotal_score_1:setVisible(false)
+
+		local uiText_result = ccui.Helper:seekWidgetByName(item,"Text_result")
+		if tScoreInfo.totalScore >= 0 then
+			uiText_result:setTextColor(cc.c3b(175,49,52))
+			uiText_result:setString(string.format("+%d\n(赛:%0.2f)",tScoreInfo.totalScore,pBuffer.lWriteScoreArr[i]/100))
+		else
+			uiText_result:setTextColor(cc.c3b(35,102,69))
+			uiText_result:setString(string.format("%d\n(赛:%0.2f)",tScoreInfo.totalScore,pBuffer.lWriteScoreArr[i]/100))
+		end
 
 		self.center:addChild(item)
 		item:setPosition(Pos[i])

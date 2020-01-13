@@ -512,6 +512,9 @@ function TableLayer:doAction(action,pBuffer)
     elseif action == NetMsgId.SUB_S_ACTION_BAOTINGCARD then     -- 土匪麻将独有的消息
        
     elseif action == NetMsgId.SUB_S_OPERATE_RESULT then
+
+        GameCommon.IsOfHu = 0
+        GameCommon.iNOoutcard = false        
         GameCommon.waitOutCardUser = pBuffer.wOperateUser               
         local uiPanel_operation = ccui.Helper:seekWidgetByName(self.root,"Panel_operation")
         uiPanel_operation:removeAllChildren()
@@ -1447,7 +1450,7 @@ function TableLayer:showCountDown(wChairID)
         --     time = 3
         -- end 
     end 
-    
+    uiAtlasLabel_countdownTime:setString(time)
     local function onEventTime(sender,event)
         local currentTime = tonumber(uiAtlasLabel_countdownTime:getString())
         currentTime = currentTime - 1
@@ -3383,6 +3386,7 @@ function TableLayer:showHandCard(data)
     local cbAction = data.cbAction
     local cbOutCard = data.cbOutCard
     local cbSendCard = data.cbSendCard
+    local cbGameEnd = data.GameEnd 
     local viewID = GameCommon:getViewIDByChairID(wChairID)
     local cbCardData = clone(GameCommon.player[wChairID].cbCardData)
     local cbCardCount = clone(GameCommon.player[wChairID].cbCardCount)
@@ -3426,17 +3430,24 @@ function TableLayer:showHandCard(data)
         local cardHeight = 114*cardScale
         local step = cardWidth
         local began = 81/2 + (14-cbCardCount-1) * 81 + (14-cbCardCount)/3*5
-        if GameCommon.waitOutCardUser == wChairID then
+        if GameCommon.waitOutCardUser == wChairID or cbGameEnd ~= nil then
             began = 81/2 + (14-cbCardCount) * 81 + (14-cbCardCount)/3*5
         end
         for i=1,cbCardCount do
             local card = GameCommon:GetCardHand(cbCardData[i],viewID)
-            if GameCommon.mBaoTingCard ~= nil and GameCommon.mBaoTingCard[1] ~= 0 then  
-                local liang = ccui.ImageView:create("common/ting.png")            
+            if GameCommon.mBaoTingCard ~= nil and GameCommon.mBaoTingCard[1] ~= 0 and GameCommon.tingpai == 1 then  
+                local liang = ccui.ImageView:create("common/hudejiaobiao1.png")            
                 for j = 1 , 14 do
                     if GameCommon.mBaoTingCard[j] == cbCardData[i] then 
-                        card:addChild(liang)
-                        liang:setPosition(18,85)
+                        if GameCommon.tableConfig.wKindID == 92 then  
+                            if GameCommon.mBaoTingCard[j] ~= GameCommon.cbKingCard[1] and  GameCommon.mBaoTingCard[j] ~= GameCommon.cbKingCard[2] then 
+                                card:addChild(liang)
+                                liang:setPosition(77,94) 
+                            end 
+                        else
+                            card:addChild(liang)
+                            liang:setPosition(77,94) 
+                        end 
                         break
                     end 
                 end 
@@ -3488,7 +3499,7 @@ function TableLayer:showHandCard(data)
                     self:showHuCardLayer(wChairID,card.data)
                     -- self:setAllCardGray(nil,false)
                     -- self:setAllCardGray(card.data,true)  
-                    if GameCommon.mBaoTingCard ~= nil and GameCommon.mBaoTingCard[1] ~= 0 then  
+                    if GameCommon.mBaoTingCard ~= nil and GameCommon.mBaoTingCard[1] ~= 0  and GameCommon.tingpai == 1  then  
                         for i = 1, 14 do 
                             print("________",card.data,GameCommon.mBaoTingCard[i],i,GameCommon.mBTHuCard)
                             if card.data  ~= nil and card.data ~= 0x31 and card.data == GameCommon.mBaoTingCard[i] and GameCommon.mBTHuCard ~= nil then 
@@ -3507,7 +3518,7 @@ function TableLayer:showHandCard(data)
                             end 
                         end
                     end
-                    if a == true then 
+                    if a == true  and GameCommon.tingpai == 1  then 
                         self:huCardShow(1)
                     end 
                     if self.copyHandCard ~= nil then
@@ -3714,6 +3725,8 @@ function TableLayer:initUI()
     uiImage_watermark:ignoreContentAdaptWithSize(true)
     local uiText_desc = ccui.Helper:seekWidgetByName(self.root,"Text_desc")
     uiText_desc:setString("")
+    local uiText_table = ccui.Helper:seekWidgetByName(self.root,"Text_table")
+    uiText_table:setString("")
     local uiText_time = ccui.Helper:seekWidgetByName(self.root,"Text_time")
     uiText_time:runAction(cc.RepeatForever:create(cc.Sequence:create(cc.CallFunc:create(function(sender,event) 
         local date = os.date("*t",os.time())
@@ -4019,7 +4032,7 @@ function TableLayer:initUI()
     Common:addTouchEventListener(ccui.Helper:seekWidgetByName(self.root,"Button_settings"),function() 
       --require("common.SceneMgr"):switchOperation(require("app.MyApp"):create():createView("SettingsLayer"))
 
-       -- local layer = require("game.majiang.MajiangSettingsLayer"):create(pBuffer)
+      -- local layer = require("game.majiang.MajiangSettingsLayer"):create(pBuffer)
         local layer = require("app.MyApp"):create():createGame('game.majiang.MajiangSettingsLayer')
       --  self:addChild(layer)
 
@@ -4114,6 +4127,15 @@ function TableLayer:initUI()
             end)
         end 
     end)
+
+    --取消托管
+    local uiButton_TG = ccui.Helper:seekWidgetByName(self.root,"Button_TG")
+    if uiButton_TG ~= nil then 
+       Common:addTouchEventListener(uiButton_TG,function() 
+           NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GR_USER,NetMsgId.REQ_USER_HOSTED,"o",false)
+       end)
+    end 
+    
     --结算层
     local uiPanel_end = ccui.Helper:seekWidgetByName(self.root,"Panel_end")
     uiPanel_end:setVisible(false)
@@ -4133,7 +4155,7 @@ function TableLayer:initUI()
     local uiButton_chakan = ccui.Helper:seekWidgetByName(self.root,"Button_chakan")
     uiButton_chakan:setVisible(false)  
     Common:addTouchEventListener(uiButton_chakan,function() 
-        if  GameCommon.mBTHuCard~= {} and GameCommon.mBTHuCard[1] ~={} and GameCommon.mBTHuCard[1][1] ~=nil then          -- GameCommon.mBaoTingCard[i] = pBuffer.cbGangCard[i]    GameCommon.mHuCard~= {} and GameCommon.mHuCard [1] ~=nil
+        if  GameCommon.mBTHuCard~= {} and GameCommon.mBTHuCard[1] ~={} and GameCommon.mBTHuCard[1][1] ~=nil and GameCommon.tingpai == 1 then          -- GameCommon.mBaoTingCard[i] = pBuffer.cbGangCard[i]    GameCommon.mHuCard~= {} and GameCommon.mHuCard [1] ~=nil
             self:huCardShow(0)
         else
             require("common.MsgBoxLayer"):create(0,nil,"您还未报听!!!")             
@@ -4261,9 +4283,7 @@ function TableLayer:initUI()
     end
 
 end
-
-
-function TableLayer:BaoTingCardShow(pBuffer)
+function TableLayer:BaoTingCardData(pBuffer)
     GameCommon.mBaoTingCard = {}
     local isBaoting = false
     for i = 1, 14 do
@@ -4285,8 +4305,20 @@ function TableLayer:BaoTingCardShow(pBuffer)
             end 
         end
     end 
+    if GameCommon.tingpai == 1 then 
+        self:BaoTingCardShow(isBaoting)
+    else
+        self:runAction(cc.Sequence:create(cc.DelayTime:create(0),cc.CallFunc:create(function(sender,event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))    
+    end 
+end 
 
+function TableLayer:BaoTingCardShow(event)
+    if GameCommon.mBaoTingCard ==  {} then 
+        self:runAction(cc.Sequence:create(cc.DelayTime:create(0),cc.CallFunc:create(function(sender,event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))     
+        return
+    end  
     local uiButton_chakan = ccui.Helper:seekWidgetByName(self.root,"Button_chakan")
+    local isBaoting = event
     if isBaoting == true then
         uiButton_chakan:setVisible(false)  
         local wChairID = GameCommon:getRoleChairID()
@@ -4295,15 +4327,29 @@ function TableLayer:BaoTingCardShow(pBuffer)
         uiPanel_handCard:stopAllActions()
         local items = uiPanel_handCard:getChildren()
         for k,v in pairs(items) do
-            if GameCommon.mBaoTingCard ~= nil and GameCommon.mBaoTingCard[1] ~= 0 then  
-                local liang = ccui.ImageView:create("common/ting.png")            
+            if GameCommon.mBaoTingCard ~= nil and GameCommon.mBaoTingCard[1] ~= 0  and GameCommon.tingpai == 1  then  
+                local liang = ccui.ImageView:create("common/hudejiaobiao1.png")            
+                -- for j = 1 , 14 do
+                --     if GameCommon.mBaoTingCard[j] == v.data then 
+                --         v:addChild(liang)
+                --         liang:setPosition(77,94)
+                --         break
+                --     end 
+                -- end 
                 for j = 1 , 14 do
                     if GameCommon.mBaoTingCard[j] == v.data then 
-                        v:addChild(liang)
-                        liang:setPosition(18,85)
+                        if GameCommon.tableConfig.wKindID == 92 then  
+                            if GameCommon.mBaoTingCard[j] ~= GameCommon.cbKingCard[1] and  GameCommon.mBaoTingCard[j] ~= GameCommon.cbKingCard[2] then 
+                                v:addChild(liang)
+                                liang:setPosition(77,94) 
+                            end 
+                        else
+                            v:addChild(liang)
+                            liang:setPosition(77,94) 
+                        end 
                         break
                     end 
-                end 
+                end
             end 
         end
     end
@@ -5149,7 +5195,11 @@ function TableLayer:EVENT_TYPE_SKIN_CHANGE(event)
     --         self:setDiscardCard(wChairID, GameCommon.player[wChairID].cbDiscardCount, GameCommon.player[wChairID].cbDiscardCard)
     --     end
     -- end
-    print("++++++++++++++++")
+    print("++++++++rrrr++++++++")
+
+    local wChairID = GameCommon:getRoleChairID()
+    self:showHandCard({wChairID = wChairID})
+
     local language = cc.UserDefault:getInstance():getIntegerForKey('volumeSelect', 1) 
     if language == 0 then
         GameCommon.language = 0

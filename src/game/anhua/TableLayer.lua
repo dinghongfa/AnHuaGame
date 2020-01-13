@@ -848,7 +848,21 @@ function TableLayer:showCountDown(wChairID,viewsID)
 	local Image_warning_all = ccui.Helper:seekWidgetByName(self.root, 'Image_warning_all')
 	Image_warning_all:setVisible(false)
 	AtlasLabel_countdownTime:stopAllActions()
-	AtlasLabel_countdownTime:setString(15)
+	local time = 15
+
+    if GameCommon.tableConfig.nTableType > TableType_GoldRoom and GameCommon.bHosted ~= nil then
+        -- if GameCommon.bHosted[wChairID] == false  then  
+            if GameCommon.gameConfig.bHostedTime ~= 0 then 
+                time = 60*GameCommon.gameConfig.bHostedTime
+            else
+                time = 15
+            end 
+        -- else
+        --     time = 3
+        -- end 
+    end 
+	AtlasLabel_countdownTime:setString(time)
+	
 	local function onEventTime(sender, event)
 		local currentTime = tonumber(AtlasLabel_countdownTime:getString())
 		currentTime = currentTime - 1
@@ -2104,6 +2118,9 @@ function TableLayer:initUI()
 	uiImage_watermark:ignoreContentAdaptWithSize(true)
 	local Text_playway = ccui.Helper:seekWidgetByName(self.root, "Text_playway")
 	Text_playway:setString("")
+
+	local uiText_table = ccui.Helper:seekWidgetByName(self.root,"Text_table")
+    uiText_table:setString("")
 	--卡牌层
 	local uiImage_line = ccui.Helper:seekWidgetByName(self.root, "Image_line")
 	uiImage_line:setVisible(false)
@@ -2119,37 +2136,39 @@ function TableLayer:initUI()
 	--用户层
 	for i = 1, 4 do
 		local uiPanel_player = ccui.Helper:seekWidgetByName(self.root, string.format("Panel_player%d", i))
-		uiPanel_player:setVisible(false)
-		local uiImage_avatarFrame = ccui.Helper:seekWidgetByName(uiPanel_player, "Image_avatarFrame")
-		local uiImage_avatar = ccui.Helper:seekWidgetByName(uiPanel_player, "Image_avatar")
-		uiImage_avatar:loadTexture("common/hall_avatar.png")
-		
-		uiImage_avatarFrame:setTouchEnabled(true)
-		uiImage_avatarFrame:addTouchEventListener(function(sender, event)
-			if event == ccui.TouchEventType.ended then
-				for key, var in pairs(GameCommon.player) do
-					if GameCommon:getViewIDByChairID(var.wChairID, true) == i then
-						NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GR_USER, NetMsgId.REQ_GR_USER_PLAYER_INFO, "d", var.dwUserID)
-						break
+		if uiPanel_player then
+			uiPanel_player:setVisible(false)
+			local uiImage_avatarFrame = ccui.Helper:seekWidgetByName(uiPanel_player, "Image_avatarFrame")
+			local uiImage_avatar = ccui.Helper:seekWidgetByName(uiPanel_player, "Image_avatar")
+			uiImage_avatar:loadTexture("common/hall_avatar.png")
+			
+			uiImage_avatarFrame:setTouchEnabled(true)
+			uiImage_avatarFrame:addTouchEventListener(function(sender, event)
+				if event == ccui.TouchEventType.ended then
+					for key, var in pairs(GameCommon.player) do
+						if GameCommon:getViewIDByChairID(var.wChairID, true) == i then
+							NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GR_USER, NetMsgId.REQ_GR_USER_PLAYER_INFO, "d", var.dwUserID)
+							break
+						end
 					end
 				end
-			end
-		end)
-		
-		local uiImage_laba = ccui.Helper:seekWidgetByName(uiPanel_player, "Image_laba")
-		uiImage_laba:setVisible(false)
-		local uiImage_banker = ccui.Helper:seekWidgetByName(uiPanel_player, "Image_banker")
-		uiImage_banker:setVisible(false)
-		local uiText_name = ccui.Helper:seekWidgetByName(uiPanel_player, "Text_name")
-		uiText_name:setString("")
-		local uiText_huXi = ccui.Helper:seekWidgetByName(uiPanel_player, "Text_huXi")
-		uiText_huXi:setString(0 .. '胡息')
-		local uiText_score = ccui.Helper:seekWidgetByName(uiPanel_player, "Text_score")
-		uiText_score:setString("")
-		local uiImage_ready = ccui.Helper:seekWidgetByName(uiPanel_player, "Image_ready")
-		uiImage_ready:setVisible(false)
-		local uiImage_chat = ccui.Helper:seekWidgetByName(uiPanel_player, "Image_chat")
-		uiImage_chat:setVisible(false)
+			end)
+			
+			local uiImage_laba = ccui.Helper:seekWidgetByName(uiPanel_player, "Image_laba")
+			uiImage_laba:setVisible(false)
+			local uiImage_banker = ccui.Helper:seekWidgetByName(uiPanel_player, "Image_banker")
+			uiImage_banker:setVisible(false)
+			local uiText_name = ccui.Helper:seekWidgetByName(uiPanel_player, "Text_name")
+			uiText_name:setString("")
+			local uiText_huXi = ccui.Helper:seekWidgetByName(uiPanel_player, "Text_huXi")
+			uiText_huXi:setString(0 .. '胡息')
+			local uiText_score = ccui.Helper:seekWidgetByName(uiPanel_player, "Text_score")
+			uiText_score:setString("")
+			local uiImage_ready = ccui.Helper:seekWidgetByName(uiPanel_player, "Image_ready")
+			uiImage_ready:setVisible(false)
+			local uiImage_chat = ccui.Helper:seekWidgetByName(uiPanel_player, "Image_chat")
+			uiImage_chat:setVisible(false)
+		end
 	end
 	
 	--UI层
@@ -2295,6 +2314,14 @@ function TableLayer:initUI()
 	-- 		uiPanel_playerInfoBg:setVisible(false)
 	-- 	end
 	-- end
+
+	--取消托管
+	local uiButton_TG = ccui.Helper:seekWidgetByName(self.root,"Button_TG")
+	if uiButton_TG ~= nil then 
+		Common:addTouchEventListener(uiButton_TG,function() 
+			NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GR_USER,NetMsgId.REQ_USER_HOSTED,"o",false)
+		end)
+	end 
 	--结算层
 	local uiPanel_end = ccui.Helper:seekWidgetByName(self.root, "Panel_end")
 	uiPanel_end:setVisible(false)
@@ -2528,8 +2555,10 @@ function TableLayer:updateGameState(state)
 			-- end
 			for i = 1, 4 do
 				local uiPanel_player = ccui.Helper:seekWidgetByName(self.root, string.format("Panel_player%d", i))
-				local uiImage_ready = ccui.Helper:seekWidgetByName(uiPanel_player, "Image_ready")
-				uiImage_ready:setVisible(false)
+				if uiPanel_player then
+					local uiImage_ready = ccui.Helper:seekWidgetByName(uiPanel_player, "Image_ready")
+					uiImage_ready:setVisible(false)
+				end
 			end
 		elseif GameCommon.tableConfig.nTableType == TableType_GoldRoom or GameCommon.tableConfig.nTableType == TableType_SportsRoom then
 			local uiButton_expression = ccui.Helper:seekWidgetByName(self.root, "Button_expression")
@@ -3028,20 +3057,14 @@ end
 function TableLayer:resetUserCountTimeAni()
 	for i = 1, 4 do
 		local Panel_player = ccui.Helper:seekWidgetByName(self.root, string.format("Panel_player%d", i))
-		local Panel_countdown = Panel_player:getChildByName("Panel_countdown")
-		local AtlasLabel_countdownTime = Panel_countdown:getChildByName("AtlasLabel_countdownTime")
-		Panel_countdown:setVisible(false)
-		AtlasLabel_countdownTime:stopAllActions()
-		local Image_warning = Panel_countdown:getChildByName('Image_warning')
-		Image_warning:setVisible(false)
-		-- local aniNode = Panel_countdown:getChildByName('AniTimeCount' .. i)
-		-- if not aniNode then
-		-- 	ccs.ArmatureDataManager:getInstance():addArmatureFileInfo("game/wanjiachupaitishi/wanjiachupaitishi.ExportJson")
-		-- 	local waitArmature = ccs.Armature:create("wanjiachupaitishi")
-		-- 	waitArmature:getAnimation():playWithIndex(0)
-		-- 	Panel_countdown:addChild(waitArmature)
-		-- 	waitArmature:setName('AniTimeCount' .. i)
-		-- end
+		if Panel_player then
+			local Panel_countdown = Panel_player:getChildByName("Panel_countdown")
+			local AtlasLabel_countdownTime = Panel_countdown:getChildByName("AtlasLabel_countdownTime")
+			Panel_countdown:setVisible(false)
+			AtlasLabel_countdownTime:stopAllActions()
+			local Image_warning = Panel_countdown:getChildByName('Image_warning')
+			Image_warning:setVisible(false)
+		end
 	end
 	local Image_warning_all = ccui.Helper:seekWidgetByName(self.root, 'Image_warning_all')
 	Image_warning_all:setVisible(false)

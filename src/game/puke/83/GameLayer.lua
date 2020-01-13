@@ -222,6 +222,19 @@ function GameLayer:readBuffer(luaFunc, mainCmdID, subCmdID)
             _tagMsg.pBuffer.gameConfig = PDKGameCommon.gameConfig
             _tagMsg.pBuffer.gameDesc = GameDesc:getGameDesc(PDKGameCommon.tableConfig.wKindID,PDKGameCommon.gameConfig,PDKGameCommon.tableConfig)
             _tagMsg.pBuffer.cbOrigin = luaFunc:readRecvByte() --解散原因
+            _tagMsg.pBuffer.tCMD_GR_ScoreInfoEx = {}
+            for i = 1, 8 do
+                _tagMsg.pBuffer.tCMD_GR_ScoreInfoEx[i] = {}
+                _tagMsg.pBuffer.tCMD_GR_ScoreInfoEx[i].dwUserID = luaFunc:readRecvDWORD() 
+                _tagMsg.pBuffer.tCMD_GR_ScoreInfoEx[i].lScore = {}
+                for j = 1, 20 do
+                    _tagMsg.pBuffer.tCMD_GR_ScoreInfoEx[i].lScore[j] = luaFunc:readRecvLong() 
+                end
+            end
+            _tagMsg.pBuffer.lWriteScoreArr = {}
+            for i = 1, 8 do
+                _tagMsg.pBuffer.lWriteScoreArr[i] = luaFunc:readRecvLong()
+            end
             
         elseif subCmdID == NetMsgId.SUB_GR_GAME_STATISTICS then
             _tagMsg.pBuffer.dwUserCount = luaFunc:readRecvDWORD()                       --用户总数
@@ -246,7 +259,7 @@ function GameLayer:readBuffer(luaFunc, mainCmdID, subCmdID)
 			_tagMsg.pBuffer.dwTableOwnerID = luaFunc:readRecvDWORD()                    --房主ID
 			_tagMsg.pBuffer.szOwnerName = luaFunc:readRecvString(32)                    --房主名字
             _tagMsg.pBuffer.szGameID = luaFunc:readRecvString(32)                    --结算唯一标志
-            _tagMsg.pBuffer.GameCommon = PDKGameCommon
+            _tagMsg.pBuffer.PDKGameCommon = PDKGameCommon
 			_tagMsg.pBuffer.tableConfig = PDKGameCommon.tableConfig
 			_tagMsg.pBuffer.gameConfig = PDKGameCommon.gameConfig
             _tagMsg.pBuffer.gameDesc = GameDesc:getGameDesc(PDKGameCommon.tableConfig.wKindID, PDKGameCommon.gameConfig, PDKGameCommon.tableConfig)
@@ -258,6 +271,11 @@ function GameLayer:readBuffer(luaFunc, mainCmdID, subCmdID)
             _tagMsg.pBuffer.lMaxScore = {}
             for i = 1, 8 do
                 _tagMsg.pBuffer.lMaxScore[i] = luaFunc:readRecvLong() --最大分  
+            end
+
+            _tagMsg.pBuffer.lWriteScoreArr = {}
+            for i = 1, 8 do
+                _tagMsg.pBuffer.lWriteScoreArr[i] = luaFunc:readRecvLong() --写入分  
             end
             local a = 1
         elseif subCmdID == NetMsgId.SUB_GR_USER_CONNECT then
@@ -304,6 +322,17 @@ function GameLayer:readBuffer(luaFunc, mainCmdID, subCmdID)
         elseif subCmdID == NetMsgId.SUB_GR_TABLE_STATUS then 
             PDKGameCommon.tableConfig.wTableNumber = luaFunc:readRecvWORD()       --房间局数
             PDKGameCommon.tableConfig.wCurrentNumber = luaFunc:readRecvWORD()    --当前局数
+            PDKGameCommon.tableConfig.lUserScore = {}
+            for i = 1 , 8 do 
+                PDKGameCommon.tableConfig.lUserScore[i] = luaFunc:readRecvLong()    --用户积分
+            end 
+            PDKGameCommon.tableConfig.isShowFatigueValue =  luaFunc:readRecvBool()    --是否显示疲劳值
+            PDKGameCommon.tableConfig.lFatigueValue = {}
+            for i = 1 , 8 do 
+                PDKGameCommon.tableConfig.lFatigueValue[i] = luaFunc:readRecvLong()    --疲劳值
+            end 
+
+            self:updatePlayerlfatigue()
             local uiText_title = ccui.Helper:seekWidgetByName(self.root,"Text_title")
             local uiText_des = ccui.Helper:seekWidgetByName(self.root,"Text_des")
             local roomId = PDKGameCommon.tableConfig.wTbaleID or 0
@@ -403,6 +432,24 @@ function GameLayer:readBuffer(luaFunc, mainCmdID, subCmdID)
             _tagMsg.pBuffer.szChatContent = luaFunc:readRecvString(_tagMsg.pBuffer.dwChatLength)
             self.tableLayer:showChat(_tagMsg.pBuffer)
             return
+
+        elseif subCmdID == NetMsgId.RET_USER_HOSTED then            
+            --托管
+            _tagMsg.pBuffer.dwUserID = luaFunc:readRecvDWORD()              --用户ID
+            _tagMsg.pBuffer.wChairID = luaFunc:readRecvWORD()               --桌子ID
+
+            _tagMsg.pBuffer.bHosted = {}                                            --托管或取消托管
+            for i = 0, 7 do
+                _tagMsg.pBuffer.bHosted[i] = luaFunc:readRecvByte()
+            end  
+
+            _tagMsg.pBuffer.cbHostedSession = {}                                    --已托管场次
+            for i = 0, 7 do
+                _tagMsg.pBuffer.cbHostedSession[i] = luaFunc:readRecvByte()
+            end
+
+            self:updatePlayerTG(_tagMsg.pBuffer)
+            return true   
         elseif subCmdID == NetMsgId.RET_GET_REDENVELOPE_REWARD then	
             _tagMsg.pBuffer.lRet = luaFunc:readRecvLong()   --0成功   1活动结束     2参数错误   3 玩家不存在           
             _tagMsg.pBuffer.bType = luaFunc:readRecvByte()      --0金币	1红包
@@ -420,6 +467,12 @@ function GameLayer:readBuffer(luaFunc, mainCmdID, subCmdID)
             PDKGameCommon.gameConfig = require("common.GameConfig"):getParameter(PDKGameCommon.tableConfig.wKindID,luaFunc)
             local uiText_desc = ccui.Helper:seekWidgetByName(self.root,"Text_desc")
             uiText_desc:setString(GameDesc:getGameDesc(PDKGameCommon.tableConfig.wKindID,PDKGameCommon.gameConfig,PDKGameCommon.tableConfig))
+            if PDKGameCommon.tableConfig.szTableName ~= nil and PDKGameCommon.tableConfig.szTableName ~="" then  
+                local uiText_table = ccui.Helper:seekWidgetByName(self.root,"Text_table")
+                uiText_table:setString(PDKGameCommon.tableConfig.szTableName)
+                local CellScore = PDKGameCommon.tableConfig.wCellScore / PDKGameCommon.tableConfig.wTableCellDenominator
+                --uiText_table:setString(PDKGameCommon.tableConfig.szTableName..string.format(" 倍率:%0.2f",CellScore))
+            end 
             return true
         elseif subCmdID == NetMsgId.REC_SUB_S_JIAPIAO then
             _tagMsg.pBuffer.bIsJiaPiao = {}
@@ -506,6 +559,10 @@ function GameLayer:readBuffer(luaFunc, mainCmdID, subCmdID)
             _tagMsg.pBuffer.cbFalseSpring = {}   -- 假春天参数
             for i=1,3 do
                 _tagMsg.pBuffer.cbFalseSpring[i] = luaFunc:readRecvBool()
+            end
+            _tagMsg.pBuffer.lWriteScoreArr = {}
+            for i = 1, 3 do
+                _tagMsg.pBuffer.lWriteScoreArr[i] = luaFunc:readRecvLong()
             end
 
             
@@ -656,7 +713,7 @@ function GameLayer:OnGameMessageRun(_tagMsg)
         -- end
 
         if subCmdID == NetMsgId.SUB_GR_GAME_STATISTICS then
-            self:updatePlayerlScore()
+        --    self:updatePlayerlScore()
             self:removeAllChildren()
             local path = self:requireClass('PDKGameRoomEnd')
             local box = require("app.MyApp"):create(pBuffer):createGame(path)
@@ -692,6 +749,7 @@ function GameLayer:OnGameMessageRun(_tagMsg)
             print("++++++++接受++++++~~~~~~",PDKGameCommon.gameConfig)
             PDKGameCommon.gameState = 1    --游戏已经开始
             self:updatePlayerPiaoFen(pBuffer)
+            self.tableLayer:showCountDown(PDKGameCommon.wBankerUser,1)
             self:runAction(cc.Sequence:create(cc.DelayTime:create(0),cc.CallFunc:create(function(sender,event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end))) 
         elseif subCmdID == NetMsgId.REC_SUB_S_SHOW_CARD_PDK then
             local wChairID = pBuffer.wChairID
@@ -735,7 +793,7 @@ function GameLayer:OnGameMessageRun(_tagMsg)
                     end
                 end
             end
-            self:updatePlayerlScore()
+        --    self:updatePlayerlScore()
             self.tableLayer:updateGameState(PDKGameCommon.GameState_Over)
             self.tableLayer:doAction(NetMsgId.SUB_S_GAME_END_PDK, {wWinUser = pBuffer.wWinUser,bUserCardCount = pBuffer.bUserCardCount})
             for i = 1, PDKGameCommon.gameConfig.bPlayerCount do
@@ -876,12 +934,9 @@ function GameLayer:updatePlayerInfo()
             uiText_ip:setString(string.format("UID:%d",PDKGameCommon.player[wChairID].dwUserID) )
             local Text_score = ccui.Helper:seekWidgetByName(uiPanel_player,"Text_score") 
             --个人添加
-            local uiText_score = ccui.Helper:seekWidgetByName(uiPanel_player,"Text_score")
-            if viewID == 1 then 
-                local  a = 1 
-            end 
-            local dwGold = Common:itemNumberToString(PDKGameCommon.player[wChairID].lScore)
-            uiText_score:setString(tostring(dwGold))             
+            -- local uiText_score = ccui.Helper:seekWidgetByName(uiPanel_player,"Text_score")
+            -- local dwGold = Common:itemNumberToString(PDKGameCommon.player[wChairID].lScore)
+            -- uiText_score:setString(tostring(dwGold))             
         end
     end
     self.tableLayer:refreshTableInfo()
@@ -939,6 +994,26 @@ function GameLayer:updatePlayerlScore()
         uiText_score:setString(tostring(dwGold))   
     end
 end
+
+function GameLayer:updatePlayerlfatigue()
+    if PDKGameCommon.gameConfig == nil then
+        return
+    end
+    for i = 1 , PDKGameCommon.gameConfig.bPlayerCount do
+        local wChairID = i-1
+        local viewID = PDKGameCommon:getViewIDByChairID(wChairID)
+        local uiPanel_player = ccui.Helper:seekWidgetByName(self.root,string.format("Panel_player%d",viewID))
+
+        local uiText_score = ccui.Helper:seekWidgetByName(uiPanel_player,"Text_score")
+        uiText_score:setString(string.format("%d",PDKGameCommon.tableConfig.lUserScore[i]))   
+        local uiText_fatigueValue = ccui.Helper:seekWidgetByName(uiPanel_player,"Text_fatigueValue")
+        if PDKGameCommon.tableConfig.isShowFatigueValue then
+            uiText_fatigueValue:setString(string.format("%0.2f",PDKGameCommon.tableConfig.lFatigueValue[i]/100))
+        else
+            uiText_fatigueValue:setString("")
+        end
+    end 
+end 
 
 function GameLayer:updateBankerUser()
     for i = 1 , PDKGameCommon.gameConfig.bPlayerCount do
@@ -1057,6 +1132,36 @@ function GameLayer:userInfoState( wChairID,isInGame )
     
         local Image_avatarFrame = ccui.Helper:seekWidgetByName(uiPanel_player,"Image_avatarFrame")
         Image_avatarFrame:setVisible(isInGame)
+    end
+end
+
+--托管中
+function GameLayer:updatePlayerTG(pBuffer)   
+    if PDKGameCommon.gameConfig == nil then
+        return
+    end
+    local uiPanel_player = ccui.Helper:seekWidgetByName(self.root,"Panel_player")
+    local uiPanel_TG = ccui.Helper:seekWidgetByName(self.root,"Panel_TG")
+    uiPanel_TG:setVisible(false)
+    PDKGameCommon.bHosted = pBuffer.bHosted
+    for i = 1 , PDKGameCommon.gameConfig.bPlayerCount do
+        local wChairID = i-1
+        if PDKGameCommon.player ~= nil and PDKGameCommon.player[wChairID] ~= nil then
+            local viewID = PDKGameCommon:getViewIDByChairID(wChairID)
+            local Panel_player = ccui.Helper:seekWidgetByName(self.root,string.format("Panel_player%d",viewID))
+            local uiImage_TG = ccui.Helper:seekWidgetByName(Panel_player,"Image_TG") 
+            print("托管——————————————",viewID,wChairID,i,PDKGameCommon.gameConfig.bPlayerCount,uiImage_TG,Panel_player,pBuffer.bHosted[wChairID])
+            if pBuffer.bHosted[wChairID] == 0 then
+                uiImage_TG:setVisible(false)
+            else
+                if uiImage_TG ~= nil then 
+                    uiImage_TG:setVisible(true)
+                end 
+                if viewID  == 1 then
+                    uiPanel_TG:setVisible(true)
+                end
+            end
+        end     
     end
 end
 

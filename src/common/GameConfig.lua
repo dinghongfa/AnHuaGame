@@ -217,9 +217,11 @@ function GameConfig:getParameter(wKindID,luaFunc)
         data.bJiaPiao = luaFunc:readRecvByte()             --0不漂分 1漂123 2漂235 3漂258
         data.bThreeEx = luaFunc:readRecvByte()             --0 三带两张  1 三带1张、2张、不带
         data.b4Add2 = luaFunc:readRecvByte()                --是否可4带2        0无      1有
-        data.bHostedTime = luaFunc:readRecvByte()                --是否可4带2        0无      1有
+        data.bHostedTime = luaFunc:readRecvByte()                 --托管时间
         data.bHostedSession = luaFunc:readRecvByte()                 --托管局数
-        data.bDistanceLimit = luaFunc:readRecvByte()                 --托管局数
+        data.bDistanceLimit = luaFunc:readRecvByte()                 --距离限制
+
+        
         haveReadByte = 21    --已读长度，每次增加或者减少都要修改该值，Byte1个字节 WORD2个字节 DWORD4个字节
 
     elseif wKindID == 84 then 
@@ -730,8 +732,10 @@ function GameConfig:getParameter(wKindID,luaFunc)
         data.bHuangFanAddUp = luaFunc:readRecvByte()
         data.bTingHuAll = luaFunc:readRecvByte()
 		data.bDeathCard = luaFunc:readRecvByte()                    --0 不抽低  1 抽牌20张 
-		data.bPaPo = luaFunc:readRecvByte()
-        haveReadByte = 29    --已读长度，每次增加或者减少都要修改该值，Byte1个字节 WORD2个字节 DWORD4个字节
+        data.bPaPo = luaFunc:readRecvByte()
+        data.bHostedTime = luaFunc:readRecvByte()                 --托管时间
+        data.bHostedSession = luaFunc:readRecvByte()                 --托管局数
+        haveReadByte = 31    --已读长度，每次增加或者减少都要修改该值，Byte1个字节 WORD2个字节 DWORD4个字节
    
     elseif wKindID == 78 then
         data.bPlayerCount = luaFunc:readRecvByte()          -- //参与游戏的人数
@@ -795,7 +799,10 @@ function GameConfig:getParameter(wKindID,luaFunc)
         --有无筒
         data.bWuTong = luaFunc:readRecvByte()               --1.有筒  0.无筒 (默认有筒)
         data.bFirstZhuang = luaFunc:readRecvByte()          --//1.首局随机庄家
-        haveReadByte = 22
+
+        data.bHostedTime = luaFunc:readRecvByte()                 --托管时间
+        data.bHostedSession = luaFunc:readRecvByte()                 --托管局数
+        haveReadByte = 24
 
     elseif wKindID == 81 then 
         data.bPlayerCount = luaFunc:readRecvByte()          --参与游戏的人数
@@ -870,13 +877,18 @@ function GameConfig:getParameter(wKindID,luaFunc)
         -- data.mZXFlag = luaFunc:readRecvByte()              --中途四喜 默认0  否
         -- data.bMaType = luaFunc:readRecvByte()             --金童玉女 默认0  否
         -- data.mNiaoType = luaFunc:readRecvByte()            --中途六六顺 默认0  否
-        haveReadByte = 6
+
+        data.bHostedTime = luaFunc:readRecvByte()                 --托管时间
+        data.bHostedSession = luaFunc:readRecvByte()                 --托管局数
+        haveReadByte = 8
     else
     
     end
-    local Log               = require("common.Log")
-    print("+++++++++++++",wKindID,haveReadByte)
-    Log.d(data)
+    
+    for i = haveReadByte+1, 128 do
+        luaFunc:readRecvByte()
+    end
+    
     return data, haveReadByte
 end
 

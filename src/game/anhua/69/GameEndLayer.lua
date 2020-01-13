@@ -318,25 +318,29 @@ function GameEndLayer:updateHeadImage(pBuffer)
     for key, var in pairs(GameCommon.player) do
         print('--->>>>>>>>',pBuffer.wWinUser , var.dwUserID)
         if pBuffer.wWinUser == key then --赢家
-            self:updateImageInfo(allAvatar[1],var,pBuffer.lGameScore[var.wChairID+1])
+            self:updateImageInfo(allAvatar[1],var,pBuffer.lGameScore[var.wChairID+1],pBuffer.lWriteScoreArr[var.wChairID+1])
         else
-            self:updateImageInfo(allAvatar[index],var,pBuffer.lGameScore[var.wChairID+1])
+            self:updateImageInfo(allAvatar[index],var,pBuffer.lGameScore[var.wChairID+1],pBuffer.lWriteScoreArr[var.wChairID+1])
             index = index+1
         end
     end
 end
 
-function GameEndLayer:updateImageInfo(avatar, data,awardScore)
+function GameEndLayer:updateImageInfo(avatar, data,lGameScore,lWriteScoreArr)
     local item = avatar
     item:setVisible(true)
     Common:requestUserAvatar(data.dwUserID,data.szPto,item,"img")
     local name = item:getChildByName('name')
     name:setString(data.szNickName)
-    local score = ccui.Helper:seekWidgetByName(item,"score")
-    if score then
-        if awardScore then
-            score:setText(awardScore)
-        end
+    local uiText_result = ccui.Helper:seekWidgetByName(item,"Text_result")
+   
+    uiText_result:setFontName("fonts/DFYuanW7-GB2312.ttf")
+    if lGameScore >= 0 then 
+        uiText_result:setTextColor(cc.c3b(175,49,52))
+        uiText_result:setString(string.format("%d(赛:+%0.2f)",lGameScore,lWriteScoreArr/100))
+    else      
+        uiText_result:setTextColor(cc.c3b(0,128,0))
+        uiText_result:setString(string.format("%d(赛:%0.2f)",lGameScore,lWriteScoreArr/100))
     end
 end
 

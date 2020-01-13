@@ -440,6 +440,21 @@ function GameEndLayer:onCreate(pBuffer)
 			uiBitmapFontLabel:setText(string.format("%d", pBuffer.lGameScore[i]))
         end
 
+        uiBitmapFontLabel_1:setVisible(false)
+		uiBitmapFontLabel:setVisible(false)
+
+        local uiText_result = ccui.Helper:seekWidgetByName(item,"Text_result")
+        uiText_result:setTextColor(cc.c3b(255,209,81))
+        uiText_result:setFontName("fonts/DFYuanW7-GB2312.ttf")
+        local dwGold = pBuffer.fWriteScoreArr[i]/100
+        if pBuffer.lGameScore[i] > 0 then 
+            uiText_result:setTextColor(cc.c3b(175,49,52))
+            uiText_result:setString(string.format(" +%d\n(赛:+%0.2f)",pBuffer.lGameScore[i],dwGold))
+        else  
+            uiText_result:setTextColor(cc.c3b(35,102,69))    
+            uiText_result:setString(string.format(" %d\n(赛:%0.2f)",pBuffer.lGameScore[i],dwGold))
+        end
+
     end
     uiPanel_itemWin:release()
 end

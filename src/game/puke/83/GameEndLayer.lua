@@ -216,13 +216,18 @@ function GameEndLayer:onCreate(pBuffer)
            uiText_piao:setString(string.format("%d",PDKGameCommon.bJiaPiaoCount[key+1]))
         end 
         local uiText_result = ccui.Helper:seekWidgetByName(root,"Text_result")
-        uiText_result:setString(string.format("%d",pBuffer.lGameScore[key+1]))      
+        if pBuffer.lGameScore[key+1] > 0 then 
+            uiText_result:setTextColor(cc.c3b(175,49,52))
+            uiText_result:setString(string.format(" +%d(赛:+%0.2f)",pBuffer.lGameScore[key+1],pBuffer.lWriteScoreArr[key+1]/100))
+        else   
+            uiText_result:setTextColor(cc.c3b(35,102,69))   
+            uiText_result:setString(string.format(" %d(赛:%0.2f)",pBuffer.lGameScore[key+1],pBuffer.lWriteScoreArr[key+1]/100))
+        end
+        
         local uiText_abandon = ccui.Helper:seekWidgetByName(root,"Text_abandon")
         if pBuffer.wChariIDAbandon == var.wChairID then
             uiText_abandon:setString("(放走包赔)")
             Image_winFlag:setVisible(false)
-        -- elseif pBuffer.wWinUser == var.wChairID then
-        --     uiText_abandon:setString("(上游)")
         else
             uiText_abandon:setString("")
         end

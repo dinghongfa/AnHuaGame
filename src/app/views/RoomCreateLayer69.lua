@@ -179,6 +179,99 @@ function RoomCreateLayer:onCreate(parameter)
         self:setDefaultCheckBox(items[1])
     end
 
+    --选择托管时间
+    local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(5),"ListView_parameter"):getItems()
+    Common:addCheckTouchEventListener(items,false,function(index) 
+        local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(6),"ListView_parameter"):getItems()
+        if index == 1 then         
+            for key, var in pairs(items) do
+                var:setBright(false)
+                var:setBright(false)
+                var:setEnabled(false)
+                var:setColor(cc.c3b(170,170,170))
+                local uiText_desc = ccui.Helper:seekWidgetByName(var,"Text_desc")
+                if uiText_desc ~= nil then 
+                    uiText_desc:setTextColor(cc.c3b(109,58,44))
+                end
+            end
+        else
+            local isHaveDefault = false
+            for key, var in pairs(items) do
+                var:setEnabled(true)
+                var:setColor(cc.c3b(255,255,255)) 
+                if var:isBright() then
+                    isHaveDefault = true
+                end
+            end
+            if isHaveDefault == false then
+                items[1]:setBright(true)
+                local uiText_desc = ccui.Helper:seekWidgetByName(items[1],"Text_desc")
+                if uiText_desc ~= nil then 
+                    uiText_desc:setTextColor(cc.c3b(215,86,31))
+                end
+            end
+        end
+    end)
+    if self.recordCreateParameter["bHostedTime"] ~= nil and self.recordCreateParameter["bHostedTime"] == 1 then
+        items[2]:setBright(true)
+        local uiText_desc = ccui.Helper:seekWidgetByName(items[2],"Text_desc")
+        if uiText_desc ~= nil then 
+            uiText_desc:setTextColor(cc.c3b(215,86,31))
+        end
+    elseif self.recordCreateParameter["bHostedTime"] ~= nil and self.recordCreateParameter["bHostedTime"] == 3 then
+        items[3]:setBright(true)
+        local uiText_desc = ccui.Helper:seekWidgetByName(items[3],"Text_desc")
+        if uiText_desc ~= nil then 
+            uiText_desc:setTextColor(cc.c3b(215,86,31))
+        end
+    elseif self.recordCreateParameter["bHostedTime"] ~= nil and self.recordCreateParameter["bHostedTime"] == 5 then
+        items[4]:setBright(true)
+        local uiText_desc = ccui.Helper:seekWidgetByName(items[4],"Text_desc")
+        if uiText_desc ~= nil then 
+            uiText_desc:setTextColor(cc.c3b(215,86,31))
+        end
+    else
+        items[1]:setBright(true)
+        local uiText_desc = ccui.Helper:seekWidgetByName(items[1],"Text_desc")
+        if uiText_desc ~= nil then 
+            uiText_desc:setTextColor(cc.c3b(215,86,31))
+        end
+    end
+    
+    --选择托管局数
+    local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(6),"ListView_parameter"):getItems()
+    Common:addCheckTouchEventListener(items)
+    if self.recordCreateParameter["bHostedTime"] == nil or self.recordCreateParameter["bHostedTime"] == 0 then
+        for key, var in pairs(items) do
+            var:setBright(false)
+            var:setBright(false)
+            var:setEnabled(false)
+            var:setColor(cc.c3b(170,170,170))
+            local uiText_desc = ccui.Helper:seekWidgetByName(var,"Text_desc")
+            if uiText_desc ~= nil then 
+                uiText_desc:setTextColor(cc.c3b(109,58,44))
+            end
+        end
+    elseif self.recordCreateParameter["bHostedSession"] ~= nil and self.recordCreateParameter["bHostedSession"] == 3 then
+        items[3]:setBright(true)
+        local uiText_desc = ccui.Helper:seekWidgetByName(items[3],"Text_desc")
+        if uiText_desc ~= nil then 
+            uiText_desc:setTextColor(cc.c3b(215,86,31))
+        end
+    elseif self.recordCreateParameter["bHostedSession"] ~= nil and self.recordCreateParameter["bHostedSession"] >= 6 then
+        items[2]:setBright(true)
+        local uiText_desc = ccui.Helper:seekWidgetByName(items[2],"Text_desc")
+        if uiText_desc ~= nil then 
+            uiText_desc:setTextColor(cc.c3b(215,86,31))
+        end
+    else
+        items[1]:setBright(true)
+        local uiText_desc = ccui.Helper:seekWidgetByName(items[1],"Text_desc")
+        if uiText_desc ~= nil then 
+            uiText_desc:setTextColor(cc.c3b(215,86,31))
+        end
+    end
+
     if self.showType == 3 then
         self.tableFriendsRoomParams = {[1] = {wGameCount = 1}}
         self:SUB_CL_FRIENDROOM_CONFIG_END()
@@ -229,7 +322,7 @@ function RoomCreateLayer:SUB_CL_FRIENDROOM_CONFIG_END(event)
                 isFound = true
                 local uiText_desc = ccui.Helper:seekWidgetByName(var,"Text_desc")
                 if uiText_desc ~= nil then 
-                    uiText_desc:setTextColor(cc.c3b(238,105,40))
+                    uiText_desc:setTextColor(cc.c3b(215,86,31))
                 end
                 if uiText_addition ~= nil then 
                     uiText_addition:setTextColor(cc.c3b(238,105,40))
@@ -255,7 +348,7 @@ function RoomCreateLayer:SUB_CL_FRIENDROOM_CONFIG_END(event)
         items[1]:setBright(true)
         local uiText_desc = ccui.Helper:seekWidgetByName(items[1],"Text_desc")
         if uiText_desc ~= nil then 
-            uiText_desc:setTextColor(cc.c3b(238,105,40))
+            uiText_desc:setTextColor(cc.c3b(215,86,31))
         end
         local uiText_addition = ccui.Helper:seekWidgetByName(items[1],"Text_addition")
         if uiText_addition ~= nil then 
@@ -289,18 +382,6 @@ function RoomCreateLayer:onEventCreate(nTableType)
     else
         return
     end
-    tableParameter.bCanHuXi = 15
-    --起胡胡息
-    local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(4),"ListView_parameter"):getItems()
-    if items[1]:isBright() then
-         tableParameter.bCanHuXi = 15
-    elseif items[2]:isBright() then
-        tableParameter.bCanHuXi = 18
-    elseif items[3]:isBright() then
-        tableParameter.bCanHuXi = 21
-    else
-        return
-    end
 
     --爬坡
     local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(2),"ListView_parameter"):getItems()
@@ -331,7 +412,43 @@ function RoomCreateLayer:onEventCreate(nTableType)
         tableParameter.bStartBanker = 0
     else
         tableParameter.bStartBanker = 1
+    end   
+       
+    tableParameter.bCanHuXi = 15
+    --起胡胡息
+    local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(4),"ListView_parameter"):getItems()
+    if items[1]:isBright() then
+         tableParameter.bCanHuXi = 15
+    elseif items[2]:isBright() then
+        tableParameter.bCanHuXi = 18
+    elseif items[3]:isBright() then
+        tableParameter.bCanHuXi = 21
+    else
+        return
     end
+
+    tableParameter.bHostedTime = 0
+    local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(5),"ListView_parameter"):getItems()
+    if items[1]:isBright() then
+        tableParameter.bHostedTime = 0
+    elseif items[2]:isBright() then
+        tableParameter.bHostedTime = 1
+    elseif items[3]:isBright() then
+        tableParameter.bHostedTime = 2
+    elseif items[4]:isBright() then
+        tableParameter.bHostedTime = 3
+    end    
+    
+    --选择托管局数
+    tableParameter.bHostedSession = 0
+    local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(6),"ListView_parameter"):getItems()
+    if items[1]:isBright() then
+        tableParameter.bHostedSession = 1
+    elseif items[2]:isBright() then
+        tableParameter.bHostedSession =  tableParameter.wGameCount
+    elseif items[3]:isBright() then
+        tableParameter.bHostedSession = 3
+    end 
   
     tableParameter.bDelShuaHou = 1
     tableParameter.bTingHuAll = 2
@@ -426,7 +543,7 @@ function RoomCreateLayer:setDefaultCheckBox(item)
     local uiText_addition = ccui.Helper:seekWidgetByName(item,"Text_addition")
     item:setBright(true)
     if uiText_desc ~= nil then 
-        uiText_desc:setTextColor(cc.c3b(238,105,40))
+        uiText_desc:setTextColor(cc.c3b(215,86,31))
     end
     if uiText_addition ~= nil then 
         uiText_addition:setTextColor(cc.c3b(238,105,40))

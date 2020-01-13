@@ -472,7 +472,7 @@ function GameOperation:onCreate(opType, cbOperateCode, cbOperateCard, cbCardInde
 		end
 	end
 	
-	self.layout = cc.UserDefault:getInstance():getIntegerForKey('HHlayout',0)
+	self.layout = cc.UserDefault:getInstance():getIntegerForKey('HHlayout',1)
 	self.isLeft = self.layout ~= 1
 
 	self:changeLayout()
@@ -593,6 +593,27 @@ function GameOperation:createChild(chidCardTable, front,isLeft,operateTag)
 		item_list:setContentSize(bgSize)
 		image_root:setContentSize(rootSize)
 		self.Panel_image_root:addChild(image_root)
+		self.Panel_image_root:setContentSize(rootSize)
+
+		if #self.Panel_image_root:getChildren() > 0 then
+			local width_1 = 0
+			local width_2 = 0
+			for key, var in pairs(self.Panel_image_root:getChildren()) do
+				print("吃牌++++++++",width,"++++++++++++++++",var:getContentSize().width,key)
+				width_2 = width_2 + var:getContentSize().width + 80	
+				if key ==  1 then 
+					width_1 = width_2
+				end 
+			end
+			self.Panel_image_root:setContentSize(cc.size(width,100))
+			print("吃牌++++++++",width_1,"++++++++++++++++",width_2,cc.Director:getInstance():getVisibleSize().width/2)
+			-- self.Panel_image_root:setColor(cc.c3b(99, 73, 41))- 
+			self.Panel_image_root:setPositionX(cc.Director:getInstance():getVisibleSize().width/2+width_1/2-width_2/2)
+		else
+			self.Panel_image_root:setVisible(false)
+			print("吃牌错误!")
+		end
+
 		local pos = self:getNextChildPosX(isLeft)
 		image_root:setPosition(pos, 0)
 		item_list:setPosition(rootSize.width / 2,rootSize.height/2-50)
@@ -751,19 +772,28 @@ function GameOperation:changeLayout( ... )
 			self.Panel_image_root:setPosition(x,y)
 		end
 		
+		-- local items = uiPanel_operation:getChildren()
+		-- local interval = 100
+		-- local width = items[1]:getContentSize().width
+		-- for i = #items, 1, - 1 do
+		-- 	if items[i] then
+		-- 		if i == 2 then
+		-- 			interval = interval * 0.5
+		-- 		end
+		-- 		local idx = #items - i + 1
+		-- 		local posX = uiPanel_operation:getContentSize().width -(idx - 1) *(width + interval) - 125
+		-- 		items[i]:setPosition(posX, uiPanel_operation:getContentSize().height / 2)
+		-- 	end
+		-- end
+
 		local items = uiPanel_operation:getChildren()
-		local interval = 100
+		local interval = 50
 		local width = items[1]:getContentSize().width
-		for i = #items, 1, - 1 do
-			if items[i] then
-				if i == 2 then
-					interval = interval * 0.5
-				end
-				local idx = #items - i + 1
-				local posX = uiPanel_operation:getContentSize().width -(idx - 1) *(width + interval) - 125
-				items[i]:setPosition(posX, uiPanel_operation:getContentSize().height / 2)
-			end
+		local beganPos =(uiPanel_operation:getContentSize().width - #items * width -(#items - 1) * interval) / 2 + width / 2
+		for key, var in pairs(items) do
+			var:setPosition(beganPos +(key - 1) *(width + interval), uiPanel_operation:getContentSize().height / 2)
 		end
+
 		uiPanel_operation:setPosition(visibleSize.width * 0.5, visibleSize.height * 0.5)
 	else
 		local x = visibleSize.width - 640

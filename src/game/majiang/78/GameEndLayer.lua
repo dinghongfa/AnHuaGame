@@ -360,7 +360,7 @@ function GameEndLayer:onCreate(pBuffer)
         local uiText_PiaoFunzi = ccui.Helper:seekWidgetByName(item,"Text_PiaoFunzi")
         uiText_PiaoFunzi:setColor(cc.c3b(127,90,46))
         local uiText_PiaoFun = ccui.Helper:seekWidgetByName(item,"Text_PiaoFun")
-        if GameCommon.gameConfig.bJiaPiao ~= 0 and GameCommon.wPiaoCount[i-1] ~= 0 then 
+        if GameCommon.gameConfig.bJiaPiao ~= 0 and GameCommon.wPiaoCount[i-1] ~= nil and GameCommon.wPiaoCount[i-1] ~= 0 then 
             uiText_PiaoFun:setString(string.format("%d",GameCommon.wPiaoCount[i-1]))
         else
             uiText_PiaoFun:setString("")
@@ -400,7 +400,20 @@ function GameEndLayer:onCreate(pBuffer)
 		else
 			uiBitmapFontLabel:setText(string.format("%d", pBuffer.lGameScore[i]))
         end
-
+        uiBitmapFontLabel:setVisible(false)
+        uiBitmapFontLabel_1:setVisible(false)
+        
+        local uiText_result = ccui.Helper:seekWidgetByName(item,"Text_result")
+        uiText_result:setTextColor(cc.c3b(255,209,81))
+        uiText_result:setFontName("fonts/DFYuanW7-GB2312.ttf")
+        local dwGold = pBuffer.fWriteScoreArr[i]/100
+        if pBuffer.lGameScore[i] > 0 then 
+            uiText_result:setTextColor(cc.c3b(175,49,52))
+            uiText_result:setString(string.format(" +%d\n(赛:+%0.2f)",pBuffer.lGameScore[i],dwGold))
+        else   
+            uiText_result:setTextColor(cc.c3b(35,102,69))   
+            uiText_result:setString(string.format(" %d\n(赛:%0.2f)",pBuffer.lGameScore[i],dwGold))
+        end
     end
     uiPanel_itemWin:release()
 end

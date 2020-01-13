@@ -15,6 +15,8 @@ function AHSetting:onConfig()
 		{'Button_effect', 'onMusicEffect'},
 		{'Button_language', 'onLanguageCall'},
 		{'Panel_mask','onClose'},
+		{'Button_tingpai'},
+		{'Text_tingpai'},
 	}
 end
 
@@ -24,6 +26,9 @@ function AHSetting:onCreate()
 	
 	self.Button_music:setBright((Music:getVolumeMusic() > 0))
 	self.Button_effect:setBright((Music:getVolumeSound() > 0))
+
+	self.Button_tingpai:setVisible(false)
+	self.Text_tingpai:setVisible(false)
 end
 
 function AHSetting:onClose()

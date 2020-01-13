@@ -265,6 +265,17 @@ function GameLayer:readBuffer(luaFunc, mainCmdID, subCmdID)
         elseif subCmdID == NetMsgId.SUB_GR_TABLE_STATUS then 
             DDZGameCommon.tableConfig.wTableNumber = luaFunc:readRecvWORD()       --房间局数
             DDZGameCommon.tableConfig.wCurrentNumber = luaFunc:readRecvWORD()    --当前局数
+            GameCommon.tableConfig.lUserScore = {}
+            for i = 1 , 8 do 
+                GameCommon.tableConfig.lUserScore[i] = luaFunc:readRecvLong()    --用户积分
+            end 
+            GameCommon.tableConfig.isShowFatigueValue =  luaFunc:readRecvBool()    --是否显示疲劳值
+            GameCommon.tableConfig.lFatigueValue = {}
+            for i = 1 , 8 do 
+                GameCommon.tableConfig.lFatigueValue[i] = luaFunc:readRecvLong()    --疲劳值
+            end 
+
+            self:updatePlayerlfatigue()
             local uiText_title = ccui.Helper:seekWidgetByName(self.root,"Text_title")
             local uiText_des = ccui.Helper:seekWidgetByName(self.root,"Text_des")
             local roomId = DDZGameCommon.tableConfig.wTbaleID or 0
@@ -363,6 +374,24 @@ function GameLayer:readBuffer(luaFunc, mainCmdID, subCmdID)
             _tagMsg.pBuffer.szChatContent = luaFunc:readRecvString(_tagMsg.pBuffer.dwChatLength)
             self.tableLayer:showChat(_tagMsg.pBuffer)
             return
+
+        elseif subCmdID == NetMsgId.RET_USER_HOSTED then            
+            --托管
+            _tagMsg.pBuffer.dwUserID = luaFunc:readRecvDWORD()              --用户ID
+            _tagMsg.pBuffer.wChairID = luaFunc:readRecvWORD()               --桌子ID
+
+            _tagMsg.pBuffer.bHosted = {}                                            --托管或取消托管
+            for i = 0, 7 do
+                _tagMsg.pBuffer.bHosted[i] = luaFunc:readRecvByte()
+            end  
+
+            _tagMsg.pBuffer.cbHostedSession = {}                                    --已托管场次
+            for i = 0, 7 do
+                _tagMsg.pBuffer.cbHostedSession[i] = luaFunc:readRecvByte()
+            end
+
+            self:updatePlayerTG(_tagMsg.pBuffer)
+            return true   
         elseif subCmdID == NetMsgId.RET_GET_REDENVELOPE_REWARD then	
             _tagMsg.pBuffer.lRet = luaFunc:readRecvLong()   --0成功   1活动结束     2参数错误   3 玩家不存在           
             _tagMsg.pBuffer.bType = luaFunc:readRecvByte()      --0金币	1红包
@@ -381,6 +410,12 @@ function GameLayer:readBuffer(luaFunc, mainCmdID, subCmdID)
             DDZGameCommon.gameConfig = require("common.GameConfig"):getParameter(DDZGameCommon.tableConfig.wKindID,luaFunc)
             local uiText_desc = ccui.Helper:seekWidgetByName(self.root,"Text_desc")
             uiText_desc:setString(GameDesc:getGameDesc(DDZGameCommon.tableConfig.wKindID,DDZGameCommon.gameConfig,DDZGameCommon.tableConfig))
+            if GameCommon.tableConfig.szTableName ~= nil and GameCommon.tableConfig.szTableName ~="" then  
+                local uiText_table = ccui.Helper:seekWidgetByName(self.root,"Text_table")
+                uiText_table:setString(GameCommon.tableConfig.szTableName)
+                local CellScore = GameCommon.tableConfig.wCellScore / GameCommon.tableConfig.wTableCellDenominator
+                --uiText_table:setString(GameCommon.tableConfig.szTableName..string.format(" 倍率:%0.2f",CellScore))
+            end 
             return true
         elseif subCmdID == NetMsgId.REC_SUB_S_JIAPIAO then
             _tagMsg.pBuffer.bIsJiaPiao = {}
@@ -755,7 +790,7 @@ function GameLayer:OnGameMessageRun(_tagMsg)
                     DDZGameCommon.player[i].lScore = DDZGameCommon.player[i].lScore + pBuffer.lBombScore[i+1]
                 end
             end
-            self:updatePlayerlScore()
+--            self:updatePlayerlScore()
             self:runAction(cc.Sequence:create(cc.DelayTime:create(0),cc.CallFunc:create(function(sender,event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))
         elseif subCmdID == NetMsgId.SUB_S_WARN_INFO_PDK then
             self.tableLayer:doAction(NetMsgId.SUB_S_WARN_INFO_PDK,pBuffer)
@@ -781,7 +816,7 @@ function GameLayer:OnGameMessageRun(_tagMsg)
                     end
                 end
             end
-            self:updatePlayerlScore()
+ --           self:updatePlayerlScore()
             self.tableLayer:updateGameState(DDZGameCommon.GameState_Over)
             self.tableLayer:doAction(NetMsgId.SUB_S_GAME_END_PDK, {wWinUser = pBuffer.wWinUser,bUserCardCount = pBuffer.bUserCardCount})
             for i = 1, DDZGameCommon.gameConfig.bPlayerCount do
@@ -931,10 +966,10 @@ function GameLayer:updatePlayerInfo()
             local uiText_name = ccui.Helper:seekWidgetByName(uiPanel_player,"Text_name")
             uiText_name:setString(DDZGameCommon.player[wChairID].szNickName)
             local Text_score = ccui.Helper:seekWidgetByName(uiPanel_player,"Text_score") 
-            --个人添加
-            local uiText_score = ccui.Helper:seekWidgetByName(uiPanel_player,"Text_score")
-            local dwGold = Common:itemNumberToString(DDZGameCommon.player[wChairID].lScore)
-            uiText_score:setString(tostring(dwGold))             
+            -- --个人添加
+            -- local uiText_score = ccui.Helper:seekWidgetByName(uiPanel_player,"Text_score")
+            -- local dwGold = Common:itemNumberToString(DDZGameCommon.player[wChairID].lScore)
+            -- uiText_score:setString(tostring(dwGold))             
         end
     end
     self.tableLayer:refreshTableInfo()
@@ -1278,6 +1313,26 @@ function GameLayer:updatePlayerlScore()
         
     end
 end
+
+function GameLayer:updatePlayerlfatigue()
+    if GameCommon.gameConfig == nil then
+        return
+    end
+    for i = 1 , GameCommon.gameConfig.bPlayerCount do
+        local wChairID = i-1
+        local viewID = GameCommon:getViewIDByChairID(wChairID)
+        local uiPanel_player = ccui.Helper:seekWidgetByName(self.root,string.format("Panel_player%d",viewID))
+
+        local uiText_score = ccui.Helper:seekWidgetByName(uiPanel_player,"Text_score")
+        uiText_score:setString(string.format("%d",GameCommon.tableConfig.lUserScore[i]))   
+        local uiText_fatigueValue = ccui.Helper:seekWidgetByName(uiPanel_player,"Text_fatigueValue")
+        if GameCommon.tableConfig.isShowFatigueValue then
+            uiText_fatigueValue:setString(string.format("%0.2f",GameCommon.tableConfig.lFatigueValue[i]/100))
+        else
+            uiText_fatigueValue:setString("")
+        end
+    end 
+end 
 
 function GameLayer:updateBankerUser()
     for i = 1 , DDZGameCommon.gameConfig.bPlayerCount do

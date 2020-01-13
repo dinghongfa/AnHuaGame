@@ -121,6 +121,9 @@ function AHGameRoomEnd:playerInfo(...)
 	self.text_club:setString('亲友圈ID: ' .. self.pBuffer.tableConfig.dwClubID)
 	self.text_club:setVisible(self:isClub())
 	self.lianjie:setVisible(false)
+	for i = 1, 8 do
+		print("sdfasdfasdf",self.pBuffer.lWriteScoreArr[i])
+	end
 end
 
 function AHGameRoomEnd:initGameEnd(index, data, isWinner )
@@ -135,8 +138,7 @@ function AHGameRoomEnd:initGameEnd(index, data, isWinner )
 	local banker = self:seekWidgetByNameEx(item, "banker")
 	local id = self:seekWidgetByNameEx(item, "id")
 	local score = self:seekWidgetByNameEx(item,'score')
-	local total_score = self:seekWidgetByNameEx(item,'total_score')
-	local total_score_1 = self:seekWidgetByNameEx(item,'total_score_1')
+	local uiText_result = self:seekWidgetByNameEx(item,'Text_result')
 	local Image_bigwinner = self:seekWidgetByNameEx(item, 'Image_bigwinner')
 	local zj = self:seekWidgetByNameEx(item,'zj')
 	Common:requestUserAvatar(data.dwUserID, data.player.szPto, image_player, "img")
@@ -149,12 +151,12 @@ function AHGameRoomEnd:initGameEnd(index, data, isWinner )
 	score:setText(bigScore)
 	zj:setText(str)
 	if data.totalScore >= 0 then
-		total_score_1:setText(data.totalScore)
+		uiText_result:setTextColor(cc.c3b(211,22,27))
+		uiText_result:setText(string.format("+%d\n(赛:%0.2f)",data.totalScore,self.pBuffer.lWriteScoreArr[index]/100))
 	else
-		total_score:setText(data.totalScore)
+		uiText_result:setTextColor(cc.c3b(9,119,9))
+		uiText_result:setText(string.format("%d\n(赛:%0.2f)",data.totalScore,self.pBuffer.lWriteScoreArr[index]/100))
 	end
-	total_score_1:setVisible(data.totalScore >= 0)
-	total_score:setVisible(data.totalScore < 0)
 	Image_bigwinner:setVisible(isWinner)
 end
 

@@ -28,10 +28,12 @@ end
 
 function NewClubParnterAddMemLayer:onEnter()
     EventMgr:registListener(EventType.RET_CLUB_GROUP_INVITE ,self,self.RET_CLUB_GROUP_INVITE)
+    EventMgr:registListener(EventType.RET_ADD_CLUB_MEMBER,self,self.RET_ADD_CLUB_MEMBER)
 end
 
 function NewClubParnterAddMemLayer:onExit()
     EventMgr:unregistListener(EventType.RET_CLUB_GROUP_INVITE ,self,self.RET_CLUB_GROUP_INVITE)
+    EventMgr:unregistListener(EventType.RET_ADD_CLUB_MEMBER,self,self.RET_ADD_CLUB_MEMBER)
 end
 
 function NewClubParnterAddMemLayer:onCreate(param)
@@ -66,7 +68,7 @@ function NewClubParnterAddMemLayer:onAddMem()
     else
         UserData.Guild:addClubMember(self.clubData.dwClubID, inputId, UserData.User.userID)
     end
-    self:resetNumber()
+	self:resetNumber()
 end
 
 function NewClubParnterAddMemLayer:RET_CLUB_GROUP_INVITE(event)
@@ -87,6 +89,29 @@ function NewClubParnterAddMemLayer:RET_CLUB_GROUP_INVITE(event)
         return
     end
     require("common.MsgBoxLayer"):create(0,nil,"合群发起成功")
+end
+
+--返回添加亲友圈成员
+function NewClubParnterAddMemLayer:RET_ADD_CLUB_MEMBER(event)
+    local data = event._usedata
+    dump(data)
+    if data.lRet ~= 0 then
+        if data.lRet == 1 then
+            require("common.MsgBoxLayer"):create(0,self,"ID输入错误!")
+        elseif data.lRet == 2 then
+            require("common.MsgBoxLayer"):create(0,self,"该成员已在亲友圈内，请勿重复操作!")
+        elseif data.lRet == 3 then
+            require("common.MsgBoxLayer"):create(0,self,"玩家不存在!")
+        elseif data.lRet == 4 then
+            require("common.MsgBoxLayer"):create(0,self,"您没有权限导入！")
+        elseif data.lRet == 5 then
+            require("common.MsgBoxLayer"):create(0,self,"人数已满!")
+        else
+            require("common.MsgBoxLayer"):create(0,self,"请升级游戏版本!")
+        end
+        return
+    end
+    require("common.MsgBoxLayer"):create(0,self,"添加成员成功")
 end
 
 

@@ -371,7 +371,20 @@ function PDKTableLayer:showCountDown(wChairID,isHide)
 	-- local Image_warning_all = ccui.Helper:seekWidgetByName(self.root, 'Image_warning_all')
 	-- Image_warning_all:setVisible(false)
 	AtlasLabel_countdownTime:stopAllActions()
-	AtlasLabel_countdownTime:setString(15)
+	local time = 15
+
+    if PDKGameCommon.tableConfig.nTableType > TableType_GoldRoom and PDKGameCommon.bHosted ~= nil then
+        -- if GameCommon.bHosted[wChairID] == false  then  
+            if PDKGameCommon.gameConfig.bHostedTime ~= 0 then 
+                time = 60*PDKGameCommon.gameConfig.bHostedTime
+            else
+                time = 15
+            end 
+        -- else
+        --     time = 3
+        -- end 
+    end 
+	AtlasLabel_countdownTime:setString(time)
 	local function onEventTime(sender, event)
 		local currentTime = tonumber(AtlasLabel_countdownTime:getString())
 		currentTime = currentTime - 1
@@ -406,7 +419,10 @@ function PDKTableLayer:showCountDown(wChairID,isHide)
         local Button_outCard = ccui.Helper:seekWidgetByName(self.root,"Button_outCard")
 
         if isHide ~= true and PDKGameCommon.tableConfig.nTableType ~= TableType_Playback then
-            uiPanel_out:setVisible(true) 
+            uiPanel_out:setVisible(true)            
+            if isHide == 1 then 
+                uiPanel_out:setVisible(false) 
+            end 
             local Button_notoutCard = ccui.Helper:seekWidgetByName(self.root,"Button_notoutCard")
             if self.lastOutCardInfo.wOutCardUser == nil or self.lastOutCardInfo.wOutCardUser == wChairID  then           
                 Button_notoutCard:setVisible(false)
@@ -589,6 +605,8 @@ function PDKTableLayer:initUI()
     -- uiImage_watermark:ignoreContentAdaptWithSize(true)
     local uiText_desc = ccui.Helper:seekWidgetByName(self.root,"Text_desc")
     uiText_desc:setString("")
+    local uiText_table = ccui.Helper:seekWidgetByName(self.root,"Text_table")
+    uiText_table:setString("")
     local uiText_time = ccui.Helper:seekWidgetByName(self.root,"Text_time")
     uiText_time:runAction(cc.RepeatForever:create(cc.Sequence:create(cc.CallFunc:create(function(sender,event) 
         local date = os.date("*t",os.time())
@@ -943,7 +961,7 @@ function PDKTableLayer:initUI()
     end
     local uiButton_return = ccui.Helper:seekWidgetByName(self.root,"Button_return")
     Common:addTouchEventListener(uiButton_return,function() 
-        local randCeil = GameCommon.tableConfig.wCurrentNumber or 0
+        local randCeil = PDKGameCommon.tableConfig.wCurrentNumber or 0
         if randCeil == 0 then        
             --require("common.MsgBoxLayer"):create(1,nil,"您确定离开房间?\n房主离开意味着房间被解散",function()
                 NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GR_USER,NetMsgId.REQ_GR_LEAVE_TABLE_USER,"")
@@ -954,6 +972,15 @@ function PDKTableLayer:initUI()
             end)
         end 
     end)
+
+    --取消托管
+    local uiButton_TG = ccui.Helper:seekWidgetByName(self.root,"Button_TG")
+    if uiButton_TG ~= nil then 
+        Common:addTouchEventListener(uiButton_TG,function() 
+            NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GR_USER,NetMsgId.REQ_USER_HOSTED,"o",false)
+        end)
+    end 
+
     --结算层
     local uiPanel_end = ccui.Helper:seekWidgetByName(self.root,"Panel_end")
     uiPanel_end:setVisible(false)
@@ -2662,15 +2689,6 @@ function PDKTableLayer:resetUserCountTimeAni()
 		AtlasLabel_countdownTime:stopAllActions()
 		local Image_warning = Panel_countdown:getChildByName('Image_warning')
 		Image_warning:setVisible(false)
-
-        -- local aniNode = Panel_countdown:getChildByName('AniTimeCount' .. i)
-        -- if not aniNode then
-        --     ccs.ArmatureDataManager:getInstance():addArmatureFileInfo("game/wanjiachupaitishi/wanjiachupaitishi.ExportJson")
-        --     local waitArmature = ccs.Armature:create("wanjiachupaitishi")
-        --     waitArmature:getAnimation():playWithIndex(0)
-        --     Panel_countdown:addChild(waitArmature)
-        --     waitArmature:setName('AniTimeCount' .. i)
-        -- end
     end
 end
 

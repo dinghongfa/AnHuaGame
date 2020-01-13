@@ -122,7 +122,8 @@ function PDKGameRoomEnd:initPlayerInfo( ... )
 		local score1 = self:seekWidgetByNameEx(item,'score1')
 		local score2 = self:seekWidgetByNameEx(item,'score2')
 		local score3 = self:seekWidgetByNameEx(item,'score3')
-		score1:setText(self.pBuffer.lMaxScore[i])
+
+		score1:setText(string.format("%d",self.pBuffer.lMaxScore[i]/100))
 		score2:setText(self.pBuffer.statistics[i][14])
 		score3:setText(self.pBuffer.statistics[i][1])
 
@@ -152,6 +153,18 @@ function PDKGameRoomEnd:initPlayerInfo( ... )
 			total_score_1:setText(string.format("%d", data.totalScore))
 		else
 			total_score:setText(string.format("%d", data.totalScore))
+		end
+
+		total_score_1:setVisible(false)
+		total_score:setVisible(false)
+
+		local uiText_result = ccui.Helper:seekWidgetByName(item,"Text_result")
+		if data.totalScore >= 0 then
+			uiText_result:setTextColor(cc.c3b(175,49,52))
+			uiText_result:setString(string.format("+%d\n(赛:%0.2f)",data.totalScore,self.pBuffer.lWriteScoreArr[i]/100))
+		else
+			uiText_result:setTextColor(cc.c3b(35,102,69))
+			uiText_result:setString(string.format("%d\n(赛:%0.2f)",data.totalScore,self.pBuffer.lWriteScoreArr[i]/100))
 		end
 
 		Common:requestUserAvatar(data.dwUserID, data.player.szPto, image_player, "img")

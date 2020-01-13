@@ -47,12 +47,14 @@ function MajiangSettingsLayer:onCreate()
     require("common.SceneMgr"):switchOperation(self)  
 
     self.Panel_mask = csb:getChildByName("Panel_mask")
-    Common:addTouchEventListener(self.Panel_mask,function() 
-        
+    Common:addTouchEventListener(self.Panel_mask,function()         
         cc.UserDefault:getInstance():setIntegerForKey('volumeSelect',self.language)
+        cc.UserDefault:getInstance():setIntegerForKey('tingpaiSelect',self.tingpai)
+        GameCommon.tingpai = self.tingpai
         --EventMgr:dispatch(EventType.EVENT_TYPE_SKIN_CHANGE,3)
         --require("common.SceneMgr"):switchOperation()
         GameCommon.language = self.language
+        EventMgr:dispatch(EventType.EVENT_TYPE_SKIN_CHANGE,3)
         self:removeFromParent()
     end,true)
 
@@ -60,10 +62,17 @@ function MajiangSettingsLayer:onCreate()
     self.Button_language = ccui.Helper:seekWidgetByName(self.root,"Button_language")
     self.Button_music = ccui.Helper:seekWidgetByName(self.root,"Button_music")
     self.Button_effect = ccui.Helper:seekWidgetByName(self.root,"Button_effect")
+
+    self.Button_tingpai = ccui.Helper:seekWidgetByName(self.root,"Button_tingpai")
+
     self.language = cc.UserDefault:getInstance():getIntegerForKey('volumeSelect', 1)  --语言 0-普通话 1-方言
 	self.Button_language:setBright(not (self.language == 1))	
 	self.Button_music:setBright((UserData.Music:getVolumeMusic() > 0))
-	self.Button_effect:setBright((UserData.Music:getVolumeSound() > 0))
+    self.Button_effect:setBright((UserData.Music:getVolumeSound() > 0))
+    
+    self.tingpai = cc.UserDefault:getInstance():getIntegerForKey('tingpaiSelect', 1)  --听牌 0-没有听牌 1-有听牌
+
+    self.Button_tingpai:setBright((self.tingpai == 1))
     Common:addTouchEventListener(self.Button_language,function() 
         UserData.Music:saveVolume()
         self:onLanguageCall()
@@ -75,6 +84,10 @@ function MajiangSettingsLayer:onCreate()
     Common:addTouchEventListener(self.Button_effect,function() 
         UserData.Music:saveVolume()
         self:onMusicEffect()
+    end)
+
+    Common:addTouchEventListener(self.Button_tingpai,function() 
+        self:ontingpaiEffect()
     end)
     -- self:initSound() 
 end
@@ -106,6 +119,17 @@ function MajiangSettingsLayer:onLanguageCall()
 	else
 		self.Button_language:setBright(true)
 		self.language = 0
+	end
+end
+
+
+function MajiangSettingsLayer:ontingpaiEffect()
+	if self.Button_tingpai:isBright() then
+		self.Button_tingpai:setBright(false)
+		self.tingpai = 0
+	else
+		self.Button_tingpai:setBright(true)
+		self.tingpai = 1
 	end
 end
 
