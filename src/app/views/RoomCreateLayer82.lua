@@ -1217,9 +1217,9 @@ function RoomCreateLayer:onEventCreate(nTableType)
     elseif items[2]:isBright() then
         tableParameter.bHostedTime = 1
     elseif items[3]:isBright() then
-        tableParameter.bHostedTime = 2
-    elseif items[4]:isBright() then
         tableParameter.bHostedTime = 3
+    elseif items[4]:isBright() then
+        tableParameter.bHostedTime = 5
     end    
     
     --选择托管局数

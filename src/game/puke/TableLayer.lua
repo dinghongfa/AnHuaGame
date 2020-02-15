@@ -959,7 +959,7 @@ function TableLayer:addClickItem()
         Common:addTouchEventListener(child,function() 
             local index= child:getName()
             print('--xx',GameCommon.wPiaoCount[i])
-            NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GF_GAME,NetMsgId.REC_SUB_C_JIAPIAO,"b",GameCommon.wPiaoCount[i])
+           -- NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GF_GAME,NetMsgId.REC_SUB_C_JIAPIAO,"b",GameCommon.wPiaoCount[i])
         end)
         --table.insert(childs,child)
     end
@@ -1611,10 +1611,20 @@ function TableLayer:getCardTypeAndCard(bCardData,bUserCardCount)
     local tableSortCard = self:getSortCard(bCardData,bUserCardCount)
     if bUserCardCount == 4 and #tableSortCard[4] == 1 then
         --是否为炸弹
-        return GameCommon.CardType_bomb, tableSortCard[4][1]
-    
+        return GameCommon.CardType_bomb, tableSortCard[4][1]  
     end
-    
+    if GameCommon.tableConfig.tableParameter.bThreeBomb == 1 then  
+        local value = Bit:_and(bCardData[1],0x0F)
+        if GameCommon.tableConfig.tableParameter.b15Or16 == 1  then           
+            if bUserCardCount == 3 and #tableSortCard[3] == 1  and value == 1 then
+                return GameCommon.CardType_bomb, tableSortCard[3][1]
+            end
+        else
+            if bUserCardCount == 3 and #tableSortCard[3] == 1  and value == 13 then
+                return GameCommon.CardType_bomb, tableSortCard[3][1]
+            end
+        end 
+    end  
     if bUserCardCount == 1 and #tableSortCard[1] == 1 then
         --是否为单牌
         return GameCommon.CardType_single, tableSortCard[1][1]
@@ -2317,6 +2327,24 @@ function TableLayer:getExtractCardType(bCardData,bUserCardCount,bTargetCardData,
             table.insert(tableCard,#tableCard+1,var)
         end
     end
+    if GameCommon.tableConfig.tableParameter.bThreeBomb == 1 then 
+        if GameCommon.tableConfig.tableParameter.b15Or16 == 1  then
+            for key, var in pairs(tableSortCardTemp[3]) do
+                local value = Bit:_and(var[1],0x0F)
+                if value == 1 then
+                    value = 14 
+                    table.insert(tableCard,#tableCard+1,var)
+                end
+            end
+        else
+            for key, var in pairs(tableSortCardTemp[3]) do
+                local value = Bit:_and(var[1],0x0F)
+                if value == 13 then
+                    table.insert(tableCard,#tableCard+1,var)
+                end
+            end
+        end 
+    end  
     return tableCard    
 end
 

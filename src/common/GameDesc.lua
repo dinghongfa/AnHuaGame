@@ -1278,6 +1278,12 @@ function GameDesc:getGameDesc(wKindID,data,tableConfig)
          desc = desc.."/首局随机做庄"
       end
 
+      if data.bDeathCard == 1 then
+         desc = desc.."/亡20张"
+      elseif data.bDeathCard == 2 then
+         desc = desc.."/亡10张"
+      end
+
       if data.bHostedTime == 1 then
         desc = desc.."\n一分钟托管"
     elseif data.bHostedTime == 2 then

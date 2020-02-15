@@ -823,6 +823,8 @@ function GameLayer:OnGameMessageRun(_tagMsg)
             if GameCommon.gameConfig.bPlayerCount ~= 4 then
                 if  GameCommon.gameConfig.bDeathCard == 1 then
                     self.tableLayer:updateLeftCardCount(80-3*20-1, true)
+                elseif  GameCommon.gameConfig.bDeathCard == 2 then
+                    self.tableLayer:updateLeftCardCount(80-2*20-11, true)
                 else
                     self.tableLayer:updateLeftCardCount(80-GameCommon.gameConfig.bPlayerCount*20-1, true)
                 end

@@ -1104,12 +1104,13 @@ function PDKTableLayer:addClickItem()
         local child = ccui.Helper:seekWidgetByName(Panel_piaoFen,(i-1))
         Common:addTouchEventListener(child,function() 
             local index= child:getName()
-            print('--xx',PDKGameCommon.wPiaoCount[i])
+            print('--xx________________',PDKGameCommon.wPiaoCount[i])
             NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GF_GAME,NetMsgId.REC_SUB_C_JIAPIAO,"b",PDKGameCommon.wPiaoCount[i])
         end)
         --table.insert(childs,child)
     end
 end
+
 
 
 function PDKTableLayer:drawnout()
@@ -1795,6 +1796,19 @@ function PDKTableLayer:getCardTypeAndCard(bCardData,bUserCardCount)
         return PDKGameCommon.CardType_bomb, tableSortCard[4][1]
     
     end
+
+    if PDKGameCommon.tableConfig.tableParameter.bThreeBomb == 1 then  
+        local value = Bit:_and(bCardData[1],0x0F)
+        if PDKGameCommon.tableConfig.tableParameter.b15Or16 == 1  then           
+            if bUserCardCount == 3 and #tableSortCard[3] == 1  and value == 1 then
+                return PDKGameCommon.CardType_bomb, tableSortCard[3][1]
+            end
+        else
+            if bUserCardCount == 3 and #tableSortCard[3] == 1  and value == 13 then
+                return PDKGameCommon.CardType_bomb, tableSortCard[3][1]
+            end
+        end 
+    end  
     
     if bUserCardCount == 1 and #tableSortCard[1] == 1 then
         --是否为单牌
@@ -2498,6 +2512,25 @@ function PDKTableLayer:getExtractCardType(bCardData,bUserCardCount,bTargetCardDa
             table.insert(tableCard,#tableCard+1,var)
         end
     end
+
+    if PDKGameCommon.tableConfig.tableParameter.bThreeBomb == 1 then 
+        if PDKGameCommon.tableConfig.tableParameter.b15Or16 == 1  then
+            for key, var in pairs(tableSortCardTemp[3]) do
+                local value = Bit:_and(var[1],0x0F)
+                if value == 1 then
+                    value = 14 
+                    table.insert(tableCard,#tableCard+1,var)
+                end
+            end
+        else
+            for key, var in pairs(tableSortCardTemp[3]) do
+                local value = Bit:_and(var[1],0x0F)
+                if value == 13 then
+                    table.insert(tableCard,#tableCard+1,var)
+                end
+            end
+        end 
+    end  
     return tableCard    
 end
 

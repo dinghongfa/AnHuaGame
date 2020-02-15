@@ -1,7 +1,7 @@
 cc.FileUtils:getInstance():setPopupNotify(false)
 cc.FileUtils:getInstance():addSearchPath("src/")
 cc.FileUtils:getInstance():addSearchPath("res/")
---local breakSocketHandle,debugXpCall = require("LuaDebugjit")("localhost",7003)
+local breakSocketHandle,debugXpCall = require("LuaDebugjit")("localhost",7003)
 require "config"
 require "cocos.init"
 
@@ -38,7 +38,7 @@ if cc.PLATFORM_OS_DEVELOPER == PLATFORM_TYPE then
     IS_OPEN_UPDATE = false
 end
 
-cc.exports.CONST_ACCOUNTS = "robot_1"
+cc.exports.CONST_ACCOUNTS = "cxx2"
 
 local searchPaths = cc.FileUtils:getInstance():getSearchPaths()
 local path = cc.FileUtils:getInstance():getWritablePath().."huyoo/"

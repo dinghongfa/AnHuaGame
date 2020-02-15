@@ -157,6 +157,7 @@ function GameGangOpration:showOpration(pBuffer)
                     self:removeFromParent()         
                 end)   
             else
+                NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GF_GAME,NetMsgId.SUB_C_OPERATE_CARD,"wb",GameCommon.WIK_NULL,GameCommon.bUserOpreaCount)
                 self:removeFromParent()
             end 
         end)
