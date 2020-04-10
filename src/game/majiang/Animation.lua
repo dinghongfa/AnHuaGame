@@ -7,8 +7,8 @@ local Animation = {
             -- playName = 'chi-donghua',
             png = "majiang/ui/operate/chi.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/chi.mp3",
-                [1] = "majiang/sound/putonghua/woman/chi.mp3",
+                [0] = "majiang/sound/putonghua/woman/chi.mp3",
+                [1] = "majiang/sound/putonghua/man/chi.mp3",
             }
         },
         [1] = {
@@ -17,8 +17,8 @@ local Animation = {
             -- playName = 'chi-donghua',
             png = "majiang/ui/operate/chi.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/chi.mp3",
-                [1] = "majiang/sound/anhua/woman/chi.mp3",
+                [0] = "majiang/sound/anhua/woman/chi.mp3",
+                [1] = "majiang/sound/anhua/man/chi.mp3",
             }
         },
     },
@@ -30,8 +30,8 @@ local Animation = {
             -- playName = 'pen',
             png = "majiang/ui/operate/peng.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/peng.mp3",
-                [1] = "majiang/sound/putonghua/woman/peng.mp3",
+                [0] = "majiang/sound/putonghua/woman/peng.mp3",
+                [1] = "majiang/sound/putonghua/man/peng.mp3",
             }
         },
 		[1] = {
@@ -40,8 +40,8 @@ local Animation = {
             -- playName = 'pen',
             png = "majiang/ui/operate/peng.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/peng.mp3",
-                [1] = "majiang/sound/anhua/woman/peng.mp3",
+                [0] = "majiang/sound/anhua/woman/peng.mp3",
+                [1] = "majiang/sound/anhua/man/peng.mp3",
             }
         },
     },
@@ -52,8 +52,8 @@ local Animation = {
            -- playName = 'gang',
 			png = "majiang/ui/operate/gang.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/gang.mp3",
-                [1] = "majiang/sound/putonghua/woman/gang.mp3",
+                [0] = "majiang/sound/putonghua/woman/gang.mp3",
+                [1] = "majiang/sound/putonghua/man/gang.mp3",
             }
         },
 		[1] = {
@@ -62,8 +62,8 @@ local Animation = {
            -- playName = 'gang',
 			png = "majiang/ui/operate/gang.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/gang.mp3",
-                [1] = "majiang/sound/anhua/woman/gang.mp3",
+                [0] = "majiang/sound/anhua/woman/gang.mp3",
+                [1] = "majiang/sound/anhua/man/gang.mp3",
             }
         },
     },
@@ -74,8 +74,8 @@ local Animation = {
            -- playName = 'gang',
 			png = "majiang/ui/operate/huanghuang.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/gang.mp3",
-                [1] = "majiang/sound/putonghua/woman/gang.mp3",
+                [0] = "majiang/sound/putonghua/woman/gang.mp3",
+                [1] = "majiang/sound/putonghua/man/gang.mp3",
             }
         },
 		[1] = {
@@ -84,8 +84,8 @@ local Animation = {
            -- playName = 'gang',
 			png = "majiang/ui/operate/huanghuang.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/gang.mp3",
-                [1] = "majiang/sound/anhua/woman/gang.mp3",
+                [0] = "majiang/sound/anhua/woman/gang.mp3",
+                [1] = "majiang/sound/anhua/man/gang.mp3",
             }
         },
     },
@@ -96,8 +96,8 @@ local Animation = {
            -- playName = 'gang',
 			png = "majiang/ui/operate/zhonglongzi.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/gang.mp3",
-                [1] = "majiang/sound/putonghua/woman/gang.mp3",
+                [0] = "majiang/sound/putonghua/woman/gang.mp3",
+                [1] = "majiang/sound/putonghua/man/gang.mp3",
             }
         },
 		[1] = {
@@ -106,8 +106,8 @@ local Animation = {
            -- playName = 'gang',
 			png = "majiang/ui/operate/zhonglongzi.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/gang.mp3",
-                [1] = "majiang/sound/anhua/woman/gang.mp3",
+                [0] = "majiang/sound/anhua/woman/gang.mp3",
+                [1] = "majiang/sound/anhua/man/gang.mp3",
             }
         },
     },
@@ -118,8 +118,8 @@ local Animation = {
            -- playName = 'gang',
 			png = "majiang/ui/operate/diandian.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/gang.mp3",
-                [1] = "majiang/sound/putonghua/woman/gang.mp3",
+                [0] = "majiang/sound/putonghua/woman/gang.mp3",
+                [1] = "majiang/sound/putonghua/man/gang.mp3",
             }
         },
 		[1] = {
@@ -128,8 +128,8 @@ local Animation = {
            -- playName = 'gang',
 			png = "majiang/ui/operate/diandian.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/gang.mp3",
-                [1] = "majiang/sound/anhua/woman/gang.mp3",
+                [0] = "majiang/sound/anhua/woman/gang.mp3",
+                [1] = "majiang/sound/anhua/man/gang.mp3",
             }
         },
     },
@@ -140,8 +140,8 @@ local Animation = {
            -- playName = 'gang',
 			png = "majiang/ui/operate/buzhang.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/gang.mp3",
-                [1] = "majiang/sound/putonghua/woman/gang.mp3",
+                [0] = "majiang/sound/putonghua/woman/gang.mp3",
+                [1] = "majiang/sound/putonghua/man/gang.mp3",
             }
         },
 		[1] = {
@@ -150,8 +150,8 @@ local Animation = {
            -- playName = 'gang',
 			png = "majiang/ui/operate/buzhang.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/gang.mp3",
-                [1] = "majiang/sound/anhua/woman/gang.mp3",
+                [0] = "majiang/sound/anhua/woman/gang.mp3",
+                [1] = "majiang/sound/anhua/man/gang.mp3",
             }
         },
     },
@@ -162,8 +162,8 @@ local Animation = {
             -- playName = 'hu_zimo',
 			png = "majiang/ui/operate/zimo.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/zimo.mp3",
-                [1] = "majiang/sound/putonghua/woman/zimo.mp3",
+                [0] = "majiang/sound/putonghua/woman/zimo.mp3",
+                [1] = "majiang/sound/putonghua/man/zimo.mp3",
             }
         },
 		[1] = {
@@ -172,8 +172,8 @@ local Animation = {
             -- playName = 'hu_zimo',
 			png = "majiang/ui/operate/zimo.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/zimo.mp3",
-                [1] = "majiang/sound/anhua/woman/zimo.mp3",
+                [0] = "majiang/sound/anhua/woman/zimo.mp3",
+                [1] = "majiang/sound/anhua/man/zimo.mp3",
             }
         },
     },
@@ -184,8 +184,8 @@ local Animation = {
             -- playName = 'hu',
 			png = "majiang/ui/operate/hu.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/hu.mp3",
-                [1] = "majiang/sound/putonghua/woman/hu.mp3",
+                [0] = "majiang/sound/putonghua/woman/hu.mp3",
+                [1] = "majiang/sound/putonghua/man/hu.mp3",
             }
         },
 		[1] = {
@@ -194,8 +194,8 @@ local Animation = {
             -- playName = 'hu',
 			png = "majiang/ui/operate/hu.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/hu.mp3",
-                [1] = "majiang/sound/anhua/woman/hu.mp3",
+                [0] = "majiang/sound/anhua/woman/hu.mp3",
+                [1] = "majiang/sound/anhua/man/hu.mp3",
             }
         },
     },
@@ -206,8 +206,8 @@ local Animation = {
             -- playName = 'dianpao',
 			png = "majiang/ui/operate/hu.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/hu.mp3",
-                [1] = "majiang/sound/putonghua/woman/hu.mp3",
+                [0] = "majiang/sound/putonghua/woman/hu.mp3",
+                [1] = "majiang/sound/putonghua/man/hu.mp3",
             }
         },
 		[1] = {
@@ -216,8 +216,8 @@ local Animation = {
             -- playName = 'dianpao',
 			png = "majiang/ui/operate/hu.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/hu.mp3",
-                [1] = "majiang/sound/anhua/woman/hu.mp3",
+                [0] = "majiang/sound/anhua/woman/hu.mp3",
+                [1] = "majiang/sound/anhua/man/hu.mp3",
             }
         },
     },
@@ -228,8 +228,8 @@ local Animation = {
             -- playName = 'dianpao',
 			png = "majiang/ui/operate/diandian.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/gang.mp3",
-                [1] = "majiang/sound/putonghua/woman/gang.mp3",
+                [0] = "majiang/sound/putonghua/woman/gang.mp3",
+                [1] = "majiang/sound/putonghua/man/gang.mp3",
             }
         },
 		[1] = {
@@ -238,8 +238,8 @@ local Animation = {
             -- playName = 'dianpao',
 			png = "majiang/ui/operate/diandian.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/gang.mp3",
-                [1] = "majiang/sound/anhua/woman/gang.mp3",
+                [0] = "majiang/sound/anhua/woman/gang.mp3",
+                [1] = "majiang/sound/anhua/man/gang.mp3",
             }
         },
     },
@@ -250,8 +250,8 @@ local Animation = {
             -- playName = 'dianpao',
 			png = "majiang/ui/operate/huanghuang.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/gang.mp3",
-                [1] = "majiang/sound/putonghua/woman/gang.mp3",
+                [0] = "majiang/sound/putonghua/woman/gang.mp3",
+                [1] = "majiang/sound/putonghua/man/gang.mp3",
             }
         },
 		[1] = {
@@ -260,8 +260,8 @@ local Animation = {
             -- playName = 'dianpao',
 			png = "majiang/ui/operate/huanghuang.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/gang.mp3",
-                [1] = "majiang/sound/anhua/woman/gang.mp3",
+                [0] = "majiang/sound/anhua/woman/gang.mp3",
+                [1] = "majiang/sound/anhua/man/gang.mp3",
             }
         },
     },
@@ -272,8 +272,8 @@ local Animation = {
             -- playName = 'dianpao',
 			png = "majiang/ui/operate/zhulongzi.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/gang.mp3",
-                [1] = "majiang/sound/putonghua/woman/gang.mp3",
+                [0] = "majiang/sound/putonghua/woman/gang.mp3",
+                [1] = "majiang/sound/putonghua/man/gang.mp3",
             }
         },
 		[1] = {
@@ -282,8 +282,8 @@ local Animation = {
             -- playName = 'dianpao',
 			png = "majiang/ui/operate/zhulongzi.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/gang.mp3",
-                [1] = "majiang/sound/anhua/woman/gang.mp3",
+                [0] = "majiang/sound/anhua/woman/gang.mp3",
+                [1] = "majiang/sound/anhua/man/gang.mp3",
             }
         },
     },
@@ -291,15 +291,15 @@ local Animation = {
         [0] = {
              png = "majiang/ui/operate/tile_cs_hu_0.png",
              sound = {
-                 [0] = "majiang/sound/putonghua/man/hu.mp3",
-                 [1] = "majiang/sound/putonghua/woman/hu.mp3",
+                 [0] = "majiang/sound/putonghua/woman/hu.mp3",
+                 [1] = "majiang/sound/putonghua/man/hu.mp3",
              }
          },
          [1] = {
              png = "majiang/ui/operate/tile_cs_hu_0.png",
              sound = {
-                 [0] = "majiang/sound/anhua/man/hu.mp3",
-                 [1] = "majiang/sound/anhua/woman/hu.mp3",
+                 [0] = "majiang/sound/anhua/woman/hu.mp3",
+                 [1] = "majiang/sound/anhua/man/hu.mp3",
              }
          },
      },
@@ -307,15 +307,15 @@ local Animation = {
         [0] = {
              png = "majiang/ui/operate/tile_cs_hu_1.png",
              sound = {
-                 [0] = "majiang/sound/putonghua/man/gang.mp3",
-                 [1] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [0] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [1] = "majiang/sound/putonghua/man/gang.mp3",
              }
          },
          [1] = {
              png = "majiang/ui/operate/tile_cs_hu_1.png",
              sound = {
-                 [0] = "majiang/sound/anhua/man/gang.mp3",
-                 [1] = "majiang/sound/anhua/woman/gang.mp3",
+                 [0] = "majiang/sound/anhua/woman/gang.mp3",
+                 [1] = "majiang/sound/anhua/man/gang.mp3",
              }
          },
      },
@@ -323,15 +323,15 @@ local Animation = {
         [0] = {
              png = "majiang/ui/operate/tile_cs_hu_2.png",
              sound = {
-                 [0] = "majiang/sound/putonghua/man/gang.mp3",
-                 [1] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [0] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [1] = "majiang/sound/putonghua/man/gang.mp3",
              }
          },
          [1] = {
              png = "majiang/ui/operate/tile_cs_hu_2.png",
              sound = {
-                 [0] = "majiang/sound/anhua/man/gang.mp3",
-                 [1] = "majiang/sound/anhua/woman/gang.mp3",
+                 [0] = "majiang/sound/anhua/woman/gang.mp3",
+                 [1] = "majiang/sound/anhua/man/gang.mp3",
              }
          },
      },
@@ -339,15 +339,15 @@ local Animation = {
         [0] = {
              png = "majiang/ui/operate/tile_cs_hu_3.png",
              sound = {
-                 [0] = "majiang/sound/putonghua/man/gang.mp3",
-                 [1] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [0] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [1] = "majiang/sound/putonghua/man/gang.mp3",
              }
          },
          [1] = {
              png = "majiang/ui/operate/tile_cs_hu_3.png",
              sound = {
-                 [0] = "majiang/sound/anhua/man/gang.mp3",
-                 [1] = "majiang/sound/anhua/woman/gang.mp3",
+                 [0] = "majiang/sound/anhua/woman/gang.mp3",
+                 [1] = "majiang/sound/anhua/man/gang.mp3",
              }
          },
      },
@@ -355,15 +355,15 @@ local Animation = {
         [0] = {
              png = "majiang/ui/operate/tile_cs_hu_4.png",
              sound = {
-                 [0] = "majiang/sound/putonghua/man/gang.mp3",
-                 [1] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [0] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [1] = "majiang/sound/putonghua/man/gang.mp3",
              }
          },
          [1] = {
              png = "majiang/ui/operate/tile_cs_hu_4.png",
              sound = {
-                 [0] = "majiang/sound/anhua/man/gang.mp3",
-                 [1] = "majiang/sound/anhua/woman/gang.mp3",
+                 [0] = "majiang/sound/anhua/woman/gang.mp3",
+                 [1] = "majiang/sound/anhua/man/gang.mp3",
              }
          },
      },
@@ -371,15 +371,15 @@ local Animation = {
         [0] = {
              png = "majiang/ui/operate/tile_cs_hu_5.png",
              sound = {
-                 [0] = "majiang/sound/putonghua/man/gang.mp3",
-                 [1] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [0] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [1] = "majiang/sound/putonghua/man/gang.mp3",
              }
          },
          [1] = {
              png = "majiang/ui/operate/tile_cs_hu_5.png",
              sound = {
-                 [0] = "majiang/sound/anhua/man/gang.mp3",
-                 [1] = "majiang/sound/anhua/woman/gang.mp3",
+                 [0] = "majiang/sound/anhua/woman/gang.mp3",
+                 [1] = "majiang/sound/anhua/man/gang.mp3",
              }
          },
      },
@@ -387,15 +387,15 @@ local Animation = {
         [0] = {
              png = "majiang/ui/operate/tile_cs_hu_6.png",
              sound = {
-                 [0] = "majiang/sound/putonghua/man/gang.mp3",
-                 [1] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [0] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [1] = "majiang/sound/putonghua/man/gang.mp3",
              }
          },
          [1] = {
              png = "majiang/ui/operate/tile_cs_hu_6.png",
              sound = {
-                 [0] = "majiang/sound/anhua/man/gang.mp3",
-                 [1] = "majiang/sound/anhua/woman/gang.mp3",
+                 [0] = "majiang/sound/anhua/woman/gang.mp3",
+                 [1] = "majiang/sound/anhua/man/gang.mp3",
              }
          },
      },
@@ -403,15 +403,15 @@ local Animation = {
         [0] = {
              png = "majiang/ui/operate/tile_cs_hu_7.png",
              sound = {
-                 [0] = "majiang/sound/putonghua/man/gang.mp3",
-                 [1] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [0] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [1] = "majiang/sound/putonghua/man/gang.mp3",
              }
          },
          [1] = {
              png = "majiang/ui/operate/tile_cs_hu_7.png",
              sound = {
-                 [0] = "majiang/sound/anhua/man/gang.mp3",
-                 [1] = "majiang/sound/anhua/woman/gang.mp3",
+                 [0] = "majiang/sound/anhua/woman/gang.mp3",
+                 [1] = "majiang/sound/anhua/man/gang.mp3",
              }
          },
      },
@@ -419,15 +419,15 @@ local Animation = {
         [0] = {
              png = "majiang/ui/operate/tile_cs_hu_8.png",
              sound = {
-                 [0] = "majiang/sound/putonghua/man/gang.mp3",
-                 [1] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [0] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [1] = "majiang/sound/putonghua/man/gang.mp3",
              }
          },
          [1] = {
              png = "majiang/ui/operate/tile_cs_hu_8.png",
              sound = {
-                 [0] = "majiang/sound/anhua/man/gang.mp3",
-                 [1] = "majiang/sound/anhua/woman/gang.mp3",
+                 [0] = "majiang/sound/anhua/woman/gang.mp3",
+                 [1] = "majiang/sound/anhua/man/gang.mp3",
              }
          },
      },
@@ -435,15 +435,15 @@ local Animation = {
         [0] = {
              png = "majiang/ui/operate/tile_cs_hu_9.png",
              sound = {
-                 [0] = "majiang/sound/putonghua/man/gang.mp3",
-                 [1] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [0] = "majiang/sound/putonghua/woman/gang.mp3",
+                 [1] = "majiang/sound/putonghua/man/gang.mp3",
              }
          },
          [1] = {
              png = "majiang/ui/operate/tile_cs_hu_9.png",
              sound = {
-                 [0] = "majiang/sound/anhua/man/gang.mp3",
-                 [1] = "majiang/sound/anhua/woman/gang.mp3",
+                 [0] = "majiang/sound/anhua/woman/gang.mp3",
+                 [1] = "majiang/sound/anhua/man/gang.mp3",
              }
          },
      },
@@ -454,8 +454,8 @@ local Animation = {
             animName = "KWX_TypeName",
             playName = 'hu_penpenhu',
             sound = {
-                [0] = "majiang/sound/putonghua/man/hu_penpenhu.mp3",
-                [1] = "majiang/sound/putonghua/woman/hu_penpenhu.mp3",
+                [0] = "majiang/sound/putonghua/woman/hu_penpenhu.mp3",
+                [1] = "majiang/sound/putonghua/man/hu_penpenhu.mp3",
             }
         },
 		[1] = {
@@ -463,8 +463,8 @@ local Animation = {
             animName = "KWX_TypeName",
             playName = 'hu_penpenhu',
             sound = {
-                [0] = "majiang/sound/putonghua/man/hu_penpenhu.mp3",
-                [1] = "majiang/sound/putonghua/woman/hu_penpenhu.mp3",
+                [0] = "majiang/sound/putonghua/woman/hu_penpenhu.mp3",
+                [1] = "majiang/sound/putonghua/man/hu_penpenhu.mp3",
             }
         },
     },
@@ -474,8 +474,8 @@ local Animation = {
             animName = "KWX_TypeName",
             playName = 'hu_qiangganghu',
             sound = {
-                [0] = "majiang/sound/putonghua/man/hu_qiangganghu.mp3",
-                [1] = "majiang/sound/putonghua/woman/hu_qiangganghu.mp3",
+                [0] = "majiang/sound/putonghua/woman/hu_qiangganghu.mp3",
+                [1] = "majiang/sound/putonghua/man/hu_qiangganghu.mp3",
             }
         },
 		[1] = {
@@ -483,8 +483,8 @@ local Animation = {
             animName = "KWX_TypeName",
             playName = 'hu_qiangganghu',
             sound = {
-                [0] = "majiang/sound/putonghua/man/hu_qiangganghu.mp3",
-                [1] = "majiang/sound/putonghua/woman/hu_qiangganghu.mp3",
+                [0] = "majiang/sound/putonghua/woman/hu_qiangganghu.mp3",
+                [1] = "majiang/sound/putonghua/man/hu_qiangganghu.mp3",
             }
         },
     },
@@ -494,8 +494,8 @@ local Animation = {
             animName = "KWX_TypeName",
             playName = 'hu_gangshangkaihua',
             sound = {
-                [0] = "majiang/sound/putonghua/man/hu_gangshangkaihua.mp3",
-                [1] = "majiang/sound/putonghua/woman/hu_gangshangkaihua.mp3",
+                [0] = "majiang/sound/putonghua/woman/hu_gangshangkaihua.mp3",
+                [1] = "majiang/sound/putonghua/man/hu_gangshangkaihua.mp3",
             }
         },
 		[1] = {
@@ -503,8 +503,8 @@ local Animation = {
             animName = "KWX_TypeName",
             playName = 'hu_gangshangkaihua',
             sound = {
-                [0] = "majiang/sound/putonghua/man/hu_gangshangkaihua.mp3",
-                [1] = "majiang/sound/putonghua/woman/hu_gangshangkaihua.mp3",
+                [0] = "majiang/sound/putonghua/woman/hu_gangshangkaihua.mp3",
+                [1] = "majiang/sound/putonghua/man/hu_gangshangkaihua.mp3",
             }
         },
     },
@@ -514,8 +514,8 @@ local Animation = {
             animName = "KWX_TypeName",
             playName = 'hu_qidui',
             sound = {
-                [0] = "majiang/sound/putonghua/man/hu_qidui.mp3",
-                [1] = "majiang/sound/putonghua/woman/hu_qidui.mp3",
+                [0] = "majiang/sound/putonghua/woman/hu_qidui.mp3",
+                [1] = "majiang/sound/putonghua/man/hu_qidui.mp3",
             }
         },
 		[1] = {
@@ -523,8 +523,8 @@ local Animation = {
             animName = "KWX_TypeName",
             playName = 'hu_qidui',
             sound = {
-                [0] = "majiang/sound/putonghua/man/hu_qidui.mp3",
-                [1] = "majiang/sound/putonghua/woman/hu_qidui.mp3",
+                [0] = "majiang/sound/putonghua/woman/hu_qidui.mp3",
+                [1] = "majiang/sound/putonghua/man/hu_qidui.mp3",
             }
         },
     },
@@ -534,8 +534,8 @@ local Animation = {
             animName = "KWX_TypeName",
             playName = 'hu_haohuaqidui',
             sound = {
-                [0] = "majiang/sound/putonghua/man/hu_haohuaqidui.mp3",
-                [1] = "majiang/sound/putonghua/woman/hu_haohuaqidui.mp3",
+                [0] = "majiang/sound/putonghua/woman/hu_haohuaqidui.mp3",
+                [1] = "majiang/sound/putonghua/man/hu_haohuaqidui.mp3",
             }
         },
 		[1] = {
@@ -543,8 +543,8 @@ local Animation = {
             animName = "KWX_TypeName",
             playName = 'hu_qidui',
             sound = {
-                [0] = "majiang/sound/putonghua/man/hu_haohuaqidui.mp3",
-                [1] = "majiang/sound/putonghua/woman/hu_haohuaqidui.mp3",
+                [0] = "majiang/sound/putonghua/woman/hu_haohuaqidui.mp3",
+                [1] = "majiang/sound/putonghua/man/hu_haohuaqidui.mp3",
             }
         },
     },
@@ -554,8 +554,8 @@ local Animation = {
             animName = "KWX_TypeName",
             playName = 'hu_chaohaohuaqidui',
             sound = {
-                [0] = "majiang/sound/putonghua/man/hu_chaohaohuaqidui.mp3",
-                [1] = "majiang/sound/putonghua/woman/hu_chaohaohuaqidui.mp3",
+                [0] = "majiang/sound/putonghua/woman/hu_chaohaohuaqidui.mp3",
+                [1] = "majiang/sound/putonghua/man/hu_chaohaohuaqidui.mp3",
             }
         },
 		[1] = {
@@ -563,8 +563,8 @@ local Animation = {
             animName = "KWX_TypeName",
             playName = 'hu_qidui',
             sound = {
-                [0] = "majiang/sound/putonghua/man/hu_chaohaohuaqidui.mp3",
-                [1] = "majiang/sound/putonghua/woman/hu_chaohaohuaqidui.mp3",
+                [0] = "majiang/sound/putonghua/woman/hu_chaohaohuaqidui.mp3",
+                [1] = "majiang/sound/putonghua/man/hu_chaohaohuaqidui.mp3",
             }
         },
     },
@@ -574,8 +574,8 @@ local Animation = {
             animName = "KWX_TypeName",
             playName = 'hu_qinyise',
             sound = {
-                [0] = "majiang/sound/putonghua/man/hu_qinyise.mp3",
-                [1] = "majiang/sound/putonghua/woman/hu_qinyise.mp3",
+                [0] = "majiang/sound/putonghua/woman/hu_qinyise.mp3",
+                [1] = "majiang/sound/putonghua/man/hu_qinyise.mp3",
             }
         },
 		[1] = {
@@ -583,8 +583,8 @@ local Animation = {
             animName = "KWX_TypeName",
             playName = 'hu_qinyise',
             sound = {
-                [0] = "majiang/sound/putonghua/man/qingyise.mp3",
-                [1] = "majiang/sound/putonghua/woman/qingyise.mp3",
+                [0] = "majiang/sound/putonghua/woman/qingyise.mp3",
+                [1] = "majiang/sound/putonghua/man/qingyise.mp3",
             }
         },
     },
@@ -615,8 +615,8 @@ local Animation = {
 		 --	playName = 'dasixi',
 			png = "majiang/ui/operatechangsha/dh_sixi.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/dasixi.mp3",
-                [1] = "majiang/sound/putonghua/woman/dasixi.mp3",
+                [0] = "majiang/sound/putonghua/woman/dasixi.mp3",
+                [1] = "majiang/sound/putonghua/man/dasixi.mp3",
             }
         },
 	    [1] = {
@@ -625,8 +625,8 @@ local Animation = {
 		 --	playName = 'dasixi',
 			png = "majiang/ui/operatechangsha/dh_sixi.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/dasixi.mp3",
-                [1] = "majiang/sound/anhua/woman/dasixi.mp3",
+                [0] = "majiang/sound/anhua/woman/dasixi.mp3",
+                [1] = "majiang/sound/anhua/man/dasixi.mp3",
             }
         },
     },
@@ -637,8 +637,8 @@ local Animation = {
 			 --	playName = 'liuliushun',
 			png = "majiang/ui/operatechangsha/dh_liuliushun.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/liuliushun.mp3",
-                [1] = "majiang/sound/putonghua/woman/liuliushun.mp3",
+                [0] = "majiang/sound/putonghua/woman/liuliushun.mp3",
+                [1] = "majiang/sound/putonghua/man/liuliushun.mp3",
             }
         },
 	    [1] = {
@@ -647,8 +647,8 @@ local Animation = {
 			 --	playName = 'liuliushun',
 			png = "majiang/ui/operatechangsha/dh_liuliushun.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/liuliushun.mp3",
-                [1] = "majiang/sound/anhua/woman/liuliushun.mp3",
+                [0] = "majiang/sound/anhua/woman/liuliushun.mp3",
+                [1] = "majiang/sound/anhua/man/liuliushun.mp3",
             }
         },
     },
@@ -659,8 +659,8 @@ local Animation = {
 			--	playName = 'queyise',
 			png = "majiang/ui/operatechangsha/dh_queyise.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/queyise.mp3",
-                [1] = "majiang/sound/putonghua/woman/queyise.mp3",
+                [0] = "majiang/sound/putonghua/woman/queyise.mp3",
+                [1] = "majiang/sound/putonghua/man/queyise.mp3",
             }
         },
 	    [1] = {
@@ -669,8 +669,8 @@ local Animation = {
 			-- playName = 'queyise',
 			png = "majiang/ui/operatechangsha/dh_queyise.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/queyise.mp3",
-                [1] = "majiang/sound/anhua/woman/queyise.mp3",
+                [0] = "majiang/sound/anhua/woman/queyise.mp3",
+                [1] = "majiang/sound/anhua/man/queyise.mp3",
             }
         },
     },
@@ -681,8 +681,8 @@ local Animation = {
 			-- playName = 'santong',
 			png = "majiang/ui/operatechangsha/dh_santong.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/santong.mp3",
-                [1] = "majiang/sound/putonghua/woman/santong.mp3",
+                [0] = "majiang/sound/putonghua/woman/santong.mp3",
+                [1] = "majiang/sound/putonghua/man/santong.mp3",
             }
         },
 	    [1] = {
@@ -691,8 +691,8 @@ local Animation = {
 			-- playName = 'santong',
 			png = "majiang/ui/operatechangsha/dh_santong.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/santong.mp3",
-                [1] = "majiang/sound/anhua/woman/santong.mp3",
+                [0] = "majiang/sound/anhua/woman/santong.mp3",
+                [1] = "majiang/sound/anhua/man/santong.mp3",
             }
         },
     },
@@ -703,8 +703,8 @@ local Animation = {
 			-- playName = 'banbanhu',
 			png = "majiang/ui/operatechangsha/dh_banbanhu.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/banbanhu.mp3",
-                [1] = "majiang/sound/putonghua/woman/banbanhu.mp3",
+                [0] = "majiang/sound/putonghua/woman/banbanhu.mp3",
+                [1] = "majiang/sound/putonghua/man/banbanhu.mp3",
             }
         },
 	    [1] = {
@@ -713,8 +713,8 @@ local Animation = {
 			-- playName = 'banbanhu',
 			png = "majiang/ui/operatechangsha/dh_banbanhu.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/banbanhu.mp3",
-                [1] = "majiang/sound/anhua/woman/banbanhu.mp3",
+                [0] = "majiang/sound/anhua/woman/banbanhu.mp3",
+                [1] = "majiang/sound/anhua/man/banbanhu.mp3",
             }
         },
     },
@@ -725,8 +725,8 @@ local Animation = {
 			-- playName = 'yizhihua',
 			png = "majiang/ui/operatechangsha/dh_yizhihua.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/yizhihua.mp3",
-                [1] = "majiang/sound/putonghua/woman/yizhihua.mp3",
+                [0] = "majiang/sound/putonghua/woman/yizhihua.mp3",
+                [1] = "majiang/sound/putonghua/man/yizhihua.mp3",
             }
         },
 	    [1] = {
@@ -735,8 +735,8 @@ local Animation = {
 			-- playName = 'yizhihua',
 			png = "majiang/ui/operatechangsha/dh_yizhihua.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/yizhihua.mp3",
-                [1] = "majiang/sound/anhua/woman/yizhihua.mp3",
+                [0] = "majiang/sound/anhua/woman/yizhihua.mp3",
+                [1] = "majiang/sound/anhua/man/yizhihua.mp3",
             }
         },
     },
@@ -747,8 +747,8 @@ local Animation = {
 			-- playName = 'dasixi',
 			png = "majiang/ui/operatechangsha/dh_zhongtusx.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/dasixi.mp3",
-                [1] = "majiang/sound/putonghua/woman/dasixi.mp3",
+                [0] = "majiang/sound/putonghua/woman/dasixi.mp3",
+                [1] = "majiang/sound/putonghua/man/dasixi.mp3",
             }
         },
 	    [1] = {
@@ -757,8 +757,8 @@ local Animation = {
 			-- playName = 'dasixi',
 			png = "majiang/ui/operatechangsha/dh_zhongtusx.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/dasixi.mp3",
-                [1] = "majiang/sound/anhua/woman/dasixi.mp3",
+                [0] = "majiang/sound/anhua/woman/dasixi.mp3",
+                [1] = "majiang/sound/anhua/man/dasixi.mp3",
             }
         },
     }, 
@@ -769,8 +769,8 @@ local Animation = {
 			-- playName = 'liuliushun',
 			png = "majiang/ui/operatechangsha/dh_zhongtull.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/liuliushun.mp3",
-                [1] = "majiang/sound/putonghua/woman/liuliushun.mp3",
+                [0] = "majiang/sound/putonghua/woman/liuliushun.mp3",
+                [1] = "majiang/sound/putonghua/man/liuliushun.mp3",
             }
         },
 	    [1] = {
@@ -779,8 +779,8 @@ local Animation = {
 			-- playName = 'liuliushun',
 			png = "majiang/ui/operatechangsha/dh_zhongtull.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/liuliushun.mp3",
-                [1] = "majiang/sound/anhua/woman/liuliushun.mp3",
+                [0] = "majiang/sound/anhua/woman/liuliushun.mp3",
+                [1] = "majiang/sound/anhua/man/liuliushun.mp3",
             }
         },
     },
@@ -791,8 +791,8 @@ local Animation = {
 			-- playName = 'jiejiegao',
 			png = "majiang/ui/operatechangsha/dh_bubugao.png",
             sound = {
-                [0] = "majiang/sound/putonghua/man/jiejiegao.mp3",
-                [1] = "majiang/sound/putonghua/woman/jiejiegao.mp3",
+                [0] = "majiang/sound/putonghua/woman/jiejiegao.mp3",
+                [1] = "majiang/sound/putonghua/man/jiejiegao.mp3",
             }
         },
 	    [1] = {
@@ -801,8 +801,8 @@ local Animation = {
 			-- playName = 'jiejiegao',
 			png = "majiang/ui/operatechangsha/dh_bubugao.png",
             sound = {
-                [0] = "majiang/sound/anhua/man/jiejiegao.mp3",
-                [1] = "majiang/sound/anhua/woman/jiejiegao.mp3",
+                [0] = "majiang/sound/anhua/woman/jiejiegao.mp3",
+                [1] = "majiang/sound/anhua/man/jiejiegao.mp3",
             }
         },
     },
@@ -836,16 +836,16 @@ local Animation = {
             animFile = "",
             animName = "",
             sound = {
-                [0] = "majiang/sound/putonghua/man/11.mp3",
-                [1] = "majiang/sound/putonghua/woman/11.mp3",
+                [0] = "majiang/sound/putonghua/woman/11.mp3",
+                [1] = "majiang/sound/putonghua/man/11.mp3",
             }
         },
 		[1] = {
             animFile = "",
             animName = "",
             sound = {
-                [0] = "majiang/sound/anhua/man/11.mp3",
-                [1] = "majiang/sound/anhua/woman/11.mp3",
+                [0] = "majiang/sound/anhua/woman/11.mp3",
+                [1] = "majiang/sound/anhua/man/11.mp3",
             }
         },
     },
@@ -854,16 +854,16 @@ local Animation = {
             animFile = "",
             animName = "",
             sound = {
-                [0] = "majiang/sound/putonghua/man/12.mp3",
-                [1] = "majiang/sound/putonghua/woman/12.mp3",
+                [0] = "majiang/sound/putonghua/woman/12.mp3",
+                [1] = "majiang/sound/putonghua/man/12.mp3",
             }
         },
 	   [1] = {
             animFile = "",
             animName = "",
             sound = {
-                [0] = "majiang/sound/anhua/man/12.mp3",
-                [1] = "majiang/sound/anhua/woman/12.mp3",
+                [0] = "majiang/sound/anhua/woman/12.mp3",
+                [1] = "majiang/sound/anhua/man/12.mp3",
             }
         },
 	
@@ -873,16 +873,16 @@ local Animation = {
             animFile = "",
             animName = "",
             sound = {
-                [0] = "majiang/sound/putonghua/man/13.mp3",
-                [1] = "majiang/sound/putonghua/woman/13.mp3",
+                [0] = "majiang/sound/putonghua/woman/13.mp3",
+                [1] = "majiang/sound/putonghua/man/13.mp3",
             }
         },
 	   [1] = {
             animFile = "",
             animName = "",
             sound = {
-                [0] = "majiang/sound/anhua/man/13.mp3",
-                [1] = "majiang/sound/anhua/woman/13.mp3",
+                [0] = "majiang/sound/anhua/woman/13.mp3",
+                [1] = "majiang/sound/anhua/man/13.mp3",
             }
         },	
     },
@@ -891,16 +891,16 @@ local Animation = {
             animFile = "",
             animName = "",
             sound = {
-                [0] = "majiang/sound/putonghua/man/14.mp3",
-                [1] = "majiang/sound/putonghua/woman/14.mp3",
+                [0] = "majiang/sound/putonghua/woman/14.mp3",
+                [1] = "majiang/sound/putonghua/man/14.mp3",
             }
         },
 	   [1] = {
             animFile = "",
             animName = "",
             sound = {
-                [0] = "majiang/sound/anhua/man/14.mp3",
-                [1] = "majiang/sound/anhua/woman/14.mp3",
+                [0] = "majiang/sound/anhua/woman/14.mp3",
+                [1] = "majiang/sound/anhua/man/14.mp3",
             }
         },	
     },
@@ -909,16 +909,16 @@ local Animation = {
             animFile = "",
             animName = "",
             sound = {
-                [0] = "majiang/sound/putonghua/man/15.mp3",
-                [1] = "majiang/sound/putonghua/woman/15.mp3",
+                [0] = "majiang/sound/putonghua/woman/15.mp3",
+                [1] = "majiang/sound/putonghua/man/15.mp3",
             }
         },
 	   [1] = {
             animFile = "",
             animName = "",
             sound = {
-                [0] = "majiang/sound/anhua/man/15.mp3",
-                [1] = "majiang/sound/anhua/woman/15.mp3",
+                [0] = "majiang/sound/anhua/woman/15.mp3",
+                [1] = "majiang/sound/anhua/man/15.mp3",
             }
         },	
     },
@@ -927,16 +927,16 @@ local Animation = {
             animFile = "",
             animName = "",
             sound = {
-                [0] = "majiang/sound/putonghua/man/16.mp3",
-                [1] = "majiang/sound/putonghua/woman/16.mp3",
+                [0] = "majiang/sound/putonghua/woman/16.mp3",
+                [1] = "majiang/sound/putonghua/man/16.mp3",
             }
         },
 	   [1] = {
             animFile = "",
             animName = "",
             sound = {
-                [0] = "majiang/sound/anhua/man/16.mp3",
-                [1] = "majiang/sound/anhua/woman/16.mp3",
+                [0] = "majiang/sound/anhua/woman/16.mp3",
+                [1] = "majiang/sound/anhua/man/16.mp3",
             }
         },	
     },
@@ -945,16 +945,16 @@ local Animation = {
             animFile = "",
             animName = "",
             sound = {
-                [0] = "majiang/sound/putonghua/man/17.mp3",
-                [1] = "majiang/sound/putonghua/woman/17.mp3",
+                [0] = "majiang/sound/putonghua/woman/17.mp3",
+                [1] = "majiang/sound/putonghua/man/17.mp3",
             }
         },
 	   [1] = {
             animFile = "",
             animName = "",
             sound = {
-                [0] = "majiang/sound/anhua/man/17.mp3",
-                [1] = "majiang/sound/anhua/woman/17.mp3",
+                [0] = "majiang/sound/anhua/woman/17.mp3",
+                [1] = "majiang/sound/anhua/man/17.mp3",
             }
         },	
     },
@@ -963,16 +963,16 @@ local Animation = {
             animFile = "",
             animName = "",
             sound = {
-                [0] = "majiang/sound/putonghua/man/18.mp3",
-                [1] = "majiang/sound/putonghua/woman/18.mp3",
+                [0] = "majiang/sound/putonghua/woman/18.mp3",
+                [1] = "majiang/sound/putonghua/man/18.mp3",
             }
         },
 	   [1] = {
             animFile = "",
             animName = "",
             sound = {
-                [0] = "majiang/sound/anhua/man/18.mp3",
-                [1] = "majiang/sound/anhua/woman/18.mp3",
+                [0] = "majiang/sound/anhua/woman/18.mp3",
+                [1] = "majiang/sound/anhua/man/18.mp3",
             }
         },	
     },
@@ -981,16 +981,16 @@ local Animation = {
             animFile = "",
             animName = "",
             sound = {
-                [0] = "majiang/sound/putonghua/man/19.mp3",
-                [1] = "majiang/sound/putonghua/woman/19.mp3",
+                [0] = "majiang/sound/putonghua/woman/19.mp3",
+                [1] = "majiang/sound/putonghua/man/19.mp3",
             }
         },
 	   [1] = {
             animFile = "",
             animName = "",
             sound = {
-                [0] = "majiang/sound/anhua/man/19.mp3",
-                [1] = "majiang/sound/anhua/woman/19.mp3",
+                [0] = "majiang/sound/anhua/woman/19.mp3",
+                [1] = "majiang/sound/anhua/man/19.mp3",
             }
         },
     },
@@ -1002,8 +1002,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/31.mp3",
-                [1] = "majiang/sound/putonghua/woman/31.mp3",
+                [0] = "majiang/sound/putonghua/woman/31.mp3",
+                [1] = "majiang/sound/putonghua/man/31.mp3",
             }
         },
 		[1] = {
@@ -1011,8 +1011,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/31.mp3",
-                [1] = "majiang/sound/anhua/woman/31.mp3",
+                [0] = "majiang/sound/anhua/woman/31.mp3",
+                [1] = "majiang/sound/anhua/man/31.mp3",
             }
         },
     },
@@ -1022,8 +1022,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/32.mp3",
-                [1] = "majiang/sound/putonghua/woman/32.mp3",
+                [0] = "majiang/sound/putonghua/woman/32.mp3",
+                [1] = "majiang/sound/putonghua/man/32.mp3",
             }
         },
 		[1] = {
@@ -1031,8 +1031,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/32.mp3",
-                [1] = "majiang/sound/anhua/woman/32.mp3",
+                [0] = "majiang/sound/anhua/woman/32.mp3",
+                [1] = "majiang/sound/anhua/man/32.mp3",
             }
         },
     },
@@ -1042,8 +1042,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/33.mp3",
-                [1] = "majiang/sound/putonghua/woman/33.mp3",
+                [0] = "majiang/sound/putonghua/woman/33.mp3",
+                [1] = "majiang/sound/putonghua/man/33.mp3",
             }
         },
 		[1] = {
@@ -1051,8 +1051,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/33.mp3",
-                [1] = "majiang/sound/anhua/woman/33.mp3",
+                [0] = "majiang/sound/anhua/woman/33.mp3",
+                [1] = "majiang/sound/anhua/man/33.mp3",
             }
         },
     },
@@ -1062,8 +1062,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/34.mp3",
-                [1] = "majiang/sound/putonghua/woman/34.mp3",
+                [0] = "majiang/sound/putonghua/woman/34.mp3",
+                [1] = "majiang/sound/putonghua/man/34.mp3",
             }
         },
 		[1] = {
@@ -1071,8 +1071,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/34.mp3",
-                [1] = "majiang/sound/anhua/woman/34.mp3",
+                [0] = "majiang/sound/anhua/woman/34.mp3",
+                [1] = "majiang/sound/anhua/man/34.mp3",
             }
         },
     },
@@ -1082,8 +1082,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/35.mp3",
-                [1] = "majiang/sound/putonghua/woman/35.mp3",
+                [0] = "majiang/sound/putonghua/woman/35.mp3",
+                [1] = "majiang/sound/putonghua/man/35.mp3",
             }
         },
 		[1] = {
@@ -1091,8 +1091,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/35.mp3",
-                [1] = "majiang/sound/anhua/woman/35.mp3",
+                [0] = "majiang/sound/anhua/woman/35.mp3",
+                [1] = "majiang/sound/anhua/man/35.mp3",
             }
         },
     },
@@ -1102,8 +1102,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/36.mp3",
-                [1] = "majiang/sound/putonghua/woman/36.mp3",
+                [0] = "majiang/sound/putonghua/woman/36.mp3",
+                [1] = "majiang/sound/putonghua/man/36.mp3",
             }
         },
 		[1] = {
@@ -1111,8 +1111,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/36.mp3",
-                [1] = "majiang/sound/anhua/woman/36.mp3",
+                [0] = "majiang/sound/anhua/woman/36.mp3",
+                [1] = "majiang/sound/anhua/man/36.mp3",
             }
         },
     },
@@ -1122,8 +1122,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/37.mp3",
-                [1] = "majiang/sound/putonghua/woman/37.mp3",
+                [0] = "majiang/sound/putonghua/woman/37.mp3",
+                [1] = "majiang/sound/putonghua/man/37.mp3",
             }
         },
 		[1] = {
@@ -1131,8 +1131,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/37.mp3",
-                [1] = "majiang/sound/anhua/woman/37.mp3",
+                [0] = "majiang/sound/anhua/woman/37.mp3",
+                [1] = "majiang/sound/anhua/man/37.mp3",
             }
         },
     },
@@ -1142,8 +1142,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/38.mp3",
-                [1] = "majiang/sound/putonghua/woman/38.mp3",
+                [0] = "majiang/sound/putonghua/woman/38.mp3",
+                [1] = "majiang/sound/putonghua/man/38.mp3",
             }
         },
 		[1] = {
@@ -1151,8 +1151,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/38.mp3",
-                [1] = "majiang/sound/anhua/woman/38.mp3",
+                [0] = "majiang/sound/anhua/woman/38.mp3",
+                [1] = "majiang/sound/anhua/man/38.mp3",
             }
         },
     },
@@ -1162,8 +1162,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/39.mp3",
-                [1] = "majiang/sound/putonghua/woman/39.mp3",
+                [0] = "majiang/sound/putonghua/woman/39.mp3",
+                [1] = "majiang/sound/putonghua/man/39.mp3",
             }
         },
 		[1] = {
@@ -1171,8 +1171,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/39.mp3",
-                [1] = "majiang/sound/anhua/woman/39.mp3",
+                [0] = "majiang/sound/anhua/woman/39.mp3",
+                [1] = "majiang/sound/anhua/man/39.mp3",
             }
         },
     },
@@ -1183,8 +1183,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/21.mp3",
-                [1] = "majiang/sound/putonghua/woman/21.mp3",
+                [0] = "majiang/sound/putonghua/woman/21.mp3",
+                [1] = "majiang/sound/putonghua/man/21.mp3",
             }
         },
 		[1] = {
@@ -1192,8 +1192,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/21.mp3",
-                [1] = "majiang/sound/anhua/woman/21.mp3",
+                [0] = "majiang/sound/anhua/woman/21.mp3",
+                [1] = "majiang/sound/anhua/man/21.mp3",
             }
         },
     },
@@ -1203,8 +1203,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/22.mp3",
-                [1] = "majiang/sound/putonghua/woman/22.mp3",
+                [0] = "majiang/sound/putonghua/woman/22.mp3",
+                [1] = "majiang/sound/putonghua/man/22.mp3",
             }
         },
 		[1] = {
@@ -1212,8 +1212,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/22.mp3",
-                [1] = "majiang/sound/anhua/woman/22.mp3",
+                [0] = "majiang/sound/anhua/woman/22.mp3",
+                [1] = "majiang/sound/anhua/man/22.mp3",
             }
         },
     },
@@ -1223,8 +1223,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/23.mp3",
-                [1] = "majiang/sound/putonghua/woman/23.mp3",
+                [0] = "majiang/sound/putonghua/woman/23.mp3",
+                [1] = "majiang/sound/putonghua/man/23.mp3",
             }
         },
 		[1] = {
@@ -1232,8 +1232,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/23.mp3",
-                [1] = "majiang/sound/anhua/woman/23.mp3",
+                [0] = "majiang/sound/anhua/woman/23.mp3",
+                [1] = "majiang/sound/anhua/man/23.mp3",
             }
         },
     },
@@ -1243,8 +1243,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/24.mp3",
-                [1] = "majiang/sound/putonghua/woman/24.mp3",
+                [0] = "majiang/sound/putonghua/woman/24.mp3",
+                [1] = "majiang/sound/putonghua/man/24.mp3",
             }
         },
 		[1] = {
@@ -1252,8 +1252,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/24.mp3",
-                [1] = "majiang/sound/anhua/woman/24.mp3",
+                [0] = "majiang/sound/anhua/woman/24.mp3",
+                [1] = "majiang/sound/anhua/man/24.mp3",
             }
         },
     },
@@ -1263,8 +1263,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/25.mp3",
-                [1] = "majiang/sound/putonghua/woman/25.mp3",
+                [0] = "majiang/sound/putonghua/woman/25.mp3",
+                [1] = "majiang/sound/putonghua/man/25.mp3",
             }
         },
 		[1] = {
@@ -1272,8 +1272,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/25.mp3",
-                [1] = "majiang/sound/anhua/woman/25.mp3",
+                [0] = "majiang/sound/anhua/woman/25.mp3",
+                [1] = "majiang/sound/anhua/man/25.mp3",
             }
         },
     },
@@ -1283,8 +1283,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/26.mp3",
-                [1] = "majiang/sound/putonghua/woman/26.mp3",
+                [0] = "majiang/sound/putonghua/woman/26.mp3",
+                [1] = "majiang/sound/putonghua/man/26.mp3",
             }
         },
 		[1] = {
@@ -1292,8 +1292,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/26.mp3",
-                [1] = "majiang/sound/anhua/woman/26.mp3",
+                [0] = "majiang/sound/anhua/woman/26.mp3",
+                [1] = "majiang/sound/anhua/man/26.mp3",
             }
         },
     },
@@ -1303,8 +1303,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/27.mp3",
-                [1] = "majiang/sound/putonghua/woman/27.mp3",
+                [0] = "majiang/sound/putonghua/woman/27.mp3",
+                [1] = "majiang/sound/putonghua/man/27.mp3",
             }
         },
 		[1] = {
@@ -1312,8 +1312,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/27.mp3",
-                [1] = "majiang/sound/anhua/woman/27.mp3",
+                [0] = "majiang/sound/anhua/woman/27.mp3",
+                [1] = "majiang/sound/anhua/man/27.mp3",
             }
         },
     },
@@ -1323,8 +1323,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/28.mp3",
-                [1] = "majiang/sound/putonghua/woman/28.mp3",
+                [0] = "majiang/sound/putonghua/woman/28.mp3",
+                [1] = "majiang/sound/putonghua/man/28.mp3",
             }
         },
 		[1] = {
@@ -1332,8 +1332,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/28.mp3",
-                [1] = "majiang/sound/anhua/woman/28.mp3",
+                [0] = "majiang/sound/anhua/woman/28.mp3",
+                [1] = "majiang/sound/anhua/man/28.mp3",
             }
         },
     },
@@ -1343,8 +1343,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/29.mp3",
-                [1] = "majiang/sound/putonghua/woman/29.mp3",
+                [0] = "majiang/sound/putonghua/woman/29.mp3",
+                [1] = "majiang/sound/putonghua/man/29.mp3",
             }
         },
 		[1] = {
@@ -1352,8 +1352,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/29.mp3",
-                [1] = "majiang/sound/anhua/woman/29.mp3",
+                [0] = "majiang/sound/anhua/woman/29.mp3",
+                [1] = "majiang/sound/anhua/man/29.mp3",
             }
         },
     },
@@ -1364,8 +1364,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/51.mp3",
-                [1] = "majiang/sound/putonghua/woman/51.mp3",
+                [0] = "majiang/sound/putonghua/woman/51.mp3",
+                [1] = "majiang/sound/putonghua/man/51.mp3",
             }
         },
 		[1] = {
@@ -1373,8 +1373,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/51.mp3",
-                [1] = "majiang/sound/anhua/woman/51.mp3",
+                [0] = "majiang/sound/anhua/woman/51.mp3",
+                [1] = "majiang/sound/anhua/man/51.mp3",
             }
         },
 
@@ -1386,8 +1386,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/52.mp3",
-                [1] = "majiang/sound/putonghua/woman/52.mp3",
+                [0] = "majiang/sound/putonghua/woman/52.mp3",
+                [1] = "majiang/sound/putonghua/man/52.mp3",
             }
         },
 		[1] = {
@@ -1395,8 +1395,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/52.mp3",
-                [1] = "majiang/sound/anhua/woman/52.mp3",
+                [0] = "majiang/sound/anhua/woman/52.mp3",
+                [1] = "majiang/sound/anhua/man/52.mp3",
             }
         },
     },
@@ -1407,8 +1407,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/putonghua/man/53.mp3",
-                [1] = "majiang/sound/putonghua/woman/53.mp3",
+                [0] = "majiang/sound/putonghua/woman/53.mp3",
+                [1] = "majiang/sound/putonghua/man/53.mp3",
             }
         },
 		[1] = {
@@ -1416,8 +1416,8 @@ local Animation = {
             animName = "",
             playName = '',
             sound = {
-                [0] = "majiang/sound/anhua/man/53.mp3",
-                [1] = "majiang/sound/anhua/woman/53.mp3",
+                [0] = "majiang/sound/anhua/woman/53.mp3",
+                [1] = "majiang/sound/anhua/man/53.mp3",
             }
         },
     },

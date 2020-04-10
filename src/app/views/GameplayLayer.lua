@@ -88,10 +88,11 @@ function GameplayLayer:onCreate(parameter)
                 local item = uiButton_iten:clone()
 
                 item.press = self:seekWidgetByNameEx(item,'Image_press')
+                item.press:setVisible(false)
                 item.wKindID = wKindID
                 item:setBright(false)
                 item:setVisible(true)
-                item.press:loadTexture(data.icon1)
+                --item.press:loadTexture(data.icon1)
                 -- item:loadTextures(data.icon1,data.icon1,data.icons)
                 uiListView_games:pushBackCustomItem(item)
                 item:setAnchorPoint(cc.p(0,0.5))
@@ -99,6 +100,15 @@ function GameplayLayer:onCreate(parameter)
                 if wKindID == locationID then
                     isFound = true
                 end
+
+                local uiText_OfflineTime = ccui.Text:create("0","fonts/DFYuanW7-GB2312.ttf","30")
+                uiText_OfflineTime:setName('Text_OfflineTime')
+                uiText_OfflineTime:setTextColor(cc.c3b(251,201,99)) 
+                uiText_OfflineTime:enableOutline(cc.c4b(101, 40, 14), 2)
+                uiText_OfflineTime:setAnchorPoint(cc.p(0.5,0.5))
+                item:addChild(uiText_OfflineTime,100)
+                uiText_OfflineTime:setPosition(100.00,45.5)                
+                uiText_OfflineTime:setString(StaticData.Games[wKindID].name)  
             end 
         end
         if isFound == true then

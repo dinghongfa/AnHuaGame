@@ -304,7 +304,13 @@ function GameLayer:readBuffer(luaFunc, mainCmdID, subCmdID)
             if GameCommon.gameState ~= GameCommon.GameState_Init then
                 self:runAction(cc.Sequence:create(cc.DelayTime:create(0),cc.CallFunc:create(function(sender,event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))
             else
-                require("common.SceneMgr"):switchScene(require("app.MyApp"):create():createView("HallLayer"),SCENE_HALL) 
+                if not UserData.Guild.isChangeClubTable then
+                    require("common.MsgBoxLayer"):create(2,nil,"房间解散成功！",function(sender,event) 
+                        require("common.SceneMgr"):switchScene(require("app.MyApp"):create():createView("HallLayer"),SCENE_HALL) 
+                    end)
+                else
+                    EventMgr:dispatch(EventType.RET_FREE_CLUB_CHANGE_TABLE_NOTICES)
+                end
             end
             return true
 
@@ -437,12 +443,16 @@ function GameLayer:readBuffer(luaFunc, mainCmdID, subCmdID)
             if GameCommon.tableConfig.szTableName ~= nil and GameCommon.tableConfig.szTableName ~="" then  
                 local uiText_table = ccui.Helper:seekWidgetByName(self.root,"Text_table")
                 uiText_table:setString(GameCommon.tableConfig.szTableName)
-                local CellScore = GameCommon.tableConfig.wCellScore / GameCommon.tableConfig.wTableCellDenominator
+                --local CellScore = GameCommon.tableConfig.wCellScore / GameCommon.tableConfig.wTableCellDenominator
                 --uiText_table:setString(GameCommon.tableConfig.szTableName..string.format(" 倍率:%0.2f",CellScore))
             end 
             --人数
             local Text_peoplenum = ccui.Helper:seekWidgetByName(self.root, "Text_peoplenum")
             Text_peoplenum:setString(GameCommon.gameConfig.bPlayerCount .. '人')
+            if GameCommon.gameConfig.bPlayerCount == 2 then 
+                local uiButton_position = ccui.Helper:seekWidgetByName(self.root, "Button_position")   -- 定位
+                uiButton_position:setVisible(false)
+            end 
             return true
             
         elseif subCmdID == NetMsgId.SUB_S_GAME_START then
@@ -1323,7 +1333,7 @@ function GameLayer:updatePlayerOnline()
     for i = 1 , GameCommon.gameConfig.bPlayerCount do
         local wChairID = i-1
         if GameCommon.player ~= nil and GameCommon.player[wChairID] ~= nil then
-            local viewID = GameCommon:getViewIDByChairID(wChairID)
+            local viewID = GameCommon:getViewIDByChairID(wChairID,true)
             local uiPanel_player = ccui.Helper:seekWidgetByName(self.root,string.format("Panel_player%d",viewID))
             local uiImage_offline = ccui.Helper:seekWidgetByName(uiPanel_player,"Image_offline")
             local uiImage_avatar = ccui.Helper:seekWidgetByName(uiPanel_player,"Image_avatar")

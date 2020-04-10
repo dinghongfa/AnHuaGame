@@ -68,7 +68,7 @@ function PositionLayer:onCreate(wKindID)
 
     if StaticData.Games[wKindID].type == 1 then
         --GameCommon = require("game.paohuzi.GameCommon")
-        if wKindID == 69 then 
+        if wKindID == 69 or wKindID == 47 or wKindID == 48 or wKindID == 49 then 
             GameCommon = require("game.anhua.GameCommon")
         end 
     elseif StaticData.Games[wKindID].type == 2 then

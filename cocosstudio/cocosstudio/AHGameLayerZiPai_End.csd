@@ -22,97 +22,265 @@
                     <PreSize X="1.0000" Y="1.0000" />
                     <FileData Type="Normal" Path="anhua/ui/smallend/img_04.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="Image_avatar_3" ActionTag="2010733327" Tag="913" IconVisible="False" LeftMargin="726.2495" RightMargin="453.7505" TopMargin="504.5435" BottomMargin="115.4565" LeftEage="33" RightEage="33" TopEage="33" BottomEage="33" Scale9OriginX="33" Scale9OriginY="33" Scale9Width="14" Scale9Height="14" ctype="ImageViewObjectData">
-                    <Size X="100.0000" Y="100.0000" />
+                  <AbstractNodeData Name="Panel_3" ActionTag="-1704969209" Tag="735" IconVisible="False" PercentWidthEnable="True" PercentWidthEnabled="True" TopMargin="520.0000" ClipAble="False" BackColorAlpha="102" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
+                    <Size X="1280.0000" Y="200.0000" />
                     <Children>
-                      <AbstractNodeData Name="name" ActionTag="671632347" Tag="914" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="113.0000" RightMargin="-71.0000" TopMargin="16.0000" BottomMargin="56.0000" FontSize="28" LabelText="白雪" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                        <Size X="58.0000" Y="28.0000" />
-                        <AnchorPoint ScaleY="0.5000" />
-                        <Position X="113.0000" Y="70.0000" />
-                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                        <CColor A="255" R="229" G="225" B="161" />
-                        <PrePosition X="1.1300" Y="0.7000" />
-                        <PreSize X="0.5800" Y="0.2800" />
-                        <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
-                        <OutlineColor A="255" R="255" G="0" B="0" />
-                        <ShadowColor A="255" R="110" G="110" B="110" />
-                      </AbstractNodeData>
-                      <AbstractNodeData Name="Image_2_0_0" ActionTag="346714758" Tag="1615" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-5.0000" RightMargin="-5.0000" TopMargin="-5.0000" BottomMargin="-5.0000" LeftEage="36" RightEage="36" TopEage="36" BottomEage="36" Scale9OriginX="36" Scale9OriginY="36" Scale9Width="38" Scale9Height="38" ctype="ImageViewObjectData">
-                        <Size X="110.0000" Y="110.0000" />
+                      <AbstractNodeData Name="Image_avatar_3" ActionTag="2010733327" Tag="913" IconVisible="False" LeftMargin="726.2495" RightMargin="453.7505" TopMargin="-15.4565" BottomMargin="115.4565" LeftEage="33" RightEage="33" TopEage="33" BottomEage="33" Scale9OriginX="33" Scale9OriginY="33" Scale9Width="14" Scale9Height="14" ctype="ImageViewObjectData">
+                        <Size X="100.0000" Y="100.0000" />
+                        <Children>
+                          <AbstractNodeData Name="name" ActionTag="671632347" Tag="914" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="113.0000" RightMargin="-71.0000" TopMargin="16.0000" BottomMargin="56.0000" FontSize="28" LabelText="白雪" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="58.0000" Y="28.0000" />
+                            <AnchorPoint ScaleY="0.5000" />
+                            <Position X="113.0000" Y="70.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="229" G="225" B="161" />
+                            <PrePosition X="1.1300" Y="0.7000" />
+                            <PreSize X="0.5800" Y="0.2800" />
+                            <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
+                            <OutlineColor A="255" R="255" G="0" B="0" />
+                            <ShadowColor A="255" R="110" G="110" B="110" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="Image_2_0_0" ActionTag="346714758" Tag="1615" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-5.0000" RightMargin="-5.0000" TopMargin="-5.0000" BottomMargin="-5.0000" LeftEage="36" RightEage="36" TopEage="36" BottomEage="36" Scale9OriginX="36" Scale9OriginY="36" Scale9Width="38" Scale9Height="38" ctype="ImageViewObjectData">
+                            <Size X="110.0000" Y="110.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="50.0000" Y="50.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.5000" Y="0.5000" />
+                            <PreSize X="1.1000" Y="1.1000" />
+                            <FileData Type="Normal" Path="common/hall_avatarbg.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="Text_result" ActionTag="-1535269755" Tag="339" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="113.0000" RightMargin="-253.0000" TopMargin="61.0000" BottomMargin="9.0000" FontSize="30" LabelText="100(赛:-2453.54)" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="240.0000" Y="30.0000" />
+                            <AnchorPoint ScaleY="0.5000" />
+                            <Position X="113.0000" Y="24.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="0" G="128" B="0" />
+                            <PrePosition X="1.1300" Y="0.2400" />
+                            <PreSize X="2.4000" Y="0.3000" />
+                            <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
+                            <OutlineColor A="255" R="255" G="0" B="0" />
+                            <ShadowColor A="255" R="110" G="110" B="110" />
+                          </AbstractNodeData>
+                        </Children>
                         <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                        <Position X="50.0000" Y="50.0000" />
-                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <Position X="776.2495" Y="165.4565" />
+                        <Scale ScaleX="0.9000" ScaleY="0.9000" />
                         <CColor A="255" R="255" G="255" B="255" />
-                        <PrePosition X="0.5000" Y="0.5000" />
-                        <PreSize X="1.1000" Y="1.1000" />
-                        <FileData Type="Normal" Path="common/hall_avatarbg.png" Plist="" />
+                        <PrePosition X="0.6064" Y="0.8273" />
+                        <PreSize X="0.0781" Y="0.5000" />
+                        <FileData Type="Normal" Path="common/hall_avatar.png" Plist="" />
                       </AbstractNodeData>
-                      <AbstractNodeData Name="Text_result" ActionTag="-1535269755" Tag="339" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="113.0000" RightMargin="-253.0000" TopMargin="61.0000" BottomMargin="9.0000" FontSize="30" LabelText="100(赛:-2453.54)" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                        <Size X="240.0000" Y="30.0000" />
-                        <AnchorPoint ScaleY="0.5000" />
-                        <Position X="113.0000" Y="24.0000" />
-                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                        <CColor A="255" R="0" G="128" B="0" />
-                        <PrePosition X="1.1300" Y="0.2400" />
-                        <PreSize X="2.4000" Y="0.3000" />
-                        <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
-                        <OutlineColor A="255" R="255" G="0" B="0" />
-                        <ShadowColor A="255" R="110" G="110" B="110" />
+                      <AbstractNodeData Name="Image_avatar_2" ActionTag="1468284765" Tag="911" IconVisible="False" LeftMargin="165.2879" RightMargin="1014.7121" TopMargin="-15.4565" BottomMargin="115.4565" LeftEage="33" RightEage="33" TopEage="33" BottomEage="33" Scale9OriginX="33" Scale9OriginY="33" Scale9Width="14" Scale9Height="14" ctype="ImageViewObjectData">
+                        <Size X="100.0000" Y="100.0000" />
+                        <Children>
+                          <AbstractNodeData Name="Image_2_0" ActionTag="-133580514" Tag="1614" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-5.0000" RightMargin="-5.0000" TopMargin="-5.0000" BottomMargin="-5.0000" LeftEage="36" RightEage="36" TopEage="36" BottomEage="36" Scale9OriginX="36" Scale9OriginY="36" Scale9Width="38" Scale9Height="38" ctype="ImageViewObjectData">
+                            <Size X="110.0000" Y="110.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="50.0000" Y="50.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.5000" Y="0.5000" />
+                            <PreSize X="1.1000" Y="1.1000" />
+                            <FileData Type="Normal" Path="common/hall_avatarbg.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="name" ActionTag="522659003" Tag="912" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="113.0000" RightMargin="-71.0000" TopMargin="16.0000" BottomMargin="56.0000" FontSize="28" LabelText="白雪" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="58.0000" Y="28.0000" />
+                            <AnchorPoint ScaleY="0.5000" />
+                            <Position X="113.0000" Y="70.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="229" G="225" B="161" />
+                            <PrePosition X="1.1300" Y="0.7000" />
+                            <PreSize X="0.5800" Y="0.2800" />
+                            <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
+                            <OutlineColor A="255" R="255" G="0" B="0" />
+                            <ShadowColor A="255" R="110" G="110" B="110" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="Text_result" ActionTag="-285260759" Tag="337" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="113.0000" RightMargin="-253.0000" TopMargin="61.0000" BottomMargin="9.0000" FontSize="30" LabelText="100(赛:-2453.54)" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="240.0000" Y="30.0000" />
+                            <AnchorPoint ScaleY="0.5000" />
+                            <Position X="113.0000" Y="24.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="0" G="128" B="0" />
+                            <PrePosition X="1.1300" Y="0.2400" />
+                            <PreSize X="2.4000" Y="0.3000" />
+                            <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
+                            <OutlineColor A="255" R="255" G="0" B="0" />
+                            <ShadowColor A="255" R="110" G="110" B="110" />
+                          </AbstractNodeData>
+                        </Children>
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="215.2879" Y="165.4565" />
+                        <Scale ScaleX="0.9000" ScaleY="0.9000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.1682" Y="0.8273" />
+                        <PreSize X="0.0781" Y="0.5000" />
+                        <FileData Type="Normal" Path="common/hall_avatar.png" Plist="" />
                       </AbstractNodeData>
                     </Children>
-                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <Position X="776.2495" Y="165.4565" />
-                    <Scale ScaleX="0.9000" ScaleY="0.9000" />
+                    <AnchorPoint />
+                    <Position />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
                     <CColor A="255" R="255" G="255" B="255" />
-                    <PrePosition X="0.6064" Y="0.2298" />
-                    <PreSize X="0.0781" Y="0.1389" />
-                    <FileData Type="Normal" Path="common/hall_avatar.png" Plist="" />
+                    <PrePosition />
+                    <PreSize X="1.0000" Y="0.2778" />
+                    <SingleColor A="255" R="150" G="200" B="255" />
+                    <FirstColor A="255" R="150" G="200" B="255" />
+                    <EndColor A="255" R="255" G="255" B="255" />
+                    <ColorVector ScaleY="1.0000" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="Image_avatar_2" ActionTag="1468284765" Tag="911" IconVisible="False" LeftMargin="165.2879" RightMargin="1014.7121" TopMargin="504.5435" BottomMargin="115.4565" LeftEage="33" RightEage="33" TopEage="33" BottomEage="33" Scale9OriginX="33" Scale9OriginY="33" Scale9Width="14" Scale9Height="14" ctype="ImageViewObjectData">
-                    <Size X="100.0000" Y="100.0000" />
+                  <AbstractNodeData Name="Panel_4" Visible="False" ActionTag="478250071" Tag="737" IconVisible="False" PercentWidthEnable="True" PercentWidthEnabled="True" TopMargin="520.0000" ClipAble="False" BackColorAlpha="102" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
+                    <Size X="1280.0000" Y="200.0000" />
                     <Children>
-                      <AbstractNodeData Name="Image_2_0" ActionTag="-133580514" Tag="1614" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-5.0000" RightMargin="-5.0000" TopMargin="-5.0000" BottomMargin="-5.0000" LeftEage="36" RightEage="36" TopEage="36" BottomEage="36" Scale9OriginX="36" Scale9OriginY="36" Scale9Width="38" Scale9Height="38" ctype="ImageViewObjectData">
-                        <Size X="110.0000" Y="110.0000" />
+                      <AbstractNodeData Name="Image_avatar_4" ActionTag="1014123351" Tag="746" IconVisible="False" LeftMargin="888.2500" RightMargin="291.7500" TopMargin="-15.4600" BottomMargin="115.4600" LeftEage="33" RightEage="33" TopEage="33" BottomEage="33" Scale9OriginX="33" Scale9OriginY="33" Scale9Width="14" Scale9Height="14" ctype="ImageViewObjectData">
+                        <Size X="100.0000" Y="100.0000" />
+                        <Children>
+                          <AbstractNodeData Name="name" ActionTag="-1081431290" Tag="747" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="113.0000" RightMargin="-71.0000" TopMargin="16.0000" BottomMargin="56.0000" FontSize="28" LabelText="白雪" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="58.0000" Y="28.0000" />
+                            <AnchorPoint ScaleY="0.5000" />
+                            <Position X="113.0000" Y="70.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="229" G="225" B="161" />
+                            <PrePosition X="1.1300" Y="0.7000" />
+                            <PreSize X="0.5800" Y="0.2800" />
+                            <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
+                            <OutlineColor A="255" R="255" G="0" B="0" />
+                            <ShadowColor A="255" R="110" G="110" B="110" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="Image_2_0_0" ActionTag="-1499656845" Tag="748" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-5.0000" RightMargin="-5.0000" TopMargin="-5.0000" BottomMargin="-5.0000" LeftEage="36" RightEage="36" TopEage="36" BottomEage="36" Scale9OriginX="36" Scale9OriginY="36" Scale9Width="38" Scale9Height="38" ctype="ImageViewObjectData">
+                            <Size X="110.0000" Y="110.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="50.0000" Y="50.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.5000" Y="0.5000" />
+                            <PreSize X="1.1000" Y="1.1000" />
+                            <FileData Type="Normal" Path="common/hall_avatarbg.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="Text_result" ActionTag="1949319757" Tag="749" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="113.0000" RightMargin="-253.0000" TopMargin="61.0000" BottomMargin="9.0000" FontSize="30" LabelText="100(赛:-2453.54)" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="240.0000" Y="30.0000" />
+                            <AnchorPoint ScaleY="0.5000" />
+                            <Position X="113.0000" Y="24.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="0" G="128" B="0" />
+                            <PrePosition X="1.1300" Y="0.2400" />
+                            <PreSize X="2.4000" Y="0.3000" />
+                            <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
+                            <OutlineColor A="255" R="255" G="0" B="0" />
+                            <ShadowColor A="255" R="110" G="110" B="110" />
+                          </AbstractNodeData>
+                        </Children>
                         <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                        <Position X="50.0000" Y="50.0000" />
-                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <Position X="938.2500" Y="165.4600" />
+                        <Scale ScaleX="0.9000" ScaleY="0.9000" />
                         <CColor A="255" R="255" G="255" B="255" />
-                        <PrePosition X="0.5000" Y="0.5000" />
-                        <PreSize X="1.1000" Y="1.1000" />
-                        <FileData Type="Normal" Path="common/hall_avatarbg.png" Plist="" />
+                        <PrePosition X="0.7330" Y="0.8273" />
+                        <PreSize X="0.0781" Y="0.5000" />
+                        <FileData Type="Normal" Path="common/hall_avatar.png" Plist="" />
                       </AbstractNodeData>
-                      <AbstractNodeData Name="name" ActionTag="522659003" Tag="912" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="113.0000" RightMargin="-71.0000" TopMargin="16.0000" BottomMargin="56.0000" FontSize="28" LabelText="白雪" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                        <Size X="58.0000" Y="28.0000" />
-                        <AnchorPoint ScaleY="0.5000" />
-                        <Position X="113.0000" Y="70.0000" />
-                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                        <CColor A="255" R="229" G="225" B="161" />
-                        <PrePosition X="1.1300" Y="0.7000" />
-                        <PreSize X="0.5800" Y="0.2800" />
-                        <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
-                        <OutlineColor A="255" R="255" G="0" B="0" />
-                        <ShadowColor A="255" R="110" G="110" B="110" />
+                      <AbstractNodeData Name="Image_avatar_3" ActionTag="-205197690" Tag="738" IconVisible="False" LeftMargin="528.2500" RightMargin="651.7500" TopMargin="-15.4565" BottomMargin="115.4565" LeftEage="33" RightEage="33" TopEage="33" BottomEage="33" Scale9OriginX="33" Scale9OriginY="33" Scale9Width="14" Scale9Height="14" ctype="ImageViewObjectData">
+                        <Size X="100.0000" Y="100.0000" />
+                        <Children>
+                          <AbstractNodeData Name="name" ActionTag="1469921249" Tag="739" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="113.0000" RightMargin="-71.0000" TopMargin="16.0000" BottomMargin="56.0000" FontSize="28" LabelText="白雪" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="58.0000" Y="28.0000" />
+                            <AnchorPoint ScaleY="0.5000" />
+                            <Position X="113.0000" Y="70.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="229" G="225" B="161" />
+                            <PrePosition X="1.1300" Y="0.7000" />
+                            <PreSize X="0.5800" Y="0.2800" />
+                            <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
+                            <OutlineColor A="255" R="255" G="0" B="0" />
+                            <ShadowColor A="255" R="110" G="110" B="110" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="Image_2_0_0" ActionTag="58116054" Tag="740" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-5.0000" RightMargin="-5.0000" TopMargin="-5.0000" BottomMargin="-5.0000" LeftEage="36" RightEage="36" TopEage="36" BottomEage="36" Scale9OriginX="36" Scale9OriginY="36" Scale9Width="38" Scale9Height="38" ctype="ImageViewObjectData">
+                            <Size X="110.0000" Y="110.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="50.0000" Y="50.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.5000" Y="0.5000" />
+                            <PreSize X="1.1000" Y="1.1000" />
+                            <FileData Type="Normal" Path="common/hall_avatarbg.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="Text_result" ActionTag="-1703711914" Tag="741" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="113.0000" RightMargin="-253.0000" TopMargin="61.0000" BottomMargin="9.0000" FontSize="30" LabelText="100(赛:-2453.54)" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="240.0000" Y="30.0000" />
+                            <AnchorPoint ScaleY="0.5000" />
+                            <Position X="113.0000" Y="24.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="0" G="128" B="0" />
+                            <PrePosition X="1.1300" Y="0.2400" />
+                            <PreSize X="2.4000" Y="0.3000" />
+                            <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
+                            <OutlineColor A="255" R="255" G="0" B="0" />
+                            <ShadowColor A="255" R="110" G="110" B="110" />
+                          </AbstractNodeData>
+                        </Children>
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="578.2500" Y="165.4565" />
+                        <Scale ScaleX="0.9000" ScaleY="0.9000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.4518" Y="0.8273" />
+                        <PreSize X="0.0781" Y="0.5000" />
+                        <FileData Type="Normal" Path="common/hall_avatar.png" Plist="" />
                       </AbstractNodeData>
-                      <AbstractNodeData Name="Text_result" ActionTag="-285260759" Tag="337" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="113.0000" RightMargin="-253.0000" TopMargin="61.0000" BottomMargin="9.0000" FontSize="30" LabelText="100(赛:-2453.54)" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                        <Size X="240.0000" Y="30.0000" />
-                        <AnchorPoint ScaleY="0.5000" />
-                        <Position X="113.0000" Y="24.0000" />
-                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                        <CColor A="255" R="0" G="128" B="0" />
-                        <PrePosition X="1.1300" Y="0.2400" />
-                        <PreSize X="2.4000" Y="0.3000" />
-                        <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
-                        <OutlineColor A="255" R="255" G="0" B="0" />
-                        <ShadowColor A="255" R="110" G="110" B="110" />
+                      <AbstractNodeData Name="Image_avatar_2" ActionTag="1492197205" Tag="742" IconVisible="False" LeftMargin="143.2900" RightMargin="1036.7100" TopMargin="-15.4565" BottomMargin="115.4565" LeftEage="33" RightEage="33" TopEage="33" BottomEage="33" Scale9OriginX="33" Scale9OriginY="33" Scale9Width="14" Scale9Height="14" ctype="ImageViewObjectData">
+                        <Size X="100.0000" Y="100.0000" />
+                        <Children>
+                          <AbstractNodeData Name="Image_2_0" ActionTag="-186121357" Tag="743" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-5.0000" RightMargin="-5.0000" TopMargin="-5.0000" BottomMargin="-5.0000" LeftEage="36" RightEage="36" TopEage="36" BottomEage="36" Scale9OriginX="36" Scale9OriginY="36" Scale9Width="38" Scale9Height="38" ctype="ImageViewObjectData">
+                            <Size X="110.0000" Y="110.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="50.0000" Y="50.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.5000" Y="0.5000" />
+                            <PreSize X="1.1000" Y="1.1000" />
+                            <FileData Type="Normal" Path="common/hall_avatarbg.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="name" ActionTag="-1565808141" Tag="744" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="113.0000" RightMargin="-71.0000" TopMargin="16.0000" BottomMargin="56.0000" FontSize="28" LabelText="白雪" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="58.0000" Y="28.0000" />
+                            <AnchorPoint ScaleY="0.5000" />
+                            <Position X="113.0000" Y="70.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="229" G="225" B="161" />
+                            <PrePosition X="1.1300" Y="0.7000" />
+                            <PreSize X="0.5800" Y="0.2800" />
+                            <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
+                            <OutlineColor A="255" R="255" G="0" B="0" />
+                            <ShadowColor A="255" R="110" G="110" B="110" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="Text_result" ActionTag="-899246389" Tag="745" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="113.0000" RightMargin="-253.0000" TopMargin="61.0000" BottomMargin="9.0000" FontSize="30" LabelText="100(赛:-2453.54)" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="240.0000" Y="30.0000" />
+                            <AnchorPoint ScaleY="0.5000" />
+                            <Position X="113.0000" Y="24.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="0" G="128" B="0" />
+                            <PrePosition X="1.1300" Y="0.2400" />
+                            <PreSize X="2.4000" Y="0.3000" />
+                            <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
+                            <OutlineColor A="255" R="255" G="0" B="0" />
+                            <ShadowColor A="255" R="110" G="110" B="110" />
+                          </AbstractNodeData>
+                        </Children>
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="193.2900" Y="165.4565" />
+                        <Scale ScaleX="0.9000" ScaleY="0.9000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.1510" Y="0.8273" />
+                        <PreSize X="0.0781" Y="0.5000" />
+                        <FileData Type="Normal" Path="common/hall_avatar.png" Plist="" />
                       </AbstractNodeData>
                     </Children>
-                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <Position X="215.2879" Y="165.4565" />
-                    <Scale ScaleX="0.9000" ScaleY="0.9000" />
+                    <AnchorPoint />
+                    <Position />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
                     <CColor A="255" R="255" G="255" B="255" />
-                    <PrePosition X="0.1682" Y="0.2298" />
-                    <PreSize X="0.0781" Y="0.1389" />
-                    <FileData Type="Normal" Path="common/hall_avatar.png" Plist="" />
+                    <PrePosition />
+                    <PreSize X="1.0000" Y="0.2778" />
+                    <SingleColor A="255" R="150" G="200" B="255" />
+                    <FirstColor A="255" R="150" G="200" B="255" />
+                    <EndColor A="255" R="255" G="255" B="255" />
+                    <ColorVector ScaleY="1.0000" />
                   </AbstractNodeData>
                   <AbstractNodeData Name="Image_avatar_1" ActionTag="1007704643" Tag="909" IconVisible="False" LeftMargin="118.5292" RightMargin="1061.4708" TopMargin="172.7457" BottomMargin="447.2543" LeftEage="33" RightEage="33" TopEage="33" BottomEage="33" Scale9OriginX="33" Scale9OriginY="33" Scale9Width="14" Scale9Height="14" ctype="ImageViewObjectData">
                     <Size X="100.0000" Y="100.0000" />

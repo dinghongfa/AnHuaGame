@@ -45,9 +45,24 @@ end
 
 function AHGameRoomEnd:onCreate(params)
 	self.pBuffer = params[1]
-	self.scoreItem = {}
-	for i=1,3 do
-		local item = self:seekWidgetByNameEx(self.panel_end,'template_' .. i)
+	self.scoreItem = {}   
+
+	
+	local Panel_3 = self:seekWidgetByNameEx(self.panel_end,'Panel_3')
+	Panel_3:setVisible(false)
+	local Panel_4 = self:seekWidgetByNameEx(self.panel_end,'Panel_4')
+	Panel_4:setVisible(false)
+	local Panel = nil
+	local bPlayerCount = 3
+	if self.pBuffer.gameConfig.bPlayerCount == 4 then 
+		bPlayerCount = 4
+		Panel = Panel_4
+	else
+		Panel = Panel_3
+	end
+	Panel:setVisible(true)
+	for i=1,bPlayerCount do
+		local item = self:seekWidgetByNameEx(Panel,'template_' .. i)
 		table.insert( self.scoreItem,item)
 		item:setVisible(false)
 	end

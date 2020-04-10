@@ -80,7 +80,21 @@ function RoomCreateLayer:onCreate(parameter)
     Common:addCheckTouchEventListener(items)
     --选择人数
     local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(1),"ListView_parameter"):getItems()
-    Common:addCheckTouchEventListener(items)
+    Common:addCheckTouchEventListener(items,false,function(index) 
+        local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(4),"ListView_parameter"):getItems()
+        if index ~= 3 then
+            items[1]:setBright(false)
+            items[1]:setEnabled(false)
+            items[1]:setColor(cc.c3b(170,170,170))
+            local uiText_desc = ccui.Helper:seekWidgetByName(items[1],"Text_desc")
+            if uiText_desc ~= nil then 
+                uiText_desc:setTextColor(cc.c3b(109,58,44))
+            end
+        else
+            items[1]:setEnabled(true)
+            items[1]:setColor(cc.c3b(255,255,255))      
+        end
+    end)
     if self.recordCreateParameter["bPlayerCount"] ~= nil and self.recordCreateParameter["bPlayerCount"] == 2 then
         items[3]:setBright(true)
         local uiText_desc = ccui.Helper:seekWidgetByName(items[3],"Text_desc")
@@ -150,48 +164,53 @@ function RoomCreateLayer:onCreate(parameter)
     --可选
     local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(4),"ListView_parameter"):getItems()
     Common:addCheckTouchEventListener(items,true)  
-    --代王硬
-    if self.recordCreateParameter["bDaiWangYing"] ~= nil and self.recordCreateParameter["bDaiWangYing"] == 1 then
+    --159中鸟
+    if self.recordCreateParameter["mZhaNiaoType"] ~= nil and self.recordCreateParameter["mZhaNiaoType"] == 1 and ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(1),"ListView_parameter"):getItems()[3]:isBright() == true then
         items[1]:setBright(true)
         local uiText_desc = ccui.Helper:seekWidgetByName(items[1],"Text_desc")
         if uiText_desc ~= nil then 
             uiText_desc:setTextColor(cc.c3b(215,86,31))
-        end  
-    -- else
-    --     items[1]:setBright(false)
-    --     local uiText_desc = ccui.Helper:seekWidgetByName(items[1],"Text_desc")
-    --     if uiText_desc ~= nil then 
-    --         uiText_desc:setTextColor(cc.c3b(140,102,57))
-    --     end
+        end
+    elseif ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(1),"ListView_parameter"):getItems()[3]:isBright() == true then 
+        items[1]:setBright(true)
+        local uiText_desc = ccui.Helper:seekWidgetByName(items[1],"Text_desc")
+        if uiText_desc ~= nil then 
+            uiText_desc:setTextColor(cc.c3b(215,86,31))
+        end
+    else
+        items[1]:setBright(false)
+        items[1]:setEnabled(false)
+        items[1]:setColor(cc.c3b(170,170,170))
+        local uiText_desc = ccui.Helper:seekWidgetByName(items[1],"Text_desc")
+        if uiText_desc ~= nil then 
+            uiText_desc:setTextColor(cc.c3b(109,58,44))
+        end
     end
-    --可抢杠胡
-    if self.recordCreateParameter["bQGHu"] ~= nil and self.recordCreateParameter["bQGHu"] == 1 then
+
+    --代王硬
+    if self.recordCreateParameter["bDaiWangYing"] ~= nil and self.recordCreateParameter["bDaiWangYing"] == 1 then
         items[2]:setBright(true)
         local uiText_desc = ccui.Helper:seekWidgetByName(items[2],"Text_desc")
         if uiText_desc ~= nil then 
             uiText_desc:setTextColor(cc.c3b(215,86,31))
         end  
-    -- else
-    --     items[2]:setBright(false)
-    --     local uiText_desc = ccui.Helper:seekWidgetByName(items[2],"Text_desc")
-    --     if uiText_desc ~= nil then 
-    --         uiText_desc:setTextColor(cc.c3b(140,102,57))
-    --     end
     end
-
-    --首局随机庄
-    if self.recordCreateParameter["bSJZhuang"] ~= nil and self.recordCreateParameter["bSJZhuang"] == 1 then
+    --可抢杠胡
+    if self.recordCreateParameter["bQGHu"] ~= nil and self.recordCreateParameter["bQGHu"] == 1 then
         items[3]:setBright(true)
         local uiText_desc = ccui.Helper:seekWidgetByName(items[3],"Text_desc")
         if uiText_desc ~= nil then 
             uiText_desc:setTextColor(cc.c3b(215,86,31))
         end  
-    -- else
-    --     items[3]:setBright(false)
-    --     local uiText_desc = ccui.Helper:seekWidgetByName(items[3],"Text_desc")
-    --     if uiText_desc ~= nil then 
-    --         uiText_desc:setTextColor(cc.c3b(140,102,57))
-    --     end
+    end
+
+    --首局随机庄
+    if self.recordCreateParameter["bSJZhuang"] ~= nil and self.recordCreateParameter["bSJZhuang"] == 1 then
+        items[4]:setBright(true)
+        local uiText_desc = ccui.Helper:seekWidgetByName(items[4],"Text_desc")
+        if uiText_desc ~= nil then 
+            uiText_desc:setTextColor(cc.c3b(215,86,31))
+        end  
     end
 
     --选择托管时间
@@ -413,18 +432,24 @@ function RoomCreateLayer:onEventCreate(nTableType)
     
     local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(4),"ListView_parameter"):getItems()
     if items[1]:isBright() then
+        tableParameter.mZhaNiaoType = 1
+    else
+        tableParameter.mZhaNiaoType = 0
+    end
+    
+    if items[2]:isBright() then
         tableParameter.bDaiWangYing = 1
     else
         tableParameter.bDaiWangYing = 0
     end
 
-    if items[2]:isBright() then
+    if items[3]:isBright() then
         tableParameter.bQGHu = 1
     else
         tableParameter.bQGHu = 0 
     end
 
-    if items[3]:isBright() then
+    if items[4]:isBright() then
         tableParameter.bSJZhuang = 1
     else
         tableParameter.bSJZhuang = 0 

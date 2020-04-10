@@ -133,7 +133,7 @@
                         <OutlineColor A="255" R="255" G="0" B="0" />
                         <ShadowColor A="255" R="110" G="110" B="110" />
                       </AbstractNodeData>
-                      <AbstractNodeData Name="ListView_Backmusic" ActionTag="769022362" Tag="1161" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="-59.8232" RightMargin="39.8232" TopMargin="304.3657" BottomMargin="138.6343" TouchEnable="True" ClipAble="False" BackColorAlpha="102" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ScrollDirectionType="0" ItemMargin="331" VerticalType="Align_VerticalCenter" ctype="ListViewObjectData">
+                      <AbstractNodeData Name="ListView_Backmusic" ActionTag="769022362" Tag="1161" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="-59.8232" RightMargin="39.8232" TopMargin="283.3700" BottomMargin="159.6300" TouchEnable="True" ClipAble="False" BackColorAlpha="102" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ScrollDirectionType="0" ItemMargin="331" VerticalType="Align_VerticalCenter" ctype="ListViewObjectData">
                         <Size X="888.0000" Y="71.0000" />
                         <Children>
                           <AbstractNodeData Name="Button_qingsong" ActionTag="585820883" Tag="138" IconVisible="False" RightMargin="848.0000" TopMargin="15.5000" BottomMargin="15.5000" TouchEnable="True" FontSize="14" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="10" Scale9Height="18" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
@@ -225,10 +225,10 @@
                           </AbstractNodeData>
                         </Children>
                         <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                        <Position X="384.1768" Y="174.1343" />
+                        <Position X="384.1768" Y="195.1300" />
                         <Scale ScaleX="1.0000" ScaleY="1.0000" />
                         <CColor A="255" R="255" G="255" B="255" />
-                        <PrePosition X="0.4426" Y="0.3388" />
+                        <PrePosition X="0.4426" Y="0.3796" />
                         <PreSize X="1.0230" Y="0.1381" />
                         <SingleColor A="255" R="150" G="150" B="255" />
                         <FirstColor A="255" R="150" G="150" B="255" />

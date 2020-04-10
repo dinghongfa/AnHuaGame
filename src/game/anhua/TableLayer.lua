@@ -2302,10 +2302,12 @@ function TableLayer:initUI()
         require("common.SceneMgr"):switchScene(require("app.MyApp"):create():createView("HallLayer"),SCENE_HALL) 
     end) 
 	
-	-- local uiButton_position = ccui.Helper:seekWidgetByName(self.root, "Button_position")   -- 定位
-	-- Common:addTouchEventListener(uiButton_position, function()
-	-- 	require("common.SceneMgr"):switchOperation(require("app.MyApp"):create():createGame("game.anhua.HHLocationLayer"))
-	-- end)
+	local uiButton_position = ccui.Helper:seekWidgetByName(self.root, "Button_position")   -- 定位
+	Common:addTouchEventListener(uiButton_position, function()
+		--require("common.SceneMgr"):switchOperation(require("app.MyApp"):create():createGame("game.anhua.HHLocationLayer"))
+		require("common.DistanceAlarm"):create(GameCommon)
+	end)
+
 	-- local uiPanel_playerInfoBg = ccui.Helper:seekWidgetByName(self.root, "Panel_playerInfoBg")
 	-- if GameCommon.tableConfig.wCurrentNumber == 0 and GameCommon.tableConfig.nTableType > TableType_GoldRoom then
 	-- 	if CHANNEL_ID ~= 0 and CHANNEL_ID ~= 1 then
@@ -2338,9 +2340,10 @@ function TableLayer:initUI()
 		self:addVoice()
 		local uiListView_function = ccui.Helper:seekWidgetByName(self.root, "ListView_function")
 		if StaticData.Hide[CHANNEL_ID].btn10 == 0 then
-			uiListView_function:removeItem(uiListView_function:getIndex(uiButton_position))
+			--uiListView_function:removeItem(uiListView_function:getIndex(uiButton_position))
 			-- uiPanel_playerInfoBg:setVisible(false)
 		end
+
 		uiButton_cancel:setVisible(false)
 		if GameCommon.gameState == GameCommon.GameState_Start then
 			local uiPanel_ready = ccui.Helper:seekWidgetByName(self.root, "Panel_ready")
@@ -2364,7 +2367,7 @@ function TableLayer:initUI()
 		uiButton_Invitation:setVisible(false)
 		local uiListView_function = ccui.Helper:seekWidgetByName(self.root, "ListView_function")
 		uiListView_function:removeItem(uiListView_function:getIndex(uiButton_disbanded))
-		uiListView_function:removeItem(uiListView_function:getIndex(uiButton_position))
+		--uiListView_function:removeItem(uiListView_function:getIndex(uiButton_position))
 		local uiPanel_ready = ccui.Helper:seekWidgetByName(self.root, "Panel_ready")
 		--        uiPanel_ready:setVisible(false)
 		uiButton_voice:setVisible(false)
@@ -2430,6 +2433,32 @@ function TableLayer:initUI()
 	--人数
 	-- local Text_peoplenum = ccui.Helper:seekWidgetByName(self.root, "Text_peoplenum")
 	-- Text_peoplenum:setString(GameCommon.gameConfig.bPlayerCount .. '人')
+
+
+	-- @cxx 牌桌查看俱乐部
+    local Button_clubTable = ccui.Helper:seekWidgetByName(self.root,"Button_clubTable")
+   -- local Button_expression = ccui.Helper:seekWidgetByName(self.root,"Button_expression")
+   -- local Panel_ui = ccui.Helper:seekWidgetByName(self.root,"Panel_ui")
+    --local Button_chatVoice = Panel_ui:getChildByName('game_button_voice')
+    if GameCommon.tableConfig.nTableType == TableType_ClubRoom and GameCommon.tableConfig.nTableType ~= TableType_Playback then
+        if GameCommon.gameState == GameCommon.GameState_Start or GameCommon.tableConfig.wCurrentNumber > 0 then
+            Button_clubTable:setVisible(false)
+           -- Button_expression:setVisible(true)
+           -- Button_chatVoice:setVisible(true)
+        else
+            Button_clubTable:setVisible(true)
+          --  Button_expression:setVisible(false)
+           -- Button_chatVoice:setVisible(false)
+        end
+
+        Common:addTouchEventListener(Button_clubTable,function()
+            local dwClubID = GameCommon.tableConfig.dwClubID
+            self:addChild(require("app.MyApp"):create(dwClubID):createView("NewClubFreeTableLayer"))
+        end)
+    else
+        Button_clubTable:setVisible(false)
+	end
+	
 end
 
 --@ fux
@@ -2575,6 +2604,23 @@ function TableLayer:updateGameState(state)
 	else
 		
 	end
+
+	-- @cxx 牌桌查看俱乐部
+    local Button_clubTable = ccui.Helper:seekWidgetByName(self.root,"Button_clubTable")
+    --local Button_expression = ccui.Helper:seekWidgetByName(self.root,"Button_expression")
+    --local Panel_ui = ccui.Helper:seekWidgetByName(self.root,"Panel_ui")
+    --local Button_chatVoice = Panel_ui:getChildByName('game_button_voice')
+    if GameCommon.tableConfig.nTableType == TableType_ClubRoom and GameCommon.tableConfig.nTableType ~= TableType_Playback then
+        if GameCommon.gameState == GameCommon.GameState_Start or GameCommon.tableConfig.wCurrentNumber > 0 then
+            Button_clubTable:setVisible(false)
+          --  Button_expression:setVisible(true)
+            --Button_chatVoice:setVisible(true)
+        else
+            Button_clubTable:setVisible(true)
+          --  Button_expression:setVisible(false)
+            --Button_chatVoice:setVisible(false)
+        end
+    end
 end
 
 

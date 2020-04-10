@@ -39,25 +39,25 @@
                 <EndColor A="255" R="255" G="255" B="255" />
                 <ColorVector ScaleY="1.0000" />
               </AbstractNodeData>
-              <AbstractNodeData Name="Panel_bg" ActionTag="-308483129" Tag="307" IconVisible="False" TouchEnable="True" ClipAble="False" BackColorAlpha="0" ComboBoxIndex="1" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
+              <AbstractNodeData Name="Panel_bg" ActionTag="-308483129" Tag="307" IconVisible="False" LeftMargin="-1.7048" RightMargin="1.7048" TopMargin="-3.4097" BottomMargin="3.4096" TouchEnable="True" ClipAble="False" BackColorAlpha="0" ComboBoxIndex="1" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
                 <Size X="1280.0000" Y="720.0000" />
                 <Children>
-                  <AbstractNodeData Name="Image_bg" ActionTag="-129213173" Alpha="229" Tag="305" IconVisible="False" PositionPercentYEnabled="True" BottomMargin="377.0000" LeftEage="422" RightEage="422" TopEage="124" BottomEage="124" Scale9OriginX="422" Scale9OriginY="124" Scale9Width="436" Scale9Height="39" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="Image_bg" ActionTag="-129213173" Alpha="229" Tag="305" IconVisible="False" PositionPercentYEnabled="True" TopMargin="-1.7050" BottomMargin="378.7050" LeftEage="422" RightEage="422" TopEage="124" BottomEage="124" Scale9OriginX="422" Scale9OriginY="124" Scale9Width="436" Scale9Height="39" ctype="ImageViewObjectData">
                     <Size X="1280.0000" Y="343.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="1.0000" />
-                    <Position X="640.0000" Y="720.0000" />
+                    <Position X="640.0000" Y="721.7050" />
                     <Scale ScaleX="1.0000" ScaleY="0.9000" />
                     <CColor A="255" R="255" G="255" B="255" />
-                    <PrePosition X="0.5000" Y="1.0000" />
+                    <PrePosition X="0.5000" Y="1.0024" />
                     <PreSize X="1.0000" Y="0.4764" />
                     <FileData Type="Normal" Path="zipai/table/zipai_table_dikuang.png" Plist="" />
                   </AbstractNodeData>
                 </Children>
                 <AnchorPoint />
-                <Position />
+                <Position X="-1.7048" Y="3.4096" />
                 <Scale ScaleX="1.0000" ScaleY="1.0000" />
                 <CColor A="255" R="255" G="255" B="255" />
-                <PrePosition />
+                <PrePosition X="-0.0013" Y="0.0047" />
                 <PreSize X="1.0000" Y="1.0000" />
                 <SingleColor A="255" R="0" G="0" B="0" />
                 <FirstColor A="255" R="0" G="0" B="0" />
@@ -101,13 +101,13 @@
                           <AbstractNodeData Name="Button_chi" ActionTag="-1695102069" ZOrder="1" Tag="18" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" TouchEnable="True" FontSize="14" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="112" Scale9Height="333" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
                             <Size X="142.0000" Y="320.0000" />
                             <Children>
-                              <AbstractNodeData Name="ListView_card" ActionTag="896268808" Tag="95" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" TopMargin="12.9920" BottomMargin="-12.9920" ClipAble="False" BackColorAlpha="102" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ScrollDirectionType="0" ItemMargin="-38" DirectionType="Vertical" HorizontalType="Align_HorizontalCenter" ctype="ListViewObjectData">
+                              <AbstractNodeData Name="ListView_card" ActionTag="896268808" Tag="95" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" TopMargin="10.5563" BottomMargin="-10.5563" ClipAble="False" BackColorAlpha="102" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ScrollDirectionType="0" ItemMargin="-38" DirectionType="Vertical" HorizontalType="Align_HorizontalCenter" ctype="ListViewObjectData">
                                 <Size X="142.0000" Y="320.0000" />
                                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                                <Position X="71.0000" Y="147.0080" />
+                                <Position X="71.0000" Y="149.4437" />
                                 <Scale ScaleX="1.0000" ScaleY="1.0000" />
                                 <CColor A="255" R="255" G="255" B="255" />
-                                <PrePosition X="0.5000" Y="0.4594" />
+                                <PrePosition X="0.5000" Y="0.4670" />
                                 <PreSize X="1.0000" Y="1.0000" />
                                 <SingleColor A="255" R="150" G="150" B="255" />
                                 <FirstColor A="255" R="150" G="150" B="255" />

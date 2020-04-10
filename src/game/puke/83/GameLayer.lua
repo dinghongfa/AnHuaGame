@@ -470,7 +470,7 @@ function GameLayer:readBuffer(luaFunc, mainCmdID, subCmdID)
             if PDKGameCommon.tableConfig.szTableName ~= nil and PDKGameCommon.tableConfig.szTableName ~="" then  
                 local uiText_table = ccui.Helper:seekWidgetByName(self.root,"Text_table")
                 uiText_table:setString(PDKGameCommon.tableConfig.szTableName)
-                local CellScore = PDKGameCommon.tableConfig.wCellScore / PDKGameCommon.tableConfig.wTableCellDenominator
+                --local CellScore = PDKGameCommon.tableConfig.wCellScore / PDKGameCommon.tableConfig.wTableCellDenominator
                 --uiText_table:setString(PDKGameCommon.tableConfig.szTableName..string.format(" 倍率:%0.2f",CellScore))
             end 
             return true

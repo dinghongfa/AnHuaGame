@@ -481,51 +481,214 @@ function GameDesc:getGameDesc(wKindID,data,tableConfig)
         
     elseif wKindID == 47 then       
         if data.bPlayerCount == 3 then
-            desc = desc.."三人房"
+            desc = desc.."3人房"
         elseif data.bPlayerCount == 2 then
             desc = desc.."双人竞技"
+        elseif data.bPlayerCount == 4 then
+            desc = desc.."4人坐省"
         end
-		if data.bPlayerCount == 2 then
-        if data.bDeathCard == 1 then
-            desc = desc.."/抽牌20张"
-        else
-            desc = desc.."/不抽底牌"
+        if data.bCanHuXi == 15 then
+            desc = desc.."/15胡息起胡"
+        elseif data.bCanHuXi == 18 then
+            desc = desc.."/18胡息起胡"
+        elseif data.bCanHuXi == 21 then
+            desc = desc.."/21胡息起胡"
         end
-      end
-        -- if data.bCanHuXi == 15 then
-        --     desc = desc.."/15胡息起胡"
-        -- elseif data.bCanHuXi == 18 then
-        --     desc = desc.."/18胡息起胡"
-        -- elseif data.bCanHuXi == 21 then
-        --     desc = desc.."/21胡息起胡"
-        -- end
         if data.bStartTun == 1 then
-            desc = desc.."/底分2分"
+            desc = desc.."/闷一底"
         elseif data.bStartTun == 2 then
-            desc = desc.."/底分3分"
+            desc = desc.."/闷二底"
         elseif data.bStartTun == 3 then
-            desc = desc.."/底分4分"
+            desc = desc.."/闷三底"
         elseif data.bStartTun == 4 then
-            desc = desc.."/底分5分"
+            desc = desc.."/闷四底"
+        elseif data.bStartTun == 5 then
+            desc = desc.."/闷五底"
         else
-            desc = desc.."/底分1分"
+            desc = desc.."/不闷"
         end
-        if data.bMaxLost == 100 then
-            desc = desc.."/100封顶"
-        elseif data.bMaxLost == 200  then
-            desc = desc.."/200封顶"
-        elseif data.bMaxLost == 300  then
-            desc = desc.."/300封顶"
-        elseif data.bMaxLost == 0  then
-            desc = desc.."/不封顶"
+        if data.bTurn == 1 then
+            desc = desc.."/轮庄"
+        else
+            desc = desc.."/抢庄"
         end
-        if Bit:_and(data.dwMingTang,0x2000) ~= 0 then
-            desc = desc.."/对对胡"
+        if data.bHostedTime == 1 then
+            desc = desc.."/一分钟托管"
+        elseif data.bHostedTime == 2 then
+            desc = desc.."/两分钟托管"
+        elseif data.bHostedTime == 3 then
+            desc = desc.."/三分钟托管"
+        elseif data.bHostedTime == 5 then
+            desc = desc.."/五分钟托管"
+        elseif data.bHostedTime == 0 then
+            desc = desc.."/无托管"
+        end
+
+        if data.bHostedSession == 1 then
+            desc = desc.."/单局托管"
+        elseif data.bHostedSession == 3 then
+            desc = desc.."/三局托管"
+        elseif data.bHostedSession >= 6 then
+            desc = desc.."/全局托管"
+        end
+        
+    elseif wKindID == 48 then        
+        if data.bPlayerCount == 3 then
+            desc = desc.."3人房"
+        elseif data.bPlayerCount == 2 then
+            desc = desc.."双人竞技"
+        elseif data.bPlayerCount == 4 then
+            desc = desc.."4人坐省"
+        end
+        if data.bCanHuXi == 15 then
+            desc = desc.."/15胡息起胡"
+        elseif data.bCanHuXi == 18 then
+            desc = desc.."/18胡息起胡"
+        elseif data.bCanHuXi == 21 then
+            desc = desc.."/21胡息起胡"
         end
         if data.bStartBanker == 1 then
             desc = desc.."/首局房主坐庄"
         else
             desc = desc.."/首局随机坐庄"
+        end
+        if data.bTurn == 1 then
+            desc = desc.."/轮庄"
+        else
+            desc = desc.."/抢庄"
+        end
+        if data.bMaxLost == 300 then
+            desc = desc.."/300封顶"
+        elseif data.bMaxLost == 600 then
+            desc = desc.."/600封顶"
+        end
+
+        -- if Bit:_and(data.dwMingTang,0x02) ~= 0 then
+        --     desc = desc.."/闷一底"
+        -- end
+        if data.bStartTun == 1 then
+            desc = desc.."/闷一底"
+        elseif data.bStartTun == 2 then
+            desc = desc.."/闷二底"
+        elseif data.bStartTun == 3 then
+            desc = desc.."/闷三底"
+        elseif data.bStartTun == 4 then
+            desc = desc.."/闷四底"
+        elseif data.bStartTun == 5 then
+            desc = desc.."/闷五底"
+        else
+            desc = desc.."/不闷"
+        end
+
+        if Bit:_and(data.dwMingTang,0x04) ~= 0 then
+            desc = desc.."/团圆不叠加"
+        elseif Bit:_and(data.dwMingTang,0x10000) ~= 0 then
+            desc = desc.."/团圆叠加"
+        end
+        if Bit:_and(data.dwMingTang,0x08) ~= 0 then
+            desc = desc.."/真行行息"
+        end
+        if Bit:_and(data.dwMingTang,0x10) ~= 0 then
+            desc = desc.."/假行行息*6"
+        end
+        if Bit:_and(data.dwMingTang,0x8000) ~= 0 then
+            desc = desc.."/假行行息*4"
+        end
+        if data.bSiQiHong == 1 then
+            desc = desc.."/四七红"
+        end
+        if Bit:_and(data.dwMingTang,0x20000) ~= 0 then
+            desc = desc.."/捉小三"
+        end
+        if data.bPaoTips == 1 then
+            desc = desc.."/明跑提示"
+        end
+
+        if data.bDeathCard == 1 then
+            desc = desc.."/去牌"
+        end
+        
+        if data.bHostedTime == 1 then
+            desc = desc.."/一分钟托管"
+        elseif data.bHostedTime == 2 then
+            desc = desc.."/两分钟托管"
+        elseif data.bHostedTime == 3 then
+            desc = desc.."/三分钟托管"
+        elseif data.bHostedTime == 5 then
+            desc = desc.."/五分钟托管"
+        elseif data.bHostedTime == 0 then
+            desc = desc.."/无托管"
+        end
+
+        if data.bHostedSession == 1 then
+            desc = desc.."/单局托管"
+        elseif data.bHostedSession == 3 then
+            desc = desc.."/三局托管"
+        elseif data.bHostedSession >= 6 then
+            desc = desc.."/全局托管"
+        end
+
+    elseif wKindID == 49 then        
+        if data.bPlayerCount == 3 then
+            desc = desc.."3人房"
+        elseif data.bPlayerCount == 2 then
+            desc = desc.."双人竞技"
+        elseif data.bPlayerCount == 4 then
+            desc = desc.."4人坐省"
+        end
+        if data.bCanHuXi == 15 then
+            desc = desc.."/15胡息起胡"
+        elseif data.bCanHuXi == 18 then
+            desc = desc.."/18胡息起胡"
+        elseif data.bCanHuXi == 21 then
+            desc = desc.."/21胡息起胡"
+        end
+        if data.bStartTun == 1 then
+            desc = desc.."/闷一底"
+        elseif data.bStartTun == 2 then
+            desc = desc.."/闷二底"
+        elseif data.bStartTun == 3 then
+            desc = desc.."/闷三底"
+        elseif data.bStartTun == 4 then
+            desc = desc.."/闷四底"
+        elseif data.bStartTun == 5 then
+            desc = desc.."/闷五底"
+        else
+            desc = desc.."/不闷"
+        end
+        if data.bTurn == 1 then
+            desc = desc.."/轮庄"
+        else
+            desc = desc.."/抢庄"
+        end
+        if Bit:_and(data.dwMingTang,0x0C00) ~= 0 then
+            desc = desc.."/天地胡"
+        end
+        if data.STWK == 1 then
+            desc = desc.."/三提五坎"
+        end
+        if data.bHuangFanAddUp == 1 then
+            desc = desc.."/黄番"
+        end
+
+        if data.bHostedTime == 1 then
+            desc = desc.."/一分钟托管"
+        elseif data.bHostedTime == 2 then
+            desc = desc.."/两分钟托管"
+        elseif data.bHostedTime == 3 then
+            desc = desc.."/三分钟托管"
+        elseif data.bHostedTime == 5 then
+            desc = desc.."/五分钟托管"
+        elseif data.bHostedTime == 0 then
+            desc = desc.."/无托管"
+        end
+
+        if data.bHostedSession == 1 then
+            desc = desc.."/单局托管"
+        elseif data.bHostedSession == 3 then
+            desc = desc.."/三局托管"
+        elseif data.bHostedSession >= 6 then
+            desc = desc.."/全局托管"
         end
         
     elseif wKindID == 89 then        
@@ -651,44 +814,6 @@ function GameDesc:getGameDesc(wKindID,data,tableConfig)
             desc = desc.."/吃过的牌之后不能碰"
         end
 
-    elseif wKindID == 49 then        
-       if data.bPlayerCount == 3 then
-           desc = desc.."三人房"
-       elseif data.bPlayerCount == 2 then
-           desc = desc.."双人竞技"
-       end
-	   if data.bPlayerCount == 2 then
-        if data.bDeathCard == 1 then
-            desc = desc.."/抽牌20张"
-        else
-            desc = desc.."/不抽底牌"
-        end
-      end
-       if data.bStartTun == 1 then
-           desc = desc.."/底分2分"
-       elseif data.bStartTun == 2 then
-           desc = desc.."/底分3分"
-       elseif data.bStartTun == 3 then
-           desc = desc.."/底分4分"
-       elseif data.bStartTun == 4 then
-           desc = desc.."/底分5分"
-       else
-           desc = desc.."/底分1分"
-       end
-       if data.bMaxLost == 100 then
-           desc = desc.."/100封顶"
-       elseif data.bMaxLost == 200  then
-           desc = desc.."/200封顶"
-       elseif data.bMaxLost == 300  then
-           desc = desc.."/300封顶"
-       elseif data.bMaxLost == 0  then
-           desc = desc.."/不封顶"
-       end
-       if data.bStartBanker == 1 then
-           desc = desc.."/首局房主坐庄"
-       else
-           desc = desc.."/首局随机坐庄"
-       end
     elseif wKindID == 68 then         
         if data.bPlayerCount == 2 then
             desc = desc.."双人竞技"
@@ -819,10 +944,10 @@ function GameDesc:getGameDesc(wKindID,data,tableConfig)
         else
             desc = desc.."2人(PK)"
         end
-        if data.bStartCard ~= 0 then
-            desc = desc.."/首局黑桃3必出"
+        if data.bStartCard == 0 then
+            desc = desc.."/首局随机出牌"
         else
-            desc = desc.."/首局黑桃3不必出"
+            desc = desc.."/首局黑桃3必出(没有黑桃3最小牌必出)"
         end  
         if data.bBombSeparation == 1 then
             desc = desc.."/炸弹可拆"
@@ -1279,21 +1404,21 @@ function GameDesc:getGameDesc(wKindID,data,tableConfig)
       end
 
       if data.bDeathCard == 1 then
-         desc = desc.."/亡20张"
+         desc = desc.."/扣20张"
       elseif data.bDeathCard == 2 then
-         desc = desc.."/亡10张"
+         desc = desc.."/扣10张"
       end
 
       if data.bHostedTime == 1 then
-        desc = desc.."\n一分钟托管"
+        desc = desc.."/一分钟托管"
     elseif data.bHostedTime == 2 then
-        desc = desc.."\n两分钟托管"
+        desc = desc.."/两分钟托管"
     elseif data.bHostedTime == 3 then
-        desc = desc.."\n三分钟托管"
+        desc = desc.."/三分钟托管"
     elseif data.bHostedTime == 5 then
-        desc = desc.."\n五分钟托管"
+        desc = desc.."/五分钟托管"
     elseif data.bHostedTime == 0 then
-        desc = desc.."\n无托管"
+        desc = desc.."/无托管"
     end
 
     if data.bHostedSession == 1 then
@@ -1867,6 +1992,9 @@ function GameDesc:getGameDesc(wKindID,data,tableConfig)
             desc = desc.."/4个鸟"
         end
 
+        if data.mZhaNiaoType == 1 then
+           desc = desc.."/159中鸟"
+        end
         if data.bDaiWangYing == 1 then
             desc = desc.."/代王硬"
         end

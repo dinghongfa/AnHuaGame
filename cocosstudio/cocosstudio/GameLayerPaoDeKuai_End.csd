@@ -211,14 +211,14 @@
                                     <PreSize X="0.0644" Y="1.2895" />
                                     <FileData Type="Normal" Path="puke/result/ok_ui_pdk_r_bird.png" Plist="" />
                                   </AbstractNodeData>
-                                  <AbstractNodeData Name="Text_result" ActionTag="-1408897067" Tag="21" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="764.8000" RightMargin="86.2000" TopMargin="1.0000" BottomMargin="1.0000" FontSize="36" LabelText="0" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                                    <Size X="19.0000" Y="36.0000" />
-                                    <AnchorPoint ScaleY="0.5000" />
-                                    <Position X="764.8000" Y="19.0000" />
+                                  <AbstractNodeData Name="Text_result" ActionTag="-1408897067" Tag="21" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="670.7100" RightMargin="4.2900" TopMargin="4.0000" BottomMargin="4.0000" FontSize="30" LabelText="+10(赛:10.00)" HorizontalAlignmentType="HT_Center" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                                    <Size X="195.0000" Y="30.0000" />
+                                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                                    <Position X="768.2100" Y="19.0000" />
                                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
                                     <CColor A="255" R="255" G="255" B="255" />
-                                    <PrePosition X="0.8791" Y="0.5000" />
-                                    <PreSize X="0.0218" Y="0.9474" />
+                                    <PrePosition X="0.8830" Y="0.5000" />
+                                    <PreSize X="0.2241" Y="0.7895" />
                                     <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
                                     <OutlineColor A="255" R="255" G="0" B="0" />
                                     <ShadowColor A="255" R="110" G="110" B="110" />
@@ -330,14 +330,14 @@
                                     <PreSize X="0.0644" Y="1.2895" />
                                     <FileData Type="Normal" Path="puke/result/ok_ui_pdk_r_bird.png" Plist="" />
                                   </AbstractNodeData>
-                                  <AbstractNodeData Name="Text_result" ActionTag="-1165716635" Tag="429" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="764.8000" RightMargin="86.2000" TopMargin="1.0000" BottomMargin="1.0000" FontSize="36" LabelText="0" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                                    <Size X="19.0000" Y="36.0000" />
-                                    <AnchorPoint ScaleY="0.5000" />
-                                    <Position X="764.8000" Y="19.0000" />
+                                  <AbstractNodeData Name="Text_result" ActionTag="-1165716635" Tag="429" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="670.7100" RightMargin="4.2900" TopMargin="4.0000" BottomMargin="4.0000" FontSize="30" LabelText="+10(赛:10.00)" HorizontalAlignmentType="HT_Center" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                                    <Size X="195.0000" Y="30.0000" />
+                                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                                    <Position X="768.2100" Y="19.0000" />
                                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
                                     <CColor A="255" R="255" G="255" B="255" />
-                                    <PrePosition X="0.8791" Y="0.5000" />
-                                    <PreSize X="0.0218" Y="0.9474" />
+                                    <PrePosition X="0.8830" Y="0.5000" />
+                                    <PreSize X="0.2241" Y="0.7895" />
                                     <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
                                     <OutlineColor A="255" R="255" G="0" B="0" />
                                     <ShadowColor A="255" R="110" G="110" B="110" />
@@ -449,14 +449,14 @@
                                     <PreSize X="0.0644" Y="1.2895" />
                                     <FileData Type="Normal" Path="puke/result/ok_ui_pdk_r_bird.png" Plist="" />
                                   </AbstractNodeData>
-                                  <AbstractNodeData Name="Text_result" ActionTag="-2104742246" Tag="437" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="764.8000" RightMargin="86.2000" TopMargin="1.0000" BottomMargin="1.0000" FontSize="36" LabelText="0" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                                    <Size X="19.0000" Y="36.0000" />
-                                    <AnchorPoint ScaleY="0.5000" />
-                                    <Position X="764.8000" Y="19.0000" />
+                                  <AbstractNodeData Name="Text_result" ActionTag="-2104742246" Tag="437" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="670.7100" RightMargin="4.2900" TopMargin="4.0000" BottomMargin="4.0000" FontSize="30" LabelText="+10(赛:10.00)" HorizontalAlignmentType="HT_Center" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                                    <Size X="195.0000" Y="30.0000" />
+                                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                                    <Position X="768.2100" Y="19.0000" />
                                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
                                     <CColor A="255" R="255" G="255" B="255" />
-                                    <PrePosition X="0.8791" Y="0.5000" />
-                                    <PreSize X="0.0218" Y="0.9474" />
+                                    <PrePosition X="0.8830" Y="0.5000" />
+                                    <PreSize X="0.2241" Y="0.7895" />
                                     <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
                                     <OutlineColor A="255" R="255" G="0" B="0" />
                                     <ShadowColor A="255" R="110" G="110" B="110" />

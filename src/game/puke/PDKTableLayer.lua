@@ -1797,9 +1797,9 @@ function PDKTableLayer:getCardTypeAndCard(bCardData,bUserCardCount)
     
     end
 
-    if PDKGameCommon.tableConfig.tableParameter.bThreeBomb == 1 then  
+    if PDKGameCommon.gameConfig ~= nil and  PDKGameCommon.gameConfig.bThreeBomb == 1 then  
         local value = Bit:_and(bCardData[1],0x0F)
-        if PDKGameCommon.tableConfig.tableParameter.b15Or16 == 1  then           
+        if PDKGameCommon.gameConfig.b15Or16 == 1  then           
             if bUserCardCount == 3 and #tableSortCard[3] == 1  and value == 1 then
                 return PDKGameCommon.CardType_bomb, tableSortCard[3][1]
             end
@@ -2264,6 +2264,9 @@ function PDKTableLayer:getExtractCardType(bCardData,bUserCardCount,bTargetCardDa
             if value > targetValue then
                 local tableReturnCard = clone(var)
                 bTargetUserCardCount = bTargetUserCardCount or bUserCardCount
+                if bTargetUserCardCount >= 5 then 
+                    bTargetUserCardCount = 5
+                end 
                 --补2个
                 if #tableReturnCard%bTargetUserCardCount ~= 0 then
                     for k, v in pairs(tableSortCardTemp[1]) do
@@ -2513,8 +2516,8 @@ function PDKTableLayer:getExtractCardType(bCardData,bUserCardCount,bTargetCardDa
         end
     end
 
-    if PDKGameCommon.tableConfig.tableParameter.bThreeBomb == 1 then 
-        if PDKGameCommon.tableConfig.tableParameter.b15Or16 == 1  then
+    if PDKGameCommon.gameConfig ~= nil and PDKGameCommon.gameConfig.bThreeBomb == 1 then 
+        if PDKGameCommon.gameConfig.b15Or16 == 1  then
             for key, var in pairs(tableSortCardTemp[3]) do
                 local value = Bit:_and(var[1],0x0F)
                 if value == 1 then

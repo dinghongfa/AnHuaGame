@@ -121,6 +121,18 @@
                     <PreSize X="0.3178" Y="0.0703" />
                     <LabelBMFontFile_CNB Type="Normal" Path="puke/ui/font_res_huang.fnt" Plist="" />
                   </AbstractNodeData>
+                  <AbstractNodeData Name="Text_result" ActionTag="927471032" Tag="342" IconVisible="False" LeftMargin="171.6400" RightMargin="72.3600" TopMargin="359.1321" BottomMargin="31.8679" FontSize="32" LabelText="Text &#xA;Label" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                    <Size X="77.0000" Y="64.0000" />
+                    <AnchorPoint ScaleY="0.5000" />
+                    <Position X="171.6400" Y="63.8679" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="0" B="0" />
+                    <PrePosition X="0.5347" Y="0.1404" />
+                    <PreSize X="0.2399" Y="0.1407" />
+                    <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
+                    <OutlineColor A="255" R="255" G="0" B="0" />
+                    <ShadowColor A="255" R="110" G="110" B="110" />
+                  </AbstractNodeData>
                   <AbstractNodeData Name="Image_gs" ActionTag="-423870271" Tag="557" IconVisible="False" LeftMargin="251.6510" RightMargin="-26.6510" TopMargin="-25.1898" BottomMargin="383.1898" LeftEage="31" RightEage="31" TopEage="26" BottomEage="26" Scale9OriginX="31" Scale9OriginY="26" Scale9Width="34" Scale9Height="45" ctype="ImageViewObjectData">
                     <Size X="96.0000" Y="97.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />

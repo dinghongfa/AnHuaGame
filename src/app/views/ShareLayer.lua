@@ -68,7 +68,7 @@ function ShareLayer:onCreate(params)
     
     local isInClub = shareData.isInClub;
     local uiListView_btn = ccui.Helper:seekWidgetByName(self.root,"ListView_btn")
-    for i = 0, 6 do
+    for i = 0, 7 do
         if Bit:_and((Bit:_rshift(shareData.cbTargetType,i)),1) == 1 then
             print('-->>>>',i);
             if i ~= 3 then
@@ -92,6 +92,8 @@ function ShareLayer:onCreate(params)
                         uitext = ccui.Text:create("邀请在线好友","fonts/DFYuanW7-GB2312.ttf",30)
                     elseif i == 6 then
                         uitext = ccui.Text:create("聊天室","fonts/DFYuanW7-GB2312.ttf",30)
+                    elseif i == 7 then
+                        uitext = ccui.Text:create("钉钉","fonts/DFYuanW7-GB2312.ttf",30)
                     end 
                     uitext:setVisible(false)
                     uitext:setTextColor(cc.c3b(118,63,25))              

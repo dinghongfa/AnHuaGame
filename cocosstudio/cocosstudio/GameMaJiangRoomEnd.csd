@@ -221,14 +221,14 @@
                     <PreSize X="0.3400" Y="0.0702" />
                     <LabelBMFontFile_CNB Type="Normal" Path="anhua/ui/bigend/font_res_huang.fnt" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="Text_result" ActionTag="329113012" Tag="311" IconVisible="False" LeftMargin="143.3900" RightMargin="98.6100" TopMargin="378.7042" BottomMargin="29.2958" FontSize="24" LabelText="Text &#xA;Label" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                    <Size X="58.0000" Y="48.0000" />
+                  <AbstractNodeData Name="Text_result" ActionTag="329113012" Tag="311" IconVisible="False" LeftMargin="143.3900" RightMargin="84.6100" TopMargin="373.7000" BottomMargin="22.3000" FontSize="30" LabelText="Text &#xA;Label" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                    <Size X="72.0000" Y="60.0000" />
                     <AnchorPoint ScaleY="0.5000" />
-                    <Position X="143.3900" Y="53.2958" />
+                    <Position X="143.3900" Y="52.3000" />
                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
                     <CColor A="255" R="255" G="0" B="0" />
-                    <PrePosition X="0.4780" Y="0.1169" />
-                    <PreSize X="0.1933" Y="0.1053" />
+                    <PrePosition X="0.4780" Y="0.1147" />
+                    <PreSize X="0.2400" Y="0.1316" />
                     <FontResource Type="Normal" Path="fonts/DFYuanW7-GB2312.ttf" Plist="" />
                     <OutlineColor A="255" R="255" G="0" B="0" />
                     <ShadowColor A="255" R="110" G="110" B="110" />

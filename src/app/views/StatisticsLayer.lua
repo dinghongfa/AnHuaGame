@@ -794,7 +794,7 @@ function StatisticsLayer:RET_GET_GAME_RECORD(event)
     local Text_num = self:seekWidgetByNameEx(item,'Text_num')
     local Text_time_1 = self:seekWidgetByNameEx(item,'Text_time_1')
     local Text_time_2 = self:seekWidgetByNameEx(item,'Text_time_2') 
-    local time  = data.dwStartData + data.dwPlayTimeCount
+    local time  = data.dwStartData --+ data.dwPlayTimeCount
     local y,m,d,h,mi,s = Common:getYMDHMS(time)
    
     local m0 = ""  

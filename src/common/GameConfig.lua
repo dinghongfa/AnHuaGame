@@ -220,9 +220,9 @@ function GameConfig:getParameter(wKindID,luaFunc)
         data.bHostedTime = luaFunc:readRecvByte()                 --托管时间
         data.bHostedSession = luaFunc:readRecvByte()                 --托管局数
         data.bDistanceLimit = luaFunc:readRecvByte()                 --距离限制
-
+        data.mZhaNiaoType = luaFunc:readRecvByte()
         
-        haveReadByte = 21    --已读长度，每次增加或者减少都要修改该值，Byte1个字节 WORD2个字节 DWORD4个字节
+        haveReadByte = 22    --已读长度，每次增加或者减少都要修改该值，Byte1个字节 WORD2个字节 DWORD4个字节
 
     elseif wKindID == 84 then 
         data.bPlayerCount = luaFunc:readRecvByte()          --参与游戏的人数   
@@ -527,30 +527,7 @@ function GameConfig:getParameter(wKindID,luaFunc)
         data.bQingSH = luaFunc:readRecvByte()
         data.bJiePao = luaFunc:readRecvByte()
         haveReadByte = 8    --已读长度，每次增加或者减少都要修改该值，Byte1个字节 WORD2个字节 DWORD4个字节
-        
-    elseif wKindID == 47 then
-        data.FanXing = {}
-        data.FanXing.bType = luaFunc:readRecvByte()                        --翻省    0默认没有反省  1上省  2下省  3跟省
-        data.FanXing.bCount = luaFunc:readRecvByte()                       --翻省的次数
-        data.FanXing.bAddTun = luaFunc:readRecvByte()                      --省算法, 一省三囤  单省    
-        data.bPlayerCountType = luaFunc:readRecvByte()              --用户人数模式 0：默认3人   1：4人玩法  2：3人参与另外一人省
-        data.bPlayerCount = luaFunc:readRecvByte()                  --参与游戏的人数 3+1模式为3
-        data.bLaiZiCount = luaFunc:readRecvByte()                   --癞子数量 0 ~ 4个
-        data.bMaxLost = luaFunc:readRecvWORD()                      --最大输
-        data.bYiWuShi = luaFunc:readRecvByte()                      --是否有一五十吃法
-        data.bLiangPai = luaFunc:readRecvByte()                     --是否亮牌
-        data.bCanHuXi = luaFunc:readRecvByte()                      --起胡数  0 3 6 10 15  
-        data.bHuType = luaFunc:readRecvByte()                       --胡牌类型  0自摸翻倍  1接炮
-        data.bFangPao = luaFunc:readRecvByte()                      --是否有放跑功能
-        data.bSettlement = luaFunc:readRecvByte()                   --结算是否按三胡一囤，否则一胡一囤
-        data.bStartTun = luaFunc:readRecvByte()                     --囤数起始算法  0起始胡息一囤  1起始胡息二囤 210胡息三囤<=15胡息每多1胡息+1囤    
-        data.bSocreType = luaFunc:readRecvByte()                    --0低分*囤数总和*名堂番数总和  1低分*囤数总和*名堂番数乘积
-        data.dwMingTang = luaFunc:readRecvDWORD()                   --包含的名堂有哪些             
-        data.bTurn = luaFunc:readRecvByte()
-        data.bDeathCard =luaFunc:readRecvByte()                     --亡牌
-        data.bStartBanker = luaFunc:readRecvByte()                    --随机庄
-        haveReadByte = 23    --已读长度，每次增加或者减少都要修改该值，Byte1个字节 WORD2个字节 DWORD4个字节
-        
+           
     elseif wKindID == 89 then 
         data.FanXing = {}
         data.FanXing.bType = luaFunc:readRecvByte()                 --翻省    0默认没有反省  1上省  2下省  3跟省
@@ -587,6 +564,63 @@ function GameConfig:getParameter(wKindID,luaFunc)
         data.bChiNoPeng = luaFunc:readRecvByte()                      --起胡数  0 3 6 10 15  
         haveReadByte = 9   --已读长度，每次增加或者减少都要修改该值，Byte1个字节 WORD2个字节 DWORD4个字节
         
+    elseif wKindID == 47 then
+        data.FanXing = {}
+        data.FanXing.bType = luaFunc:readRecvByte()                        --翻省    0默认没有反省  1上省  2下省  3跟省
+        data.FanXing.bCount = luaFunc:readRecvByte()                       --翻省的次数
+        data.FanXing.bAddTun = luaFunc:readRecvByte()                      --省算法, 一省三囤  单省    
+        data.bPlayerCountType = luaFunc:readRecvByte()              --用户人数模式 0：默认3人   1：4人玩法  2：3人参与另外一人省
+        data.bPlayerCount = luaFunc:readRecvByte()                  --参与游戏的人数 3+1模式为3
+        data.bLaiZiCount = luaFunc:readRecvByte()                   --癞子数量 0 ~ 4个
+        data.bMaxLost = luaFunc:readRecvWORD()                      --最大输
+        data.bYiWuShi = luaFunc:readRecvByte()                      --是否有一五十吃法
+        data.bLiangPai = luaFunc:readRecvByte()                     --是否亮牌
+        data.bCanHuXi = luaFunc:readRecvByte()                      --起胡数  0 3 6 10 15  
+        data.bHuType = luaFunc:readRecvByte()                       --胡牌类型  0自摸翻倍  1接炮
+        data.bFangPao = luaFunc:readRecvByte()                      --是否有放跑功能
+        data.bSettlement = luaFunc:readRecvByte()                   --结算是否按三胡一囤，否则一胡一囤
+        data.bStartTun = luaFunc:readRecvByte()                     --囤数起始算法  0起始胡息一囤  1起始胡息二囤 210胡息三囤<=15胡息每多1胡息+1囤    
+        data.bSocreType = luaFunc:readRecvByte()                    --0低分*囤数总和*名堂番数总和  1低分*囤数总和*名堂番数乘积
+        data.dwMingTang = luaFunc:readRecvDWORD()                   --包含的名堂有哪些             
+        data.bTurn = luaFunc:readRecvByte()
+        data.bDeathCard =luaFunc:readRecvByte()                     --亡牌
+        data.bStartBanker = luaFunc:readRecvByte()                    --随机庄
+
+        data.bHostedTime = luaFunc:readRecvByte()               --托管时间
+        data.bHostedSession = luaFunc:readRecvByte()                 --托管局数
+        haveReadByte = 25    --已读长度，每次增加或者减少都要修改该值，Byte1个字节 WORD2个字节 DWORD4个字节
+        local a = 1
+    elseif wKindID == 48 then 
+        data.FanXing = {}
+        data.FanXing.bType = luaFunc:readRecvByte()                 --翻省    0默认没有反省  1上省  2下省  3跟省
+        data.FanXing.bCount = luaFunc:readRecvByte()                --翻省的次数
+        data.FanXing.bAddTun = luaFunc:readRecvByte()               --省算法, 一省三囤  单省    
+        data.bPlayerCountType = luaFunc:readRecvByte()              --用户人数模式 0：默认3人   1：4人玩法  2：3人参与另外一人省(无用)
+        data.bPlayerCount = luaFunc:readRecvByte()                  --参与游戏的人数 3+1模式为3
+        data.bLaiZiCount = luaFunc:readRecvByte()                   --癞子数量 0 ~ 4个
+        data.bMaxLost = luaFunc:readRecvWORD()                      --最大输
+        data.bYiWuShi = luaFunc:readRecvByte()                      --是否有一五十吃法
+        data.bLiangPai = luaFunc:readRecvByte()                     --是否亮牌
+        data.bCanHuXi = luaFunc:readRecvByte()                      --起胡数  0 3 6 10 15  
+        data.bHuType = luaFunc:readRecvByte()                       --胡牌类型  0自摸翻倍  1接炮
+        data.bFangPao = luaFunc:readRecvByte()                      --是否有放跑功能
+        data.bSettlement = luaFunc:readRecvByte()                   --结算是否按三胡一囤，否则一胡一囤
+        data.bStartTun = luaFunc:readRecvByte()                     --囤数起始算法  0起始胡息一囤  1起始胡息二囤 210胡息三囤<=15胡息每多1胡息+1囤    
+        data.bSocreType = luaFunc:readRecvByte()                    --0低分*囤数总和*名堂番数总和  1低分*囤数总和*名堂番数乘积
+        data.dwMingTang = luaFunc:readRecvDWORD()                   --包含的名堂有哪些             
+        data.bTurn = luaFunc:readRecvByte()
+        data.bPaoTips = luaFunc:readRecvByte()
+        data.bStartBanker = luaFunc:readRecvByte()
+        data.bSiQiHong = luaFunc:readRecvByte()
+        data.bDelShuaHou = luaFunc:readRecvByte()
+        data.bHuangFanAddUp = luaFunc:readRecvByte()
+        data.bTingHuAll = luaFunc:readRecvByte()
+        data.bDeathCard = luaFunc:readRecvByte()                    --0 不抽低  1 抽牌20张 
+
+        data.bHostedTime = luaFunc:readRecvByte()               --托管时间
+        data.bHostedSession = luaFunc:readRecvByte()                 --托管局数
+        haveReadByte = 30    --已读长度，每次增加或者减少都要修改该值，Byte1个字节 WORD2个字节 DWORD4个字节
+        
     elseif wKindID == 49 then 
         data.FanXing = {}
         data.FanXing.bType = luaFunc:readRecvByte()                        --翻省    0默认没有反省  1上省  2下省  3跟省
@@ -610,7 +644,10 @@ function GameConfig:getParameter(wKindID,luaFunc)
         data.bStartBanker = luaFunc:readRecvByte()                    --随机庄
         data.bHuangFanAddUp = luaFunc:readRecvByte()                    --黄番
         data.STWK = luaFunc:readRecvByte()                    --三五
-        haveReadByte = 25    --已读长度，每次增加或者减少都要修改该值，Byte1个字节 WORD2个字节 DWORD4个字节
+
+        data.bHostedTime = luaFunc:readRecvByte()               --托管时间
+        data.bHostedSession = luaFunc:readRecvByte()                 --托管局数
+        haveReadByte = 27    --已读长度，每次增加或者减少都要修改该值，Byte1个字节 WORD2个字节 DWORD4个字节
         
     elseif wKindID == 52 then
         data.bPlayerCount = luaFunc:readRecvByte()--参与游戏的人数           
@@ -880,7 +917,9 @@ function GameConfig:getParameter(wKindID,luaFunc)
 
         data.bHostedTime = luaFunc:readRecvByte()                 --托管时间
         data.bHostedSession = luaFunc:readRecvByte()                 --托管局数
-        haveReadByte = 8
+        data.mZhaNiaoType = luaFunc:readRecvByte()
+
+        haveReadByte = 9
     else
     
     end

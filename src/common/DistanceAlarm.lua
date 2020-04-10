@@ -53,7 +53,7 @@ function DistanceAlarm:onCreate(wKindID)
     
     if StaticData.Games[wKindID].type == 1 then
         --GameCommon = require("game.paohuzi.GameCommon")
-        if wKindID == 69 then 
+        if wKindID == 69 or wKindID == 47 or wKindID == 48 or wKindID == 49 then 
             GameCommon = require("game.anhua.GameCommon")
         end 
     elseif StaticData.Games[wKindID].type == 2 then
@@ -79,10 +79,10 @@ function DistanceAlarm:onCreate(wKindID)
                 end  
            else
                 for wTargetChairID = wChairID+1, GameCommon.gameConfig.bPlayerCount-1 do
-                    if GameCommon.player[wTargetChairID].location.x > 0.1 then
+                    if  GameCommon.player[wTargetChairID] ~= nil and GameCommon.player[wTargetChairID].location.x > 0.1 then
                         local desc = nil                         
                         desc = GameCommon:GetDistance(GameCommon.player[wChairID].location,GameCommon.player[wTargetChairID].location)                                     
-                        if desc~= nil and desc < 100 then
+                        if desc~= nil then--and desc < 1000
                             if distance == nil then 
                                 distance =string.format("%s与%s距离为%dm",GameCommon.player[wChairID].szNickName,GameCommon.player[wTargetChairID].szNickName,desc)
                             else

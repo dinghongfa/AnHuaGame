@@ -1,6 +1,9 @@
 local GamesText = {
     --id="游戏ID",name="游戏名字"Text8="八字玩法美图秀秀" rules ="规则",iconda="大厅按钮图片2",icon8="八字玩法图片",
     [44]={ id=44, name="怀\n化\n红\n拐\n弯", Text8="花 多\n样 姿\n名 多\n堂 味", rules ="规则简介：", iconda="game/puke/25/iconda.png", icon8="game/puke/25/icon8.png"},
+    [47]={ id=47, name="常\n德\n红\n黑\n点", Text8="花 倒\n样 底\n名 起\n堂 胡", rules ="规则简介：", iconda="game/puke/25/iconda.png", icon8="game/puke/25/icon8.png"}, 
+    [48]={ id=48, name="常\n德\n全\n名\n堂", Text8="花 倒\n样 底\n名 起\n堂 胡", rules ="规则简介：", iconda="game/puke/25/iconda.png", icon8="game/puke/25/icon8.png"}, 
+    [49]={ id=49, name="常\n德\n多\n红\n对", Text8="花 倒\n样 底\n名 起\n堂 胡", rules ="规则简介：", iconda="game/puke/25/iconda.png", icon8="game/puke/25/icon8.png"}, 
     [60]={ id=60, name="汉\n寿\n跑\n胡\n子", Text8="花 倒\n样 底\n名 起\n堂 胡", rules ="规则简介：", iconda="game/puke/25/iconda.png", icon8="game/puke/25/icon8.png"}, 
     [78]={ id=78, name="红\n中\n麻\n将",	 Text8="百 转\n变 转\n红 玩\n中 法", rules ="规则简介：", iconda="game/puke/25/iconda.png", icon8="game/puke/25/icon8.png"}, 
     [79]={ id=79, name="转\n转\n麻\n将",	 Text8="经 激\n典 情\n转 自\n转 摸", rules ="规则简介：", iconda="game/puke/25/iconda.png", icon8="game/puke/25/icon8.png"},

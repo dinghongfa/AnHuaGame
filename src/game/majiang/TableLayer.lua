@@ -2515,7 +2515,6 @@ function TableLayer:setHandCard(wChairID,cbCardCount,cbCardData)
             end
 
             if GameCommon.tableConfig.wKindID == 92 then 
-
                 local cbCardData_Tem = {}
                 for i = 1, cbCardCount do
                     if ( GameCommon.cbKingCard~=nil and cbCardData[i] == GameCommon.cbKingCard[1] or cbCardData[i] == GameCommon.cbKingCard[2]) then
@@ -3436,17 +3435,17 @@ function TableLayer:showHandCard(data)
         for i=1,cbCardCount do
             local card = GameCommon:GetCardHand(cbCardData[i],viewID)
             if GameCommon.mBaoTingCard ~= nil and GameCommon.mBaoTingCard[1] ~= 0 and GameCommon.tingpai == 1 then  
-                local liang = ccui.ImageView:create("common/hudejiaobiao1.png")            
+                local liang = ccui.ImageView:create("common/hudejiaobiao2.png")            
                 for j = 1 , 14 do
                     if GameCommon.mBaoTingCard[j] == cbCardData[i] then 
                         if GameCommon.tableConfig.wKindID == 92 then  
                             if GameCommon.mBaoTingCard[j] ~= GameCommon.cbKingCard[1] and  GameCommon.mBaoTingCard[j] ~= GameCommon.cbKingCard[2] then 
                                 card:addChild(liang)
-                                liang:setPosition(77,94) 
+                                liang:setPosition(45,145) 
                             end 
                         else
                             card:addChild(liang)
-                            liang:setPosition(77,94) 
+                            liang:setPosition(45,145) 
                         end 
                         break
                     end 
@@ -4328,7 +4327,7 @@ function TableLayer:BaoTingCardShow(event)
         local items = uiPanel_handCard:getChildren()
         for k,v in pairs(items) do
             if GameCommon.mBaoTingCard ~= nil and GameCommon.mBaoTingCard[1] ~= 0  and GameCommon.tingpai == 1  then  
-                local liang = ccui.ImageView:create("common/hudejiaobiao1.png")            
+                local liang = ccui.ImageView:create("common/hudejiaobiao2.png")            
                 -- for j = 1 , 14 do
                 --     if GameCommon.mBaoTingCard[j] == v.data then 
                 --         v:addChild(liang)
@@ -4341,11 +4340,11 @@ function TableLayer:BaoTingCardShow(event)
                         if GameCommon.tableConfig.wKindID == 92 then  
                             if GameCommon.mBaoTingCard[j] ~= GameCommon.cbKingCard[1] and  GameCommon.mBaoTingCard[j] ~= GameCommon.cbKingCard[2] then 
                                 v:addChild(liang)
-                                liang:setPosition(77,94) 
+                                liang:setPosition(45,145) 
                             end 
                         else
                             v:addChild(liang)
-                            liang:setPosition(77,94) 
+                            liang:setPosition(45,145) 
                         end 
                         break
                     end 

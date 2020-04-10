@@ -362,7 +362,7 @@ function TableLayer:showCountDown(wChairID,isHide)
     Panel_countdown:setVisible(true)
 
     uiAtlasLabel_countdownTime:stopAllActions()
-    uiAtlasLabel_countdownTime:setString(15)
+    uiAtlasLabel_countdownTime:setString(10)
     local function onEventTime(sender,event)
         local currentTime = tonumber(uiAtlasLabel_countdownTime:getString())
         currentTime = currentTime - 1

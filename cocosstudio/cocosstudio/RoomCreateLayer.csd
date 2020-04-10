@@ -168,13 +168,13 @@
                   <AbstractNodeData Name="Button_iten" ActionTag="616155413" Tag="246" IconVisible="False" RightMargin="4.0000" BottomMargin="409.0000" TouchEnable="True" FontSize="14" Scale9Enable="True" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="184" Scale9Height="69" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
                     <Size X="214.0000" Y="91.0000" />
                     <Children>
-                      <AbstractNodeData Name="Image_press" ActionTag="157844202" Tag="469" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftEage="44" RightEage="44" TopEage="11" BottomEage="11" Scale9OriginX="44" Scale9OriginY="11" Scale9Width="126" Scale9Height="69" ctype="ImageViewObjectData">
+                      <AbstractNodeData Name="Image_press" ActionTag="157844202" Tag="469" IconVisible="False" TopMargin="-1.3802" BottomMargin="1.3802" LeftEage="44" RightEage="44" TopEage="11" BottomEage="11" Scale9OriginX="44" Scale9OriginY="11" Scale9Width="126" Scale9Height="69" ctype="ImageViewObjectData">
                         <Size X="214.0000" Y="91.0000" />
                         <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                        <Position X="107.0000" Y="45.5000" />
+                        <Position X="107.0000" Y="46.8802" />
                         <Scale ScaleX="1.0000" ScaleY="1.0000" />
                         <CColor A="255" R="255" G="255" B="255" />
-                        <PrePosition X="0.5000" Y="0.5000" />
+                        <PrePosition X="0.5000" Y="0.5152" />
                         <PreSize X="1.0000" Y="1.0000" />
                         <FileData Type="Normal" Path="newroom/icon2.png" Plist="" />
                       </AbstractNodeData>
@@ -204,7 +204,7 @@
                 <EndColor A="255" R="255" G="255" B="255" />
                 <ColorVector ScaleY="1.0000" />
               </AbstractNodeData>
-              <AbstractNodeData Name="Button_return" ActionTag="1468290656" Tag="98" IconVisible="False" HorizontalEdge="LeftEdge" LeftMargin="1197.8029" RightMargin="2.5812" TopMargin="0.1392" BottomMargin="640.1569" TouchEnable="True" StretchWidthEnable="True" StretchHeightEnable="True" FontSize="14" Scale9Enable="True" LeftEage="27" RightEage="27" TopEage="27" BottomEage="27" Scale9OriginX="27" Scale9OriginY="27" Scale9Width="29" Scale9Height="29" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
+              <AbstractNodeData Name="Button_return" ActionTag="1468290656" Tag="98" IconVisible="False" HorizontalEdge="LeftEdge" LeftMargin="1197.8029" RightMargin="2.5812" TopMargin="0.1391" BottomMargin="640.1569" TouchEnable="True" StretchWidthEnable="True" StretchHeightEnable="True" FontSize="14" Scale9Enable="True" LeftEage="27" RightEage="27" TopEage="27" BottomEage="27" Scale9OriginX="27" Scale9OriginY="27" Scale9Width="29" Scale9Height="29" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
                 <Size X="79.6160" Y="79.7040" />
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                 <Position X="1237.6108" Y="680.0089" />

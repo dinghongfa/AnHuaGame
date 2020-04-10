@@ -225,7 +225,7 @@ function PDKGameCommon:playAnimation(root,id, wChairID)
             end
             local viewID = PDKGameCommon:getViewIDByChairID(wChairID)
             local uiPanel_tipsCardPosUser = ccui.Helper:seekWidgetByName(root,string.format("Panel_tipsCardPos%d",viewID))
-            armature:setPosition(uiPanel_tipsCardPosUser:getPosition())
+            armature:setPosition(uiPanel_tipsCardPosUser:getPositionX(), uiPanel_tipsCardPosUser:getPositionY()-45)
         end
 
     end

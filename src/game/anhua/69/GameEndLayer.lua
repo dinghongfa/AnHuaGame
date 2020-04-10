@@ -307,9 +307,22 @@ end
 
 function GameEndLayer:updateHeadImage(pBuffer)
     dump(pBuffer,'fx-------updateHeadImage------->>')
-    local allAvatar = {}
-    for i=1,3 do
-        local avatar = ccui.Helper:seekWidgetByName(self.root,"Image_avatar_" .. i)
+    local allAvatar = {}    
+    local Panel = nil  
+    local bPlayerCount = 3  
+    local Panel_4 = ccui.Helper:seekWidgetByName(self.root,"Panel_4")
+    Panel_4:setVisible(false)
+    local Panel_3 = ccui.Helper:seekWidgetByName(self.root,"Panel_3")
+    Panel_3:setVisible(false)
+    Panel = Panel_3
+    Panel:setVisible(true)
+    for i=1, bPlayerCount do
+        local avatar = nil
+        if i == 1 then 
+            avatar = ccui.Helper:seekWidgetByName(self.root,"Image_avatar_" .. i)
+        else
+            avatar = ccui.Helper:seekWidgetByName(Panel,"Image_avatar_" .. i)
+        end 
         avatar:setVisible(false)
         table.insert( allAvatar,avatar)
     end

@@ -751,6 +751,40 @@ function NewClubPlayWayInfoLayer:sendSetPlayWay(data)
             data.tableParameter.dwMingTang,data.tableParameter.bTurn,data.tableParameter.bPaoTips,data.tableParameter.bStartBanker,
             data.tableParameter.bSiQiHong,data.tableParameter.bDelShuaHou,data.tableParameter.bHuangFanAddUp,data.tableParameter.bTingHuAll,
             data.tableParameter.bDeathCard, data.tableParameter.bPaPo,data.tableParameter.bHostedTime,data.tableParameter.bHostedSession)
+    elseif data.wKindID == 47 then
+        NetMgr:getLogicInstance():sendMsgToSvr(NetMsgId.MDM_CL_CLUB,NetMsgId.REQ_SETTINGS_CLUB_PLAY,"bddwwwbbddddddolwolwnsbbbbbbwbbbbbbbbdbbbbb",
+            data.settype,data.dwClubID,data.playid,data.wKindID,data.wGameCount,1,
+            data.cbMode,data.payMode,data.payLimit1,data.payCount1,data.payLimit2,data.payCount2,data.payLimit3,data.payCount3,data.isPercentage,data.tableLimit,data.fatigueCell,data.isTableCharge,data.fatigueLimit,data.antiCell,32,data.szParameterName,
+            data.tableParameter.FanXing.bType,data.tableParameter.FanXing.bCount,data.tableParameter.FanXing.bAddTun,
+            data.tableParameter.bPlayerCountType,data.tableParameter.bPlayerCount,data.tableParameter.bLaiZiCount,data.tableParameter.bMaxLost,
+            data.tableParameter.bYiWuShi,data.tableParameter.bLiangPai,data.tableParameter.bCanHuXi,data.tableParameter.bHuType,
+            data.tableParameter.bFangPao,data.tableParameter.bSettlement,data.tableParameter.bStartTun,data.tableParameter.bSocreType,
+            data.tableParameter.dwMingTang,data.tableParameter.bTurn,data.tableParameter.bDeathCard,data.tableParameter.bStartBanker,
+            data.tableParameter.bHostedTime,data.tableParameter.bHostedSession)
+
+    elseif data.wKindID == 48 then
+        NetMgr:getLogicInstance():sendMsgToSvr(NetMsgId.MDM_CL_CLUB,NetMsgId.REQ_SETTINGS_CLUB_PLAY,"bddwwwbbddddddolwolwnsbbbbbbwbbbbbbbbdbbbbbbbbbb",
+            data.settype,data.dwClubID,data.playid,data.wKindID,data.wGameCount,1,
+            data.cbMode,data.payMode,data.payLimit1,data.payCount1,data.payLimit2,data.payCount2,data.payLimit3,data.payCount3,data.isPercentage,data.tableLimit,data.fatigueCell,data.isTableCharge,data.fatigueLimit,data.antiCell,32,data.szParameterName,
+            data.tableParameter.FanXing.bType,data.tableParameter.FanXing.bCount,data.tableParameter.FanXing.bAddTun,
+            data.tableParameter.bPlayerCountType,data.tableParameter.bPlayerCount,data.tableParameter.bLaiZiCount,data.tableParameter.bMaxLost,
+            data.tableParameter.bYiWuShi,data.tableParameter.bLiangPai,data.tableParameter.bCanHuXi,data.tableParameter.bHuType,
+            data.tableParameter.bFangPao,data.tableParameter.bSettlement,data.tableParameter.bStartTun,data.tableParameter.bSocreType,
+            data.tableParameter.dwMingTang,data.tableParameter.bTurn,data.tableParameter.bPaoTips,data.tableParameter.bStartBanker,
+            data.tableParameter.bSiQiHong,data.tableParameter.bDelShuaHou,data.tableParameter.bHuangFanAddUp,data.tableParameter.bTingHuAll,
+            data.tableParameter.bDeathCard,data.tableParameter.bHostedTime,data.tableParameter.bHostedSession)
+
+    elseif data.wKindID == 49 then
+        NetMgr:getLogicInstance():sendMsgToSvr(NetMsgId.MDM_CL_CLUB,NetMsgId.REQ_SETTINGS_CLUB_PLAY,"bddwwwbbddddddolwolwnsbbbbbbwbbbbbbbbdbbbbbbb",
+            data.settype,data.dwClubID,data.playid,data.wKindID,data.wGameCount,1,
+            data.cbMode,data.payMode,data.payLimit1,data.payCount1,data.payLimit2,data.payCount2,data.payLimit3,data.payCount3,data.isPercentage,data.tableLimit,data.fatigueCell,data.isTableCharge,data.fatigueLimit,data.antiCell,32,data.szParameterName,
+            data.tableParameter.FanXing.bType,data.tableParameter.FanXing.bCount,data.tableParameter.FanXing.bAddTun,
+            data.tableParameter.bPlayerCountType,data.tableParameter.bPlayerCount,data.tableParameter.bLaiZiCount,data.tableParameter.bMaxLost,
+            data.tableParameter.bYiWuShi,data.tableParameter.bLiangPai,data.tableParameter.bCanHuXi,data.tableParameter.bHuType,
+            data.tableParameter.bFangPao,data.tableParameter.bSettlement,data.tableParameter.bStartTun,data.tableParameter.bSocreType,
+            data.tableParameter.dwMingTang,data.tableParameter.bTurn,data.tableParameter.bDeathCard,data.tableParameter.bStartBanker,
+            data.tableParameter.bHuangFanAddUp,data.tableParameter.STWK,data.tableParameter.bHostedTime,data.tableParameter.bHostedSession)
+
 
     elseif data.wKindID == 83 then
         NetMgr:getLogicInstance():sendMsgToSvr(NetMsgId.MDM_CL_CLUB,NetMsgId.REQ_SETTINGS_CLUB_PLAY,"bddwwwbbddddddolwolwnsbbbbbbbbbbbbbbbbbbbb",
@@ -787,11 +821,11 @@ function NewClubPlayWayInfoLayer:sendSetPlayWay(data)
             data.tableParameter.bQGHuBaoPei, data.tableParameter.bJiaPiao, data.tableParameter.bMaType, data.tableParameter.bMaCount, data.tableParameter.mNiaoType, 
             data.tableParameter.mHongNiao, data.tableParameter.bWuTong,data.tableParameter.bFirstZhuang,data.tableParameter.bHostedTime,data.tableParameter.bHostedSession)  
     elseif data.wKindID == 92 then
-        NetMgr:getLogicInstance():sendMsgToSvr(NetMsgId.MDM_CL_CLUB,NetMsgId.REQ_SETTINGS_CLUB_PLAY,"bddwwwbbddddddolwolwnsbbbbbbbb",
+        NetMgr:getLogicInstance():sendMsgToSvr(NetMsgId.MDM_CL_CLUB,NetMsgId.REQ_SETTINGS_CLUB_PLAY,"bddwwwbbddddddolwolwnsbbbbbbbbb",
             data.settype,data.dwClubID,data.playid,data.wKindID,data.wGameCount,1,
             data.cbMode,data.payMode,data.payLimit1,data.payCount1,data.payLimit2,data.payCount2,data.payLimit3,data.payCount3,data.isPercentage,data.tableLimit,data.fatigueCell,data.isTableCharge,data.fatigueLimit,data.antiCell,32,data.szParameterName,
             data.tableParameter.bPlayerCount,data.tableParameter.mQiWangFlag,data.tableParameter.bMaCount,data.tableParameter.bDaiWangYing,data.tableParameter.bQGHu, 
-            data.tableParameter.bSJZhuang,data.tableParameter.bHostedTime,data.tableParameter.bHostedSession)   
+            data.tableParameter.bSJZhuang,data.tableParameter.bHostedTime,data.tableParameter.bHostedSession,data.tableParameter.mZhaNiaoType)   
     end
 end
 
