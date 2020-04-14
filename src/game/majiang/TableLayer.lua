@@ -4149,6 +4149,7 @@ function TableLayer:initUI()
     Text_gamename:setString(StaticData.Games[GameCommon.tableConfig.wKindID].name)
     --灯光层
     local uiButton_voice = ccui.Helper:seekWidgetByName(self.root,"Button_voice")
+    uiButton_voice:setVisible(false)--true
     local childUI = ccui.Helper:seekWidgetByName(self.root,"Panel_childui") 
     childUI:setVisible(true)
     local uiButton_chakan = ccui.Helper:seekWidgetByName(self.root,"Button_chakan")
@@ -4659,7 +4660,7 @@ function TableLayer:updateGameState(state)
             local uiButton_expression = ccui.Helper:seekWidgetByName(self.root,"Button_expression")
             uiButton_expression:setVisible(true)
             local uiButton_voice = ccui.Helper:seekWidgetByName(self.root,"Button_voice")
-            uiButton_voice:setVisible(true)
+            uiButton_voice:setVisible(false)--true
             Image_title:setVisible(true)
         end         
         local uiButton_cancel = ccui.Helper:seekWidgetByName(self.root,"Button_cancel")  --取消按钮

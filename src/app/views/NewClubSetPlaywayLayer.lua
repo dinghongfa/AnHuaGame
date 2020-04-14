@@ -352,7 +352,7 @@ function NewClubSetPlaywayLayer:initPlaywayItem(item, count, index)
         des = '圈主模式/'
     end
     
-    if CHANNEL_ID == 26 or CHANNEL_ID == 27 then
+    if self.clubData.dwClubID == 359949 or self.clubData.dwClubID == 807113 or self.clubData.dwClubID == 110852 or self.clubData.dwClubID == 460861 then
         if self.clubData.wAntiCell[index] and self.clubData.wAntiCell[index] ~= 0 then
             des = des .. string.format('倍率:%s/', self.clubData.wAntiCell[index])
         end

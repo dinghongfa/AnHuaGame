@@ -86,6 +86,8 @@ function NewClubInfoLayer:onConfig()
         {"Button_ybFrame"},
         {"Image_lAntiValue"},
         {"Text_lAntiValue"},
+        {"Button_fkFrame"},
+        {"Text_fkNum"},
 
         {"Panel_tempNotice"},
         {"Button_tempClose", "onTempClose"},
@@ -167,7 +169,7 @@ function NewClubInfoLayer:refreshCeil(index, ceil)
 	local items = ceil:getChildren()
 	local selectTable = cc.UserDefault:getInstance():getIntegerForKey('CurSelClubTable', 1)
 	for i,item in ipairs(items) do
-		local data = self.tableViewData[index*2 + i]
+		local data = self.tempTableViewCache[index*2 + i]
 		if not data then
 			item:setVisible(false)
 			break
@@ -389,12 +391,67 @@ function NewClubInfoLayer:getDataCount()
 	return math.ceil(self.tableViewLength / 2)
 end
 
+-- 获取桌子显示方式数量
+function NewClubInfoLayer:getTableShowTypeNum()
+	self.tempTableViewCache = clone(self.tableViewData) or {}
+
+	if not self.clubData then
+		return 0
+	end
+
+	if UserData.User.userID == self.clubData.dwUserID or self:isAdmin(UserData.User.userID) then
+        return #self.tableViewData
+    end
+
+	local count = 0
+	if Bit:_and(0x40, self.clubData.bIsDisable or 0) == 0x40 then
+		for i,v in ipairs(self.tableViewData or {}) do
+			if v.type == 2 then
+				if v.data.bIsGameStart then
+					-- 以开局
+					count = count + 1
+				end
+			end
+		end
+
+		local fullPeopleNum = math.floor(count * (1 - 0.2)) --只显示20%的以开局桌子数
+		local removeCount = 0
+		for i=#self.tempTableViewCache,1,-1 do
+			local v = self.tempTableViewCache[i]
+			if v.type == 2 then
+				local isSelfExist = false
+				for _,v in ipairs(v.data.dwUserID or {}) do
+					if v ~= 0 then
+						if v == UserData.User.userID then
+							isSelfExist = true
+						end
+					end
+				end
+				
+				if v.data.bIsGameStart and not isSelfExist then
+					-- 以开局
+					table.remove(self.tempTableViewCache, i)
+					removeCount = removeCount + 1
+					if removeCount >= fullPeopleNum then
+						break
+					end
+				end
+			end
+		end
+		count = #self.tableViewData - fullPeopleNum
+	else
+		count = #self.tableViewData
+	end
+	return count
+end
+
 function NewClubInfoLayer:onCreate(param)
     self.clubData = param[1]
 	self.Chat = UserData.Chat -- 俱乐部聊天信息
 	
 	--牌桌tableview
 	self.tableViewData = {}
+	self.tempTableViewCache = {}
 	self.isTableViewScrolling = false
 	local viewSize = cc.size(self.Panel_bg:getContentSize().width, 480)
 	self.listView = Common:_createList(viewSize, handler(self, self._itemUpdateCall), CellSize.width, CellSize.height, handler(self, self.getDataCount), nil, cc.SCROLLVIEW_DIRECTION_HORIZONTAL, nil, false)
@@ -407,7 +464,7 @@ function NewClubInfoLayer:onCreate(param)
 		if self.isTableViewRefresh then
 			self.isTableViewRefresh = false
 			local offset = self.listView:getContentOffset()
-			self.tableViewLength = #self.tableViewData
+			self.tableViewLength = self:getTableShowTypeNum()
 			self.listView:reloadData()
 			self.listView:setContentOffset(cc.p(offset.x, offset.y))
 		end
@@ -478,19 +535,11 @@ function NewClubInfoLayer:onCreate(param)
         self.Image_bottom:setVisible(false)
     end
 
-    if CHANNEL_ID == 26 or CHANNEL_ID == 27 then
-        local path = 'kwxclub/kwxclub_24.png'
-        self.Button_fatigue:loadTextures(path, path, path)
-        self.Button_give:setVisible(false)
-        self.Image_moneyIcon:loadTexture('common/yuanbaoc_icon.png')
-        self.Image_lAntiValue:setVisible(true)
-    else
-        local path = 'kwxclub/club_info_6.png'
-        self.Button_fatigue:loadTextures(path, path, path)
-        self.Image_moneyIcon:loadTexture('kwxclub/club_hall_3.png')
-        self.Image_lAntiValue:setVisible(false)
-    end
     self.Button_ybFrame:setVisible(false)
+    self.Button_fatigue:setVisible(false)
+    self.Button_give:setVisible(false)
+    self.Image_moneyIcon:setVisible(false)
+    self.Image_lAntiValue:setVisible(false)
 end
 
 function NewClubInfoLayer:onReturn()
@@ -731,7 +780,7 @@ function NewClubInfoLayer:onNotice()
 end
 
 function NewClubInfoLayer:onFatigue()
-    if CHANNEL_ID == 26 or CHANNEL_ID == 27 then
+    if self.clubData.dwClubID == 359949 or self.clubData.dwClubID == 807113 or self.clubData.dwClubID == 110852 or self.clubData.dwClubID == 460861 then
         self:addChild(require("app.MyApp"):create(self.clubData):createView("NewClubDefendLayer"))
     else
         self:addChild(require("app.MyApp"):create(self.clubData, self.userFatigueValue, self.userOffice):createView("NewClubFatigueLayer"))
@@ -773,6 +822,7 @@ end
 
 function NewClubInfoLayer:createClubTable(playwayId)
 	self.tableViewData = {}
+	self.tempTableViewCache = {}
     playwayId = playwayId or 0
     cc.UserDefault:getInstance():setIntegerForKey('CurSelPlaywayId', playwayId)
 
@@ -805,7 +855,7 @@ function NewClubInfoLayer:createClubTable(playwayId)
             local pos = (col - 1) * 2 + row
 			table.insert(self.tableViewData, {
 				type = 1, 
-				playwayIdx = i, 
+				playwayIdx = i,
 				data = {pos = pos, wKindID = v, wTableSubType = self.clubData.dwPlayID[i]}
 			})
         end
@@ -903,16 +953,28 @@ function NewClubInfoLayer:updateClubInfo()
         self.Button_give:setVisible(true)
     end
 
-    --防沉迷
-    if CHANNEL_ID == 26 or CHANNEL_ID == 27 then
+    --只有这4个亲友圈保留防沉迷
+    if self.clubData.dwClubID == 359949 or self.clubData.dwClubID == 807113 or self.clubData.dwClubID == 110852 or self.clubData.dwClubID == 460861 then  --CHANNEL_ID == 26 or CHANNEL_ID == 27 then
         if Bit:_and(0x20, self.clubData.bIsDisable) == 0x20 then
             self.Button_fatigue:setVisible(true)
+            local path = 'kwxclub/kwxclub_24.png'
+            self.Button_fatigue:loadTextures(path, path, path)
         else
             self.Button_fatigue:setVisible(false)
         end
         self.Button_give:setVisible(false)
+        self.Image_moneyIcon:setVisible(true)
+        self.Image_moneyIcon:loadTexture('common/yuanbaoc_icon.png')
+        self.Image_lAntiValue:setVisible(true)
+    else
+    	local path = 'kwxclub/club_info_6.png'
+        self.Button_fatigue:setVisible(true)
+        self.Button_fatigue:loadTextures(path, path, path)
+        self.Button_give:setVisible(true)
+        self.Image_moneyIcon:setVisible(true)
+        self.Image_moneyIcon:loadTexture('kwxclub/club_hall_3.png')
+        self.Image_lAntiValue:setVisible(false)
     end
-
 end
 
 --移除亲友圈桌子
@@ -1375,15 +1437,15 @@ function NewClubInfoLayer:RET_REFRESH_CLUB(event)
     --     end
 	-- end
 	
-	if CHANNEL_ID == 10 or CHANNEL_ID == 11  then
-		if self.clubData.dwClubID == 55404967 then
-			self.Button_ybFrame:setVisible(false)
-		else
-			self.Button_ybFrame:setVisible(true)
-		end
-	else
-		self.Button_ybFrame:setVisible(false)
-	end
+	-- if CHANNEL_ID == 10 or CHANNEL_ID == 11  then
+	-- 	if self.clubData.dwClubID == 55404967 then
+	-- 		self.Button_ybFrame:setVisible(false)
+	-- 	else
+	-- 		self.Button_ybFrame:setVisible(true)
+	-- 	end
+	-- else
+	-- 	self.Button_ybFrame:setVisible(false)
+	-- end
 end
 
 --返回刷新俱乐部玩法
@@ -1550,7 +1612,7 @@ end
 function NewClubInfoLayer:RET_UPDATE_CLUB_PLAYER_INFO(event)
     local data = event._usedata
     Log.d(data)
-    if CHANNEL_ID == 26 or CHANNEL_ID == 27 then
+    if self.clubData.dwClubID == 359949 or self.clubData.dwClubID == 807113 or self.clubData.dwClubID == 110852 or self.clubData.dwClubID == 460861 then
         self.Text_pilaozhi:setString(UserData.Bag:getBagPropCount(1009))
         self.Text_lAntiValue:setString('沉迷值:' .. data.lAntiValue)
     else
@@ -1566,8 +1628,11 @@ function NewClubInfoLayer:RET_UPDATE_CLUB_PLAYER_INFO(event)
         self.Button_partner:setVisible(true)
         self.Button_share:setVisible(true)
         self.Button_mem:setVisible(true)
+        self.Button_fkFrame:setVisible(true)
+        self.Text_fkNum:setString(self.clubData.dwPropCount)
     else
         self.Button_notice:setVisible(false)
+        self.Button_fkFrame:setVisible(false)
         if self.userOffice == 3 or self.userOffice == 4 then
             -- 合伙人
             self.Button_partner:setVisible(true)
@@ -1598,7 +1663,7 @@ function NewClubInfoLayer:RET_SETTINGS_CLUB_MEMBER(event)
     if (data.cbSettingsType == 6 or data.cbSettingsType == 8) and (data.dwUserID == UserData.User.userID) then
         --疲劳值
         self.userFatigueValue = data.lFatigueValue
-        if not (CHANNEL_ID == 26 or CHANNEL_ID == 27) then
+        if not (self.clubData.dwClubID == 359949 or self.clubData.dwClubID == 807113 or self.clubData.dwClubID == 110852 or self.clubData.dwClubID == 460861) then
             self.Text_pilaozhi:setString(data.lFatigueValue)
         end
     elseif data.cbSettingsType == 7 or data.cbSettingsType == 11 then
@@ -1680,7 +1745,7 @@ function NewClubInfoLayer:RET_CLUB_SETTING_ANTI_MEMBER(event)
     end
 
     if data.bOperatorType ~= 0 and data.dwUserID == UserData.User.userID then
-        if CHANNEL_ID == 26 or CHANNEL_ID == 27 then
+        if self.clubData.dwClubID == 359949 or self.clubData.dwClubID == 807113 or self.clubData.dwClubID == 110852 or self.clubData.dwClubID == 460861 then
             self.Text_lAntiValue:setString('沉迷值:0')
         end
     end

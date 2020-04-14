@@ -117,17 +117,22 @@ end
 
 function NewClubNoticeLayer:onAddMem()
     local id = ""
-    for i = 1 , 6 do
+    for i = 1 , 8 do
         local numName = string.format("Text_number%d", i)
         local Text_number = ccui.Helper:seekWidgetByName(self.Image_inputFrame, numName)
         if Text_number:getString() == "" then
-            require("common.MsgBoxLayer"):create(0,nil,"输入玩家ID不正确!")
-            return
+            break
         else
             id = id .. Text_number:getString()
         end
     end
-    UserData.Guild:addClubMember(self.clubData.dwClubID, tonumber(id), UserData.User.userID)
+
+    local playerId = tonumber(id)
+    if not playerId then
+        require("common.MsgBoxLayer"):create(0,nil,"输入玩家ID不正确!")
+        return
+    end
+    UserData.Guild:addClubMember(self.clubData.dwClubID, playerId, UserData.User.userID)
     self.curInputMemID = tonumber(id)
 end
 
@@ -637,7 +642,7 @@ end
 
 --重置数字
 function NewClubNoticeLayer:resetNumber()
-    for i = 1 , 6 do
+    for i = 1 , 8 do
         local numName = string.format("Text_number%d", i)
         local Text_number = ccui.Helper:seekWidgetByName(self.Image_inputFrame, numName)
         if Text_number then
@@ -650,13 +655,13 @@ end
 --输入数字
 function NewClubNoticeLayer:inputNumber(num)
     local roomNumber = ""
-    for i = 1 , 6 do
+    for i = 1 , 8 do
         local numName = string.format("Text_number%d", i)
         local Text_number = ccui.Helper:seekWidgetByName(self.Image_inputFrame, numName)
         if Text_number:getString() == "" then
             Text_number:setString(tostring(num))
             roomNumber = roomNumber .. Text_number:getString()
-            if i == 6 then
+            if i == 8 then
                 -- UserData.Guild:addClubMember(self.clubData.dwClubID, tonumber(roomNumber), UserData.User.userID)
             end
             break
@@ -670,7 +675,7 @@ end
 --删除数字
 function NewClubNoticeLayer:deleteNumber()
 	local delIndex = 0
-    for i = 6 , 1 , -1 do
+    for i = 8 , 1 , -1 do
         local numName = string.format("Text_number%d", i)
         local Text_number = ccui.Helper:seekWidgetByName(self.Image_inputFrame, numName)
         if Text_number:getString() ~= "" then

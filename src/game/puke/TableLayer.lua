@@ -839,6 +839,7 @@ function TableLayer:initUI()
     uiPanel_end:setVisible(false)
     --灯光层
     local uiButton_voice = ccui.Helper:seekWidgetByName(self.root,"Button_voice")
+    uiButton_voice:setVisible(false)--true
     local uiText_title = ccui.Helper:seekWidgetByName(self.root,"Text_title")
     local uiText_des = ccui.Helper:seekWidgetByName(self.root,"Text_des")
     uiText_title:setString(StaticData.Games[GameCommon.tableConfig.wKindID].name)    
@@ -1012,7 +1013,7 @@ function TableLayer:updateGameState(state)
             local uiButton_expression = ccui.Helper:seekWidgetByName(self.root,"Button_expression")
             uiButton_expression:setVisible(true)
             local uiButton_voice = ccui.Helper:seekWidgetByName(self.root,"Button_voice")
-            uiButton_voice:setVisible(true)
+            uiButton_voice:setVisible(false)--true
         end         
         local uiButton_cancel = ccui.Helper:seekWidgetByName(self.root,"Button_cancel")  --取消按钮
         uiButton_cancel:setVisible(false)
@@ -1049,6 +1050,7 @@ function TableLayer:addVoice()
     local intervalTimePackage = 0.1
     local fileName = "temp_voice.mp3"
     local uiButton_voice = ccui.Helper:seekWidgetByName(self.root,"Button_voice")
+    uiButton_voice:setVisible(false)--true
     local animVoice = cc.CSLoader:createNode("VoiceNode.csb")
     self:addChild(animVoice,120)
     local root = animVoice:getChildByName("Panel_root")

@@ -332,6 +332,10 @@ function Guild:EVENT_TYPE_NET_RECV_MESSAGE(event)
         for i = 7, 8 do
             data.lScore[i] = luaFunc:readRecvLong()
         end
+        data.szPartnerName = {}
+        for i = 1, 8 do
+            data.szPartnerName[i] = luaFunc:readRecvString(32)
+        end
         EventMgr:dispatch(EventType.RET_GET_CLUB_TABLE,data)
     
     elseif mainCmdID == NetMsgId.MDM_CL_CLUB and subCmdID == NetMsgId.RET_GET_CLUB_MEMBER then
@@ -469,6 +473,10 @@ function Guild:EVENT_TYPE_NET_RECV_MESSAGE(event)
         for i = 7, 8 do
             data.lScore[i] = luaFunc:readRecvLong()
         end
+        data.szPartnerName = {}
+        for i = 1, 8 do
+            data.szPartnerName[i] = luaFunc:readRecvString(32)
+        end
         EventMgr:dispatch(EventType.RET_ADD_CLUB_TABLE, data)
 
     elseif mainCmdID == NetMsgId.MDM_CL_CLUB and subCmdID == NetMsgId.RET_UPDATE_CLUB_TABLE then
@@ -529,6 +537,10 @@ function Guild:EVENT_TYPE_NET_RECV_MESSAGE(event)
         end
         for i = 7, 8 do
             data.lScore[i] = luaFunc:readRecvLong()
+        end
+        data.szPartnerName = {}
+        for i = 1, 8 do
+            data.szPartnerName[i] = luaFunc:readRecvString(32)
         end
         EventMgr:dispatch(EventType.RET_UPDATE_CLUB_TABLE, data)
 
@@ -875,6 +887,7 @@ function Guild:EVENT_TYPE_NET_RECV_MESSAGE(event)
         data.dwSuperiorID = luaFunc:readRecvDWORD()
         data.szSuperiorNickName = luaFunc:readRecvString(32)
         data.dwTargetPartnerID = luaFunc:readRecvDWORD()
+        data.lMinusFatigueTotal = luaFunc:readRecvLong() / 100
 
         EventMgr:dispatch(EventType.RET_GET_CLUB_PARTNER, data)
 
@@ -931,6 +944,7 @@ function Guild:EVENT_TYPE_NET_RECV_MESSAGE(event)
         data.szRemarks = luaFunc:readRecvString(32)
         data.lFatigueValue = luaFunc:readRecvLong() / 100
         data.szPartnerNickName = luaFunc:readRecvString(32)
+        data.lMinusFatigueTotal = luaFunc:readRecvLong() / 100
         EventMgr:dispatch(EventType.RET_GET_CLUB_NOT_PARTNER_MEMBER, data)
 
     elseif mainCmdID == NetMsgId.MDM_CL_CLUB and subCmdID == NetMsgId.RET_GET_CLUB_NOT_PARTNER_MEMBER_FINISH then
@@ -1263,6 +1277,7 @@ function Guild:EVENT_TYPE_NET_RECV_MESSAGE(event)
         data.szRemarks = luaFunc:readRecvString(32)
         data.lFatigueValue = luaFunc:readRecvLong() / 100
         data.szPartnerNickName = luaFunc:readRecvString(32)
+        data.lMinusFatigueTotal = luaFunc:readRecvLong() / 100
         EventMgr:dispatch(EventType.RET_CLUB_MEMBER_INFO, data)
 
     elseif mainCmdID == NetMsgId.MDM_CL_CLUB and subCmdID == NetMsgId.RET_CLUB_MEMBER_INFO_FINISH then

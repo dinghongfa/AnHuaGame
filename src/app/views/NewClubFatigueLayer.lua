@@ -262,7 +262,9 @@ function NewClubFatigueLayer:loadMemerItem(item, data)
     local userInfo = {
         name = name,
         userID = data.dwUserID,
-        fatigue = data.lFatigueValue
+        fatigue = data.lFatigueValue,
+        fatigueTotal = data.lMinusFatigueTotal,
+        offer = data.cbOffice,
     }
     local setType = 7
     Common:addTouchEventListener(Button_add,function()
