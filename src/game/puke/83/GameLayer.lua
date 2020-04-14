@@ -795,7 +795,7 @@ function GameLayer:OnGameMessageRun(_tagMsg)
             end
         --    self:updatePlayerlScore()
             self.tableLayer:updateGameState(PDKGameCommon.GameState_Over)
-            self.tableLayer:doAction(NetMsgId.SUB_S_GAME_END_PDK, {wWinUser = pBuffer.wWinUser,bUserCardCount = pBuffer.bUserCardCount})
+            --self.tableLayer:doAction(NetMsgId.SUB_S_GAME_END_PDK, {wWinUser = pBuffer.wWinUser,bUserCardCount = pBuffer.bUserCardCount})
             for i = 1, PDKGameCommon.gameConfig.bPlayerCount do
                 self.tableLayer:setHandCard(i-1,pBuffer.bUserCardCount[i], pBuffer.cbCardData[i])
                 self.tableLayer:showHandCard(i-1,1,true)
@@ -806,7 +806,7 @@ function GameLayer:OnGameMessageRun(_tagMsg)
             uiPanel_end:removeAllChildren()
             uiPanel_end:stopAllActions()
             uiPanel_end:runAction(cc.Sequence:create(
-                cc.DelayTime:create(1),
+                cc.DelayTime:create(0),
                 cc.CallFunc:create(function(sender,event) 
                     ListView_top:setVisible(false)
                     uiPanel_end:addChild(require("game.puke.83.GameEndLayer"):create(pBuffer))
@@ -1012,6 +1012,9 @@ function GameLayer:updatePlayerlfatigue()
         else
             uiText_fatigueValue:setString("")
         end
+        if viewID ~= 1 then 
+            uiText_fatigueValue:setVisible(false)
+        end 
     end 
 end 
 

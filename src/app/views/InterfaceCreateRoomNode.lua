@@ -164,7 +164,7 @@ function InterfaceCreateRoomNode:SUB_GR_LOGON_SUCCESS(event)
             self.tableParameter.dwMingTang,self.tableParameter.bTurn,self.tableParameter.bStartBanker,self.tableParameter.bDeathCard)  
 
     elseif self.wKindID == 69 then
-        NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GR_USER,NetMsgId.REQ_GR_CREATE_TABLE,"diwwwwdbbbbbbwbbbbbbbbdbbbbbbbbbbb",--
+        NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GR_USER,NetMsgId.REQ_GR_CREATE_TABLE,"diwwwwdbbbbbbwbbbbbbbbdbbbbbbbbbbbb",--
             CHANNEL_ID,self.nTableType,self.wTableSubType,self.wKindID,self.wGameCount,1,self.dwTargetID,
             self.tableParameter.FanXing.bType,self.tableParameter.FanXing.bCount,self.tableParameter.FanXing.bAddTun,
             self.tableParameter.bPlayerCountType,self.tableParameter.bPlayerCount,self.tableParameter.bLaiZiCount,self.tableParameter.bMaxLost,
@@ -172,7 +172,8 @@ function InterfaceCreateRoomNode:SUB_GR_LOGON_SUCCESS(event)
             self.tableParameter.bFangPao,self.tableParameter.bSettlement,self.tableParameter.bStartTun,self.tableParameter.bSocreType,
             self.tableParameter.dwMingTang,self.tableParameter.bTurn,self.tableParameter.bPaoTips,self.tableParameter.bStartBanker,
             self.tableParameter.bSiQiHong,self.tableParameter.bDelShuaHou,self.tableParameter.bHuangFanAddUp,self.tableParameter.bTingHuAll,
-            self.tableParameter.bDeathCard,self.tableParameter.bPaPo,self.tableParameter.bHostedTime,self.tableParameter.bHostedSession)
+            self.tableParameter.bDeathCard,self.tableParameter.bPaPo,self.tableParameter.bHostedTime,self.tableParameter.bHostedSession,
+            self.tableParameter.bZiMoJiaTun)
     elseif self.wKindID == 83   then
             NetMgr:getGameInstance():sendMsgToSvr(NetMsgId.MDM_GR_USER,NetMsgId.REQ_GR_CREATE_TABLE,"diwwwwdbbbbbbbbbbbbbbbbbbbb",
                 CHANNEL_ID,self.nTableType,self.wTableSubType,self.wKindID,self.wGameCount,1,self.dwTargetID,

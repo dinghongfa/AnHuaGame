@@ -1252,6 +1252,9 @@ function GameLayer:updatePlayerlfatigue()
         else
             uiText_fatigueValue:setString("")
         end
+        if viewID ~= 1 then 
+            uiText_fatigueValue:setVisible(false)
+        end 
     end 
 end 
 

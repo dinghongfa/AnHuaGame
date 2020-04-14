@@ -915,7 +915,7 @@ function GameLayer:OnGameMessageRun(_tagMsg)
             self:runAction(cc.Sequence:create(cc.DelayTime:create(0.5),cc.CallFunc:create(function(sender,event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))
 
         elseif subCmdID == NetMsgId.SUB_S_SEND_CARD then
-            self:runAction(cc.Sequence:create(cc.DelayTime:create(0.5),
+            self:runAction(cc.Sequence:create(cc.DelayTime:create(0.3),
                 cc.CallFunc:create(function(sender,event) 
                 self.tableLayer:doAction(GameCommon.ACTION_SEND_CARD, pBuffer)  
             end)))
@@ -1240,6 +1240,9 @@ function GameLayer:updatePlayerlfatigue()
         else
             uiText_fatigueValue:setString("")
         end
+        if viewID ~= 1 then 
+            uiText_fatigueValue:setVisible(false)
+        end 
     end 
 end 
 

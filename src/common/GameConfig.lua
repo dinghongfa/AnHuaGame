@@ -758,7 +758,7 @@ function GameConfig:getParameter(wKindID,luaFunc)
         data.bHuType = luaFunc:readRecvByte()                       --胡牌类型  0自摸翻倍  1接炮
         data.bFangPao = luaFunc:readRecvByte()                      --是否有放跑功能
         data.bSettlement = luaFunc:readRecvByte()                   --结算是否按三胡一囤，否则一胡一囤
-        data.bStartTun = luaFunc:readRecvByte()                     --囤数起始算法  0起始胡息一囤  1起始胡息二囤 210胡息三囤<=15胡息每多1胡息+1囤    
+        data.bStartTun = luaFunc:readRecvByte()                     --带省  囤数起始算法  0起始胡息一囤  1起始胡息二囤 210胡息三囤<=15胡息每多1胡息+1囤    
         data.bSocreType = luaFunc:readRecvByte()                    --0低分*囤数总和*名堂番数总和  1低分*囤数总和*名堂番数乘积
         data.dwMingTang = luaFunc:readRecvDWORD()                   --包含的名堂有哪些             
         data.bTurn = luaFunc:readRecvByte()
@@ -772,8 +772,11 @@ function GameConfig:getParameter(wKindID,luaFunc)
         data.bPaPo = luaFunc:readRecvByte()
         data.bHostedTime = luaFunc:readRecvByte()                 --托管时间
         data.bHostedSession = luaFunc:readRecvByte()                 --托管局数
-        haveReadByte = 31    --已读长度，每次增加或者减少都要修改该值，Byte1个字节 WORD2个字节 DWORD4个字节
-   
+
+        data.bZiMoJiaTun = luaFunc:readRecvByte()                 --自摸加囤
+
+        haveReadByte = 32    --已读长度，每次增加或者减少都要修改该值，Byte1个字节 WORD2个字节 DWORD4个字节
+
     elseif wKindID == 78 then
         data.bPlayerCount = luaFunc:readRecvByte()          -- //参与游戏的人数
         data.mLaiZiCount = luaFunc:readRecvByte()           -- //0.无红中  1.四红中   2.八红中  （默认四红中）

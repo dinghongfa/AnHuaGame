@@ -741,7 +741,7 @@ function NewClubPlayWayInfoLayer:sendSetPlayWay(data)
     Log.d(data)
 
     if data.wKindID == 69 then
-        NetMgr:getLogicInstance():sendMsgToSvr(NetMsgId.MDM_CL_CLUB,NetMsgId.REQ_SETTINGS_CLUB_PLAY,"bddwwwbbddddddolwolwnsbbbbbbwbbbbbbbbdbbbbbbbbbbb",
+        NetMgr:getLogicInstance():sendMsgToSvr(NetMsgId.MDM_CL_CLUB,NetMsgId.REQ_SETTINGS_CLUB_PLAY,"bddwwwbbddddddolwolwnsbbbbbbwbbbbbbbbdbbbbbbbbbbbb",
             data.settype,data.dwClubID,data.playid,data.wKindID,data.wGameCount,1,
             data.cbMode,data.payMode,data.payLimit1,data.payCount1,data.payLimit2,data.payCount2,data.payLimit3,data.payCount3,data.isPercentage,data.tableLimit,data.fatigueCell,data.isTableCharge,data.fatigueLimit,data.antiCell,32,data.szParameterName,
             data.tableParameter.FanXing.bType,data.tableParameter.FanXing.bCount,data.tableParameter.FanXing.bAddTun,
@@ -750,7 +750,8 @@ function NewClubPlayWayInfoLayer:sendSetPlayWay(data)
             data.tableParameter.bFangPao,data.tableParameter.bSettlement,data.tableParameter.bStartTun,data.tableParameter.bSocreType,
             data.tableParameter.dwMingTang,data.tableParameter.bTurn,data.tableParameter.bPaoTips,data.tableParameter.bStartBanker,
             data.tableParameter.bSiQiHong,data.tableParameter.bDelShuaHou,data.tableParameter.bHuangFanAddUp,data.tableParameter.bTingHuAll,
-            data.tableParameter.bDeathCard, data.tableParameter.bPaPo,data.tableParameter.bHostedTime,data.tableParameter.bHostedSession)
+            data.tableParameter.bDeathCard, data.tableParameter.bPaPo,data.tableParameter.bHostedTime,data.tableParameter.bHostedSession,
+            data.tableParameter.bZiMoJiaTun)
     elseif data.wKindID == 47 then
         NetMgr:getLogicInstance():sendMsgToSvr(NetMsgId.MDM_CL_CLUB,NetMsgId.REQ_SETTINGS_CLUB_PLAY,"bddwwwbbddddddolwolwnsbbbbbbwbbbbbbbbdbbbbb",
             data.settype,data.dwClubID,data.playid,data.wKindID,data.wGameCount,1,

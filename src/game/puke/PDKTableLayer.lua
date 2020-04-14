@@ -233,7 +233,7 @@ function PDKTableLayer:doAction(action,pBuffer)
         else
             self:tryAutoSendCard(pBuffer.wCurrentUser)
         end
-        self:runAction(cc.Sequence:create(cc.DelayTime:create(1),cc.CallFunc:create(function(sender,event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))
+        self:runAction(cc.Sequence:create(cc.DelayTime:create(0.6),cc.CallFunc:create(function(sender,event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))
                              
     elseif action == NetMsgId.SUB_S_WARN_INFO_PDK then
         PDKGameCommon:playAnimation(self.root, "报警",pBuffer.wWarnUser)
@@ -337,7 +337,7 @@ function PDKTableLayer:doAction(action,pBuffer)
         else
             self:tryAutoSendCard(pBuffer.wCurrentUser)
         end
-        self:runAction(cc.Sequence:create(cc.DelayTime:create(1),cc.CallFunc:create(function(sender,event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))
+        self:runAction(cc.Sequence:create(cc.DelayTime:create(0.6),cc.CallFunc:create(function(sender,event) EventMgr:dispatch(EventType.EVENT_TYPE_CACEL_MESSAGE_BLOCK) end)))
         
     elseif action == NetMsgId.SUB_S_GAME_END_PDK then
         local wChairID = pBuffer.wWinUser

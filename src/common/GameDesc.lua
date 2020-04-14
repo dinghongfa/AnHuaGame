@@ -1396,13 +1396,16 @@ function GameDesc:getGameDesc(wKindID,data,tableConfig)
       end
 
       if data.bStartTun == 1 then
-         desc = desc.."加一囤"
+         desc = desc.."带省"
       end
 
       if data.bStartBanker == 0 then
          desc = desc.."/首局随机做庄"
       end
 
+      if data.bZiMoJiaTun == 1 then
+        desc = desc.."/自摸加囤"
+     end
       if data.bDeathCard == 1 then
          desc = desc.."/扣20张"
       elseif data.bDeathCard == 2 then

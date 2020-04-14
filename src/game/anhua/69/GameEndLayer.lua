@@ -718,9 +718,9 @@ function GameEndLayer:showMingTang(pBuffer)
         end
         uiListView_player:pushBackCustomItem(item)
     end
-
+  --  gameConfig
     --自摸判断
-    if Bit:_and(pBuffer.wType,self.PHZ_HT_ZIMO)~= 0 then
+    if Bit:_and(pBuffer.wType,self.PHZ_HT_ZIMO)~= 0 then -- bZiMoJiaTun
         local item = uiPanel_defaultPalyer:clone()
         self:createMingTang(item,"zimo")
         uiListView_player:pushBackCustomItem(item)

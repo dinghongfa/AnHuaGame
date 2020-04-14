@@ -829,7 +829,7 @@ function GameLayer:OnGameMessageRun(_tagMsg)
             uiPanel_end:removeAllChildren()
             uiPanel_end:stopAllActions()
             uiPanel_end:runAction(cc.Sequence:create(
-                cc.DelayTime:create(1),
+                cc.DelayTime:create(0),
                 cc.CallFunc:create(function(sender,event) 
                     ListView_top:setVisible(false)
                     uiPanel_end:addChild(require("game.puke.84.GameEndLayer"):create(pBuffer))
@@ -1331,6 +1331,9 @@ function GameLayer:updatePlayerlfatigue()
         else
             uiText_fatigueValue:setString("")
         end
+        if viewID ~= 1 then 
+            uiText_fatigueValue:setVisible(false)
+        end 
     end 
 end 
 

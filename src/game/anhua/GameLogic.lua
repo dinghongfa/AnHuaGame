@@ -1538,6 +1538,1659 @@ function GameLogic:TakeOutChiCard(cbCardIndex, cbCurrentCard)--提取吃牌
     return 0,cbResultCard,cbCardIndex
 end
 
+--跑胡子手牌排列方式控制
+function GameLogic:sortHandCard(cardIndex, maxHanCardRow,pos,num)
+    local cardIndex = cardIndex
+    local maxHanCardRow = maxHanCardRow
+    local pos = pos
+    local num = num
+    local cardStackInfo = {}
+    if num == 1  then 
+        cardStackInfo = self:sortHandCardone(cardIndex, maxHanCardRow,pos)
+    elseif num == 2  then 
+        cardStackInfo = self:sortHandCardtwo(cardIndex, maxHanCardRow,pos)
+    elseif num == 3  then 
+        cardStackInfo = self:sortHandCardthree(cardIndex, maxHanCardRow,pos) 
+    end 
+    return cardStackInfo 
+end
+--手牌排序1
+function GameLogic:sortHandCardone(cardIndex, maxHanCardRow,pos)
+    local cardStackInfo = {}
+    --3,4张遍历
+    for i=1 , 20 do
+        if cardIndex[i] >= 3 then
+            local cardinfo = {}
+            cardinfo.nCardCount = cardIndex[i]
+            cardinfo.cbCardData = {}
+            for j= 1 , cardIndex[i] do 
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(i)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+            end
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            cardIndex[i]=0
+        end
+    end
+
+    --对子
+    for i=1 , 20 do
+        if cardIndex[i]==2 then
+            local cardinfo = {}
+            cardinfo.nCardCount = cardIndex[i]
+            cardinfo.cbCardData = {}
+            for j= 1 , cardIndex[i] do 
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(i)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+            end
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            cardIndex[i]=0
+        end
+    end
+
+    --大二七十
+    for i = 1, 2 do
+        if cardIndex[12] >= 1  and  cardIndex[17] >= 1  and  cardIndex[20] >= 1  and #cardStackInfo <=maxHanCardRow then
+            local cardinfo = {}
+            cardinfo.nCardCount = 3
+            cardinfo.cbCardData = {}
+
+            cardIndex[20]=cardIndex[20]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(20)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+            cardIndex[17]=cardIndex[17]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(17)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[12]=cardIndex[12]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(12)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+
+    --大一二三
+    for i = 1, 2 do
+        if cardIndex[11] >= 1  and  cardIndex[12] >= 1  and  cardIndex[13] >= 1  and #cardStackInfo <=maxHanCardRow then
+            local cardinfo = {}
+            cardinfo.nCardCount = 3
+            cardinfo.cbCardData = {}
+
+            cardIndex[13]=cardIndex[13]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(13)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[12]=cardIndex[12]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(12)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[11]=cardIndex[11]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(11)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+
+    --大一五十
+    if GameCommon.gameConfig.bYiWuShi == 1 then
+        for i = 1, 2 do
+            if cardIndex[11] >= 1  and  cardIndex[15] >= 1  and  cardIndex[20] >= 1  and #cardStackInfo <=maxHanCardRow then
+                local cardinfo = {}
+                cardinfo.nCardCount = 3
+                cardinfo.cbCardData = {}
+
+                cardIndex[20]=cardIndex[20]-1    
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(20)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+                cardIndex[15]=cardIndex[15]-1    
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(15)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+                cardIndex[11]=cardIndex[11]-1    
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(11)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+                table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            end
+        end
+    end
+
+    --小二七十
+    for i = 1, 2 do
+        if cardIndex[2] >= 1  and  cardIndex[7] >= 1  and  cardIndex[10] >= 1  and #cardStackInfo <=maxHanCardRow then
+            local cardinfo = {}
+            cardinfo.nCardCount = 3
+            cardinfo.cbCardData = {}
+
+            cardIndex[10]=cardIndex[10]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(10)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[7]=cardIndex[7]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(7)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[2]=cardIndex[2]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(2)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+    --小一二三
+    for i = 1, 2 do
+        if cardIndex[1] >= 1  and  cardIndex[2] >= 1  and  cardIndex[3] >= 1  and #cardStackInfo <=maxHanCardRow then
+            local cardinfo = {}
+            cardinfo.nCardCount = 3
+            cardinfo.cbCardData = {}
+
+            cardIndex[3]=cardIndex[3]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(3)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[2]=cardIndex[2]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(2)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[1]=cardIndex[1]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(1)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+    --小一五十
+    if GameCommon.gameConfig.bYiWuShi == 1 then
+        for i = 1, 2 do
+            if cardIndex[1] >= 1  and  cardIndex[5] >= 1  and  cardIndex[10] >= 1  and #cardStackInfo <=maxHanCardRow then
+                local cardinfo = {}
+                cardinfo.nCardCount = 3
+                cardinfo.cbCardData = {}
+
+                cardIndex[10]=cardIndex[10]-1    
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(10)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+                cardIndex[5]=cardIndex[5]-1    
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(5)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+                cardIndex[1]=cardIndex[1]-1    
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(1)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+                table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            end
+        end
+    end
+
+    --顺子
+    local i = 1 
+    while i <= 18 do
+        if cardIndex[i]==1  and  cardIndex[i+1]==1  and  cardIndex[i+2] ==1 then
+            local cardinfo = {}
+            cardinfo.nCardCount = 3
+            cardinfo.cbCardData = {}
+
+
+            cardIndex[i+2]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i+2)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[i+1]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i+1)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[i]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+        if i==8 then
+            i=10
+        end
+        i = i + 1
+    end
+
+    --两个大小
+    for i=1 , 10 do
+        if cardIndex[i]==1  and  cardIndex[i+10]==1  and #cardStackInfo < maxHanCardRow then
+            local cardinfo = {}
+            cardinfo.nCardCount = 2
+            cardinfo.cbCardData = {}
+
+            cardIndex[i+10]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i+10)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[i]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+
+    --补单1、2、3、7、10、5
+    local tableTemp = {20,17,12}
+    local cardinfo = {}
+    cardinfo.nCardCount = 0
+    cardinfo.cbCardData = {}
+    for iKey, iVar in pairs(tableTemp) do
+        if cardIndex[iVar] == 1 then
+            cardinfo.nCardCount = cardinfo.nCardCount + 1
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(iVar)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+        end
+    end
+    if cardinfo.nCardCount == 2 and #cardStackInfo < maxHanCardRow then
+        for key, var in pairs(cardinfo.cbCardData) do
+            local index = GameLogic:SwitchToCardIndex(var.data)
+            cardIndex[index]=0
+        end
+        table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+    end
+    local tableTemp = {13,12,11}
+    local cardinfo = {}
+    cardinfo.nCardCount = 0
+    cardinfo.cbCardData = {}
+    for iKey, iVar in pairs(tableTemp) do
+        if cardIndex[iVar] == 1 then
+            cardinfo.nCardCount = cardinfo.nCardCount + 1
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(iVar)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+        end
+    end
+    if cardinfo.nCardCount == 2 and #cardStackInfo < maxHanCardRow then
+        for key, var in pairs(cardinfo.cbCardData) do
+            local index = GameLogic:SwitchToCardIndex(var.data)
+            cardIndex[index]=0
+        end
+        table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+    end
+    if GameCommon.gameConfig.bYiWuShi == 1 then
+        local tableTemp = {20,15,11}
+        local cardinfo = {}
+        cardinfo.nCardCount = 0
+        cardinfo.cbCardData = {}
+        for iKey, iVar in pairs(tableTemp) do
+            if cardIndex[iVar] == 1 then
+                cardinfo.nCardCount = cardinfo.nCardCount + 1
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(iVar)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+            end
+        end
+        if cardinfo.nCardCount == 2 and #cardStackInfo < maxHanCardRow then
+            for key, var in pairs(cardinfo.cbCardData) do
+                local index = GameLogic:SwitchToCardIndex(var.data)
+                cardIndex[index]=0
+            end
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+
+    local tableTemp = {10,7,2}
+    local cardinfo = {}
+    cardinfo.nCardCount = 0
+    cardinfo.cbCardData = {}
+    for iKey, iVar in pairs(tableTemp) do
+        if cardIndex[iVar] == 1 and #cardStackInfo < maxHanCardRow then
+            cardinfo.nCardCount = cardinfo.nCardCount + 1
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(iVar)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+        end
+    end
+    if cardinfo.nCardCount == 2 and #cardStackInfo < maxHanCardRow then
+        for key, var in pairs(cardinfo.cbCardData) do
+            local index = GameLogic:SwitchToCardIndex(var.data)
+            cardIndex[index]=0
+        end
+        table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+    end
+    local tableTemp = {3,2,1}
+    local cardinfo = {}
+    cardinfo.nCardCount = 0
+    cardinfo.cbCardData = {}
+    for iKey, iVar in pairs(tableTemp) do
+        if cardIndex[iVar] == 1 then
+            cardinfo.nCardCount = cardinfo.nCardCount + 1
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(iVar)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+        end
+    end
+    if cardinfo.nCardCount == 2 and #cardStackInfo < maxHanCardRow then
+        for key, var in pairs(cardinfo.cbCardData) do
+            local index = GameLogic:SwitchToCardIndex(var.data)
+            cardIndex[index]=0
+        end
+        table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+    end
+    if GameCommon.gameConfig.bYiWuShi == 1 then
+        local tableTemp = {10,5,1}
+        local cardinfo = {}
+        cardinfo.nCardCount = 0
+        cardinfo.cbCardData = {}
+        for iKey, iVar in pairs(tableTemp) do
+            if cardIndex[iVar] == 1 then
+                cardinfo.nCardCount = cardinfo.nCardCount + 1
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(iVar)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+            end
+        end
+        if cardinfo.nCardCount == 2 and #cardStackInfo < maxHanCardRow then
+            for key, var in pairs(cardinfo.cbCardData) do
+                local index = GameLogic:SwitchToCardIndex(var.data)
+                cardIndex[index]=0
+            end
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+
+    --对子上补成大小吃
+    for i=1 , 20 do
+        if cardIndex[i]==1 then
+            local data = GameLogic:SwitchToCardData(i)
+            local value = Bit:_and(data,0x0F)
+            local color = Bit:_rshift(Bit:_and(data,0xF0),4)
+            for key, var in pairs(cardStackInfo) do
+                if var.nCardCount == 2 then
+                    local data1 = var.cbCardData[1].data
+                    local data2 = var.cbCardData[2].data
+                    local value1 = Bit:_and(data1,0x0F)
+                    local color1 = Bit:_rshift(Bit:_and(data1,0xF0),4)
+                    if data1 == data2 and value == value1 and color1 ~= color then
+                        var.nCardCount = var.nCardCount + 1
+                        cardIndex[i]=0
+                        local _cardData = {}
+                        _cardData.data=GameLogic:SwitchToCardData(i)
+                        _cardData.pt = pos
+                        table.insert(var.cbCardData,#var.cbCardData+1,_cardData)
+                        break
+                    end
+                end 
+            end
+        end
+    end
+
+    --2个顺子
+    local i = 1
+    while #cardStackInfo < maxHanCardRow and i <= 19 do
+        if cardIndex[i]==1  and  cardIndex[i+1]==1 then
+            local cardinfo = {}
+            cardinfo.nCardCount = 2
+            cardinfo.cbCardData = {}
+
+            cardIndex[i+1]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i+1)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[i]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)    
+        end
+        if i==9 then
+            i=10
+        end
+        i = i + 1
+    end
+
+    --随便铺
+    for i=1 ,20 do
+        if cardIndex[i]==1 then
+            if #cardStackInfo < maxHanCardRow then
+                local cardinfo = {}
+                cardinfo.nCardCount = 1
+                cardinfo.cbCardData = {}
+                for j= 1 , cardIndex[i] do 
+                    local _cardData = {}
+                    _cardData.data=GameLogic:SwitchToCardData(i)
+                    _cardData.pt = pos
+                    table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+                end
+                table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            else
+                for j= #cardStackInfo , 1 , -1 do
+                    if cardStackInfo[j].nCardCount < 3 then
+                        cardStackInfo[j].nCardCount = cardStackInfo[j].nCardCount + 1
+                        cardIndex[i]=0
+                        local _cardData = {}
+                        _cardData.data=GameLogic:SwitchToCardData(i)
+                        _cardData.pt = pos
+                        table.insert(cardStackInfo[j].cbCardData,#cardStackInfo[j].cbCardData+1,_cardData)
+                        break
+                    end
+                end
+            end
+        end
+    end
+    return cardStackInfo
+end
+
+
+--手牌排序2
+function GameLogic:sortHandCardtwo(cardIndex, maxHanCardRow,pos)
+    local cardStackInfo = {}
+    --3,4张遍历
+    for i=1 , 20 do
+        if cardIndex[i] >= 3 then
+            local cardinfo = {}
+            cardinfo.nCardCount = cardIndex[i]
+            cardinfo.cbCardData = {}
+            for j= 1 , cardIndex[i] do 
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(i)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+            end
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            cardIndex[i]=0
+        end
+    end
+
+    --大二七十
+    for i = 1, 2 do
+        if cardIndex[12] >= 1  and  cardIndex[17] >= 1  and  cardIndex[20] >= 1  and #cardStackInfo <=maxHanCardRow then
+            local cardinfo = {}
+            cardinfo.nCardCount = 3
+            cardinfo.cbCardData = {}
+
+            cardIndex[20]=cardIndex[20]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(20)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[17]=cardIndex[17]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(17)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[12]=cardIndex[12]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(12)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+
+    --大一二三
+    for i = 1, 2 do
+        if cardIndex[11] >= 1  and  cardIndex[12] >= 1  and  cardIndex[13] >= 1  and #cardStackInfo <=maxHanCardRow then
+            local cardinfo = {}
+            cardinfo.nCardCount = 3
+            cardinfo.cbCardData = {}
+
+            cardIndex[13]=cardIndex[13]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(13)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[12]=cardIndex[12]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(12)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[11]=cardIndex[11]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(11)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+
+    --大一五十
+    if GameCommon.gameConfig.bYiWuShi == 1 then
+        for i = 1, 2 do
+            if cardIndex[11] >= 1  and  cardIndex[15] >= 1  and  cardIndex[20] >= 1  and #cardStackInfo <=maxHanCardRow then
+                local cardinfo = {}
+                cardinfo.nCardCount = 3
+                cardinfo.cbCardData = {}
+
+                cardIndex[20]=cardIndex[20]-1    
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(20)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+                cardIndex[15]=cardIndex[15]-1    
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(15)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+                cardIndex[11]=cardIndex[11]-1    
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(11)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+                table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            end
+        end
+    end
+
+    --小二七十
+    for i = 1, 2 do
+        if cardIndex[2] >= 1  and  cardIndex[7] >= 1  and  cardIndex[10] >= 1  and #cardStackInfo <=maxHanCardRow then
+            local cardinfo = {}
+            cardinfo.nCardCount = 3
+            cardinfo.cbCardData = {}
+
+            cardIndex[10]=cardIndex[10]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(10)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[7]=cardIndex[7]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(7)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[2]=cardIndex[2]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(2)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+    --小一二三
+    for i = 1, 2 do
+        if cardIndex[1] >= 1  and  cardIndex[2] >= 1  and  cardIndex[3] >= 1  and #cardStackInfo <=maxHanCardRow then
+            local cardinfo = {}
+            cardinfo.nCardCount = 3
+            cardinfo.cbCardData = {}
+
+            cardIndex[3]=cardIndex[3]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(3)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[2]=cardIndex[2]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(2)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+            cardIndex[1]=cardIndex[1]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(1)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+    --小一五十
+    if GameCommon.gameConfig.bYiWuShi == 1 then
+        for i = 1, 2 do
+            if cardIndex[1] >= 1  and  cardIndex[5] >= 1  and  cardIndex[10] >= 1  and #cardStackInfo <=maxHanCardRow then
+                local cardinfo = {}
+                cardinfo.nCardCount = 3
+                cardinfo.cbCardData = {}
+
+                cardIndex[10]=cardIndex[10]-1    
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(10)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+                cardIndex[5]=cardIndex[5]-1    
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(5)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+                cardIndex[1]=cardIndex[1]-1    
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(1)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+                table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            end
+        end
+    end
+
+    --对子
+    for i=1 , 20 do
+        if cardIndex[i]==2 then
+            local cardinfo = {}
+            cardinfo.nCardCount = cardIndex[i]
+            cardinfo.cbCardData = {}
+            for j= 1 , cardIndex[i] do 
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(i)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+            end
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            cardIndex[i]=0
+        end
+    end
+
+    --顺子
+    local i = 1 
+    while i <= 18 do
+        if cardIndex[i]==1  and  cardIndex[i+1]==1  and  cardIndex[i+2] ==1 then
+            local cardinfo = {}
+            cardinfo.nCardCount = 3
+            cardinfo.cbCardData = {}
+
+            cardIndex[i+2]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i+2)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[i+1]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i+1)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[i]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+        if i==8 then
+            i=10
+        end
+        i = i + 1
+    end
+
+    --补单1、2、3、7、10、5
+    local tableTemp = {20,17,12}
+    local cardinfo = {}
+    cardinfo.nCardCount = 0
+    cardinfo.cbCardData = {}
+    for iKey, iVar in pairs(tableTemp) do
+        if cardIndex[iVar] == 1 then
+            cardinfo.nCardCount = cardinfo.nCardCount + 1
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(iVar)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+        end
+    end
+    if cardinfo.nCardCount == 2 and #cardStackInfo < maxHanCardRow then
+        for key, var in pairs(cardinfo.cbCardData) do
+            local index = GameLogic:SwitchToCardIndex(var.data)
+            cardIndex[index]=0
+        end
+        table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+    end
+    local tableTemp = {13,12,11}
+    local cardinfo = {}
+    cardinfo.nCardCount = 0
+    cardinfo.cbCardData = {}
+    for iKey, iVar in pairs(tableTemp) do
+        if cardIndex[iVar] == 1 then
+            cardinfo.nCardCount = cardinfo.nCardCount + 1
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(iVar)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+        end
+    end
+    if cardinfo.nCardCount == 2 and #cardStackInfo < maxHanCardRow then
+        for key, var in pairs(cardinfo.cbCardData) do
+            local index = GameLogic:SwitchToCardIndex(var.data)
+            cardIndex[index]=0
+        end
+        table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+    end
+    if GameCommon.gameConfig.bYiWuShi == 1 then
+        local tableTemp = {20,15,11}
+        local cardinfo = {}
+        cardinfo.nCardCount = 0
+        cardinfo.cbCardData = {}
+        for iKey, iVar in pairs(tableTemp) do
+            if cardIndex[iVar] == 1 then
+                cardinfo.nCardCount = cardinfo.nCardCount + 1
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(iVar)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+            end
+        end
+        if cardinfo.nCardCount == 2 and #cardStackInfo < maxHanCardRow then
+            for key, var in pairs(cardinfo.cbCardData) do
+                local index = GameLogic:SwitchToCardIndex(var.data)
+                cardIndex[index]=0
+            end
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+
+    local tableTemp = {10,7,2}
+    local cardinfo = {}
+    cardinfo.nCardCount = 0
+    cardinfo.cbCardData = {}
+    for iKey, iVar in pairs(tableTemp) do
+        if cardIndex[iVar] == 1 and #cardStackInfo < maxHanCardRow then
+            cardinfo.nCardCount = cardinfo.nCardCount + 1
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(iVar)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+        end
+    end
+    if cardinfo.nCardCount == 2 and #cardStackInfo < maxHanCardRow then
+        for key, var in pairs(cardinfo.cbCardData) do
+            local index = GameLogic:SwitchToCardIndex(var.data)
+            cardIndex[index]=0
+        end
+        table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+    end
+    local tableTemp = {3,2,1}
+    local cardinfo = {}
+    cardinfo.nCardCount = 0
+    cardinfo.cbCardData = {}
+    for iKey, iVar in pairs(tableTemp) do
+        if cardIndex[iVar] == 1 then
+            cardinfo.nCardCount = cardinfo.nCardCount + 1
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(iVar)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+        end
+    end
+    if cardinfo.nCardCount == 2 and #cardStackInfo < maxHanCardRow then
+        for key, var in pairs(cardinfo.cbCardData) do
+            local index = GameLogic:SwitchToCardIndex(var.data)
+            cardIndex[index]=0
+        end
+        table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+    end
+    if GameCommon.gameConfig.bYiWuShi == 1 then
+        local tableTemp = {10,5,1}
+        local cardinfo = {}
+        cardinfo.nCardCount = 0
+        cardinfo.cbCardData = {}
+        for iKey, iVar in pairs(tableTemp) do
+            if cardIndex[iVar] == 1 then
+                cardinfo.nCardCount = cardinfo.nCardCount + 1
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(iVar)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+            end
+        end
+        if cardinfo.nCardCount == 2 and #cardStackInfo < maxHanCardRow then
+            for key, var in pairs(cardinfo.cbCardData) do
+                local index = GameLogic:SwitchToCardIndex(var.data)
+                cardIndex[index]=0
+            end
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+    --两个大小
+    for i=1 , 10 do
+        if cardIndex[i]==1  and  cardIndex[i+10]==1  and #cardStackInfo < maxHanCardRow then
+            local cardinfo = {}
+            cardinfo.nCardCount = 2
+            cardinfo.cbCardData = {}
+            
+            cardIndex[i+10]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i+10)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+            
+            cardIndex[i]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+    --对子上补成大小吃
+    for i=1 , 20 do
+        if cardIndex[i]==1 then
+            local data = GameLogic:SwitchToCardData(i)
+            local value = Bit:_and(data,0x0F)
+            local color = Bit:_rshift(Bit:_and(data,0xF0),4)
+            for key, var in pairs(cardStackInfo) do
+                if var.nCardCount == 2 then
+                    local data1 = var.cbCardData[1].data
+                    local data2 = var.cbCardData[2].data
+                    local value1 = Bit:_and(data1,0x0F)
+                    local color1 = Bit:_rshift(Bit:_and(data1,0xF0),4)
+                    if data1 == data2 and value == value1 and color1 ~= color then
+                        var.nCardCount = var.nCardCount + 1
+                        cardIndex[i]=0
+                        local _cardData = {}
+                        _cardData.data=GameLogic:SwitchToCardData(i)
+                        _cardData.pt = pos
+                        table.insert(var.cbCardData,#var.cbCardData+1,_cardData)
+                        break
+                    end
+                end 
+            end
+        end
+    end
+
+    --2个顺子
+    local i = 1
+    while #cardStackInfo < maxHanCardRow and i <= 19 do
+        if cardIndex[i]==1  and  cardIndex[i+1]==1 then
+            local cardinfo = {}
+            cardinfo.nCardCount = 2
+            cardinfo.cbCardData = {}
+
+            cardIndex[i+1]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i+1)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[i]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)    
+        end
+        if i==9 then
+            i=10
+        end
+        i = i + 1
+    end
+
+    --随便铺
+    for i=1 ,20 do
+        if cardIndex[i]==1 then
+            if #cardStackInfo < maxHanCardRow then
+                local cardinfo = {}
+                cardinfo.nCardCount = 1
+                cardinfo.cbCardData = {}
+                for j= 1 , cardIndex[i] do 
+                    local _cardData = {}
+                    _cardData.data=GameLogic:SwitchToCardData(i)
+                    _cardData.pt = pos
+                    table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+                end
+                table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            else
+                for j= #cardStackInfo , 1 , -1 do
+                    if cardStackInfo[j].nCardCount < 3 then
+                        cardStackInfo[j].nCardCount = cardStackInfo[j].nCardCount + 1
+                        cardIndex[i]=0
+                        local _cardData = {}
+                        _cardData.data=GameLogic:SwitchToCardData(i)
+                        _cardData.pt = pos
+                        table.insert(cardStackInfo[j].cbCardData,#cardStackInfo[j].cbCardData+1,_cardData)
+                        break
+                    end
+                end
+            end
+        end
+    end
+    return cardStackInfo
+end
+
+
+--手牌排序3
+function GameLogic:sortHandCardthree(cardIndex, maxHanCardRow,pos)
+    local cardStackInfo = {}
+    --3,4张遍历
+    for i=1 , 10 do
+        if cardIndex[i] >= 3 then
+            local cardinfo = {}
+            cardinfo.nCardCount = cardIndex[i]
+            cardinfo.cbCardData = {}
+            for j= 1 , cardIndex[i] do 
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(i)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+            end
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            cardIndex[i]=0
+        end
+        if cardIndex[i+10] >= 3 then
+            local cardinfo = {}
+            cardinfo.nCardCount = cardIndex[i+10]
+            cardinfo.cbCardData = {}
+            for j= 1 , cardIndex[i+10] do 
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(i+10)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+            end
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            cardIndex[i+10]=0
+        end
+
+        if cardIndex[i]==2 then
+            local cardinfo = {}
+            cardinfo.nCardCount = cardIndex[i]
+            cardinfo.cbCardData = {}
+            for j= 1 , cardIndex[i] do 
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(i)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+            end
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            cardIndex[i]=0
+        end
+        if cardIndex[i+10]==2 then
+            local cardinfo = {}
+            cardinfo.nCardCount = cardIndex[i+10]
+            cardinfo.cbCardData = {}
+            for j= 1 , cardIndex[i+10] do 
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(i+10)
+                _cardData.pt = pos
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+            end
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            cardIndex[i+10]=0
+        end
+        if cardIndex[i]==1  and  cardIndex[i+10]==1  and #cardStackInfo < maxHanCardRow then
+            local cardinfo = {}
+            cardinfo.nCardCount = 2
+            cardinfo.cbCardData = {}
+
+            cardIndex[i+10]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i+10)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[i]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i)
+            _cardData.pt = pos
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+
+        if cardIndex[i]==1 then
+            local data = GameLogic:SwitchToCardData(i)
+            local value = Bit:_and(data,0x0F)
+            local color = Bit:_rshift(Bit:_and(data,0xF0),4)
+            for key, var in pairs(cardStackInfo) do
+                if var.nCardCount == 2 then
+                    local data1 = var.cbCardData[1].data
+                    local data2 = var.cbCardData[2].data
+                    local value1 = Bit:_and(data1,0x0F)
+                    local color1 = Bit:_rshift(Bit:_and(data1,0xF0),4)
+                    if data1 == data2 and value == value1 and color1 ~= color then
+                        var.nCardCount = var.nCardCount + 1
+                        cardIndex[i]=0
+                        local _cardData = {}
+                        _cardData.data=GameLogic:SwitchToCardData(i)
+                        _cardData.pt = pos
+                        table.insert(var.cbCardData,#var.cbCardData+1,_cardData)
+                        break
+                    end
+                end 
+            end
+        end
+        if cardIndex[i+10]==1 then
+            local data = GameLogic:SwitchToCardData(i+10)
+            local value = Bit:_and(data,0x0F)
+            local color = Bit:_rshift(Bit:_and(data,0xF0),4)
+            for key, var in pairs(cardStackInfo) do
+                if var.nCardCount == 2 then
+                    local data1 = var.cbCardData[1].data
+                    local data2 = var.cbCardData[2].data
+                    local value1 = Bit:_and(data1,0x0F)
+                    local color1 = Bit:_rshift(Bit:_and(data1,0xF0),4)
+                    if data1 == data2 and value == value1 and color1 ~= color then
+                        var.nCardCount = var.nCardCount + 1
+                        cardIndex[i+10]=0
+                        local _cardData = {}
+                        _cardData.data=GameLogic:SwitchToCardData(i+10)
+                        _cardData.pt = pos
+                        table.insert(var.cbCardData,#var.cbCardData+1,_cardData)
+                        break
+                    end
+                end 
+            end
+        end
+
+        if cardIndex[i]==1 then
+            if #cardStackInfo < maxHanCardRow then
+                local cardinfo = {}
+                cardinfo.nCardCount = 1
+                cardinfo.cbCardData = {}
+                for j= 1 , cardIndex[i] do 
+                    local _cardData = {}
+                    _cardData.data=GameLogic:SwitchToCardData(i)
+                    _cardData.pt = pos
+                    table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+                end
+                table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            else
+                for j= #cardStackInfo , 1 , -1 do
+                    if cardStackInfo[j].nCardCount < 3 then
+                        cardStackInfo[j].nCardCount = cardStackInfo[j].nCardCount + 1
+                        cardIndex[i]=0
+                        local _cardData = {}
+                        _cardData.data=GameLogic:SwitchToCardData(i)
+                        _cardData.pt = pos
+                        table.insert(cardStackInfo[j].cbCardData,#cardStackInfo[j].cbCardData+1,_cardData)
+                        break
+                    end
+                end
+            end
+        end
+
+        if cardIndex[i+10]==1 then
+            if #cardStackInfo < maxHanCardRow then
+                local cardinfo = {}
+                cardinfo.nCardCount = 1
+                cardinfo.cbCardData = {}
+                for j= 1 , cardIndex[i+10] do 
+                    local _cardData = {}
+                    _cardData.data=GameLogic:SwitchToCardData(i+10)
+                    _cardData.pt = pos
+                    table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+                end
+                table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            else
+                for j= #cardStackInfo , 1 , -1 do
+                    if cardStackInfo[j].nCardCount < 3 then
+                        cardStackInfo[j].nCardCount = cardStackInfo[j].nCardCount + 1
+                        cardIndex[i+10]=0
+                        local _cardData = {}
+                        _cardData.data=GameLogic:SwitchToCardData(i+10)
+                        _cardData.pt = pos
+                        table.insert(cardStackInfo[j].cbCardData,#cardStackInfo[j].cbCardData+1,_cardData)
+                        break
+                    end
+                end
+            end
+        end
+    end
+    return cardStackInfo
+end
+
+--手牌排序3
+function GameLogic:sortEndHandCard(cardIndex, maxHanCardRow)
+
+
+    local cardStackInfo = {}
+    --3,4张遍历
+    for i=1 , 20 do
+        if cardIndex[i] >= 3 then
+            local cardinfo = {}
+            cardinfo.nCardCount = cardIndex[i]
+            cardinfo.cbCardData = {}
+            for j= 1 , cardIndex[i] do 
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(i)
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+            end
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            cardIndex[i]=0
+        end
+    end
+
+    --对子
+    for i=1 , 20 do
+        if cardIndex[i]==2  and #cardStackInfo <=maxHanCardRow then
+            local cardinfo = {}
+            cardinfo.nCardCount = cardIndex[i]
+            cardinfo.cbCardData = {}
+            for j= 1 , cardIndex[i] do 
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(i)
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+            end
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            cardIndex[i]=0
+        elseif cardIndex[i]==2 and #cardStackInfo > maxHanCardRow then 
+            for j= #cardStackInfo , 1 , -1 do
+                if cardStackInfo[j].nCardCount < 3 then
+                    cardStackInfo[j].nCardCount = cardStackInfo[j].nCardCount + 1
+                    cardIndex[i]= cardIndex[i] - 1
+                    local _cardData = {}
+                    _cardData.data=GameLogic:SwitchToCardData(i)
+                    table.insert(cardStackInfo[j].cbCardData,#cardStackInfo[j].cbCardData+1,_cardData)
+                    if cardIndex[i] == 0  then 
+                        break
+                    end 
+                end
+            end
+
+
+        end
+    end
+
+    --大二七十
+    for i = 1, 2 do
+        if cardIndex[12] >= 1  and  cardIndex[17] >= 1  and  cardIndex[20] >= 1  and #cardStackInfo <=maxHanCardRow then
+            local cardinfo = {}
+            cardinfo.nCardCount = 3
+            cardinfo.cbCardData = {}
+
+            cardIndex[20]=cardIndex[20]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(20)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+            cardIndex[17]=cardIndex[17]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(17)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[12]=cardIndex[12]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(12)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+
+    --大一二三
+    for i = 1, 2 do
+        if cardIndex[11] >= 1  and  cardIndex[12] >= 1  and  cardIndex[13] >= 1  and #cardStackInfo <=maxHanCardRow then
+            local cardinfo = {}
+            cardinfo.nCardCount = 3
+            cardinfo.cbCardData = {}
+
+            cardIndex[13]=cardIndex[13]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(13)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[12]=cardIndex[12]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(12)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[11]=cardIndex[11]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(11)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+
+    --大一五十
+    if GameCommon.gameConfig.bYiWuShi == 1 then
+        for i = 1, 2 do
+            if cardIndex[11] >= 1  and  cardIndex[15] >= 1  and  cardIndex[20] >= 1  and #cardStackInfo <=maxHanCardRow then
+                local cardinfo = {}
+                cardinfo.nCardCount = 3
+                cardinfo.cbCardData = {}
+
+                cardIndex[20]=cardIndex[20]-1    
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(20)
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+                cardIndex[15]=cardIndex[15]-1    
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(15)
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+                cardIndex[11]=cardIndex[11]-1    
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(11)
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+                table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            end
+        end
+    end
+
+    --小二七十
+    for i = 1, 2 do
+        if cardIndex[2] >= 1  and  cardIndex[7] >= 1  and  cardIndex[10] >= 1  and #cardStackInfo <=maxHanCardRow then
+            local cardinfo = {}
+            cardinfo.nCardCount = 3
+            cardinfo.cbCardData = {}
+
+            cardIndex[10]=cardIndex[10]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(10)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[7]=cardIndex[7]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(7)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[2]=cardIndex[2]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(2)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+    --小一二三
+    for i = 1, 2 do
+        if cardIndex[1] >= 1  and  cardIndex[2] >= 1  and  cardIndex[3] >= 1  and #cardStackInfo <=maxHanCardRow then
+            local cardinfo = {}
+            cardinfo.nCardCount = 3
+            cardinfo.cbCardData = {}
+
+            cardIndex[3]=cardIndex[3]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(3)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[2]=cardIndex[2]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(2)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[1]=cardIndex[1]-1    
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(1)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+    --小一五十
+    if GameCommon.gameConfig.bYiWuShi == 1 then
+        for i = 1, 2 do
+            if cardIndex[1] >= 1  and  cardIndex[5] >= 1  and  cardIndex[10] >= 1  and #cardStackInfo <=maxHanCardRow then
+                local cardinfo = {}
+                cardinfo.nCardCount = 3
+                cardinfo.cbCardData = {}
+
+                cardIndex[10]=cardIndex[10]-1    
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(10)
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+                cardIndex[5]=cardIndex[5]-1    
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(5)
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+                cardIndex[1]=cardIndex[1]-1    
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(1)
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+
+                table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            end
+        end
+    end
+
+    --顺子
+    local i = 1 
+    while i <= 18 do
+        if cardIndex[i]==1  and  cardIndex[i+1]==1  and  cardIndex[i+2] ==1 then
+            local cardinfo = {}
+            cardinfo.nCardCount = 3
+            cardinfo.cbCardData = {}
+
+            cardIndex[i+2]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i+2)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[i+1]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i+1)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[i]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+        if i==8 then
+            i=10
+        end
+        i = i + 1
+    end
+
+    --两个大小
+    for i=1 , 10 do
+        if cardIndex[i]==1  and  cardIndex[i+10]==1  and #cardStackInfo < maxHanCardRow then
+            local cardinfo = {}
+            cardinfo.nCardCount = 2
+            cardinfo.cbCardData = {}
+
+            cardIndex[i+10]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i+10)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[i]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+
+    --补单1、2、3、7、10、5
+    local tableTemp = {20,17,12}
+    local cardinfo = {}
+    cardinfo.nCardCount = 0
+    cardinfo.cbCardData = {}
+    for iKey, iVar in pairs(tableTemp) do
+        if cardIndex[iVar] == 1 then
+            cardinfo.nCardCount = cardinfo.nCardCount + 1
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(iVar)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+        end
+    end
+    if cardinfo.nCardCount == 2 and #cardStackInfo < maxHanCardRow then
+        for key, var in pairs(cardinfo.cbCardData) do
+            local index = GameLogic:SwitchToCardIndex(var.data)
+            cardIndex[index]=0
+        end
+        table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+    end
+    local tableTemp = {13,12,11}
+    local cardinfo = {}
+    cardinfo.nCardCount = 0
+    cardinfo.cbCardData = {}
+    for iKey, iVar in pairs(tableTemp) do
+        if cardIndex[iVar] == 1 then
+            cardinfo.nCardCount = cardinfo.nCardCount + 1
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(iVar)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+        end
+    end
+    if cardinfo.nCardCount == 2 and #cardStackInfo < maxHanCardRow then
+        for key, var in pairs(cardinfo.cbCardData) do
+            local index = GameLogic:SwitchToCardIndex(var.data)
+            cardIndex[index]=0
+        end
+        table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+    end
+    if GameCommon.gameConfig.bYiWuShi == 1 then
+        local tableTemp = {20,15,11}
+        local cardinfo = {}
+        cardinfo.nCardCount = 0
+        cardinfo.cbCardData = {}
+        for iKey, iVar in pairs(tableTemp) do
+            if cardIndex[iVar] == 1 then
+                cardinfo.nCardCount = cardinfo.nCardCount + 1
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(iVar)
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+            end
+        end
+        if cardinfo.nCardCount == 2 and #cardStackInfo < maxHanCardRow then
+            for key, var in pairs(cardinfo.cbCardData) do
+                local index = GameLogic:SwitchToCardIndex(var.data)
+                cardIndex[index]=0
+            end
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+
+    local tableTemp = {10,7,2}
+    local cardinfo = {}
+    cardinfo.nCardCount = 0
+    cardinfo.cbCardData = {}
+    for iKey, iVar in pairs(tableTemp) do
+        if cardIndex[iVar] == 1 and #cardStackInfo < maxHanCardRow then
+            cardinfo.nCardCount = cardinfo.nCardCount + 1
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(iVar)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+        end
+    end
+    if cardinfo.nCardCount == 2 and #cardStackInfo < maxHanCardRow then
+        for key, var in pairs(cardinfo.cbCardData) do
+            local index = GameLogic:SwitchToCardIndex(var.data)
+            cardIndex[index]=0
+        end
+        table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+    end
+    local tableTemp = {3,2,1}
+    local cardinfo = {}
+    cardinfo.nCardCount = 0
+    cardinfo.cbCardData = {}
+    for iKey, iVar in pairs(tableTemp) do
+        if cardIndex[iVar] == 1 then
+            cardinfo.nCardCount = cardinfo.nCardCount + 1
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(iVar)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+        end
+    end
+    if cardinfo.nCardCount == 2 and #cardStackInfo < maxHanCardRow then
+        for key, var in pairs(cardinfo.cbCardData) do
+            local index = GameLogic:SwitchToCardIndex(var.data)
+            cardIndex[index]=0
+        end
+        table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+    end
+    if GameCommon.gameConfig.bYiWuShi == 1 then
+        local tableTemp = {10,5,1}
+        local cardinfo = {}
+        cardinfo.nCardCount = 0
+        cardinfo.cbCardData = {}
+        for iKey, iVar in pairs(tableTemp) do
+            if cardIndex[iVar] == 1 then
+                cardinfo.nCardCount = cardinfo.nCardCount + 1
+                local _cardData = {}
+                _cardData.data=GameLogic:SwitchToCardData(iVar)
+                table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+            end
+        end
+        if cardinfo.nCardCount == 2 and #cardStackInfo < maxHanCardRow then
+            for key, var in pairs(cardinfo.cbCardData) do
+                local index = GameLogic:SwitchToCardIndex(var.data)
+                cardIndex[index]=0
+            end
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+        end
+    end
+
+    --对子上补成大小吃
+    for i=1 , 20 do
+        if cardIndex[i]==1 then
+            local data = GameLogic:SwitchToCardData(i)
+            local value = Bit:_and(data,0x0F)
+            local color = Bit:_rshift(Bit:_and(data,0xF0),4)
+            for key, var in pairs(cardStackInfo) do
+                if var.nCardCount == 2 then
+                    local data1 = var.cbCardData[1].data
+                    local data2 = var.cbCardData[2].data
+                    local value1 = Bit:_and(data1,0x0F)
+                    local color1 = Bit:_rshift(Bit:_and(data1,0xF0),4)
+                    if data1 == data2 and value == value1 and color1 ~= color then
+                        var.nCardCount = var.nCardCount + 1
+                        cardIndex[i]=0
+                        local _cardData = {}
+                        _cardData.data=GameLogic:SwitchToCardData(i)
+                        table.insert(var.cbCardData,#var.cbCardData+1,_cardData)
+                        break
+                    end
+                end 
+            end
+        end
+    end
+
+    --2个顺子
+    local i = 1
+    while #cardStackInfo < maxHanCardRow and i <= 19 do
+        if cardIndex[i]==1  and  cardIndex[i+1]==1 then
+            local cardinfo = {}
+            cardinfo.nCardCount = 2
+            cardinfo.cbCardData = {}
+
+            cardIndex[i+1]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i+1)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            cardIndex[i]=0
+            local _cardData = {}
+            _cardData.data=GameLogic:SwitchToCardData(i)
+            table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+
+            table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)    
+        end
+        if i==9 then
+            i=10
+        end
+        i = i + 1
+    end
+
+    --随便铺
+    for i=1 ,20 do
+        if cardIndex[i]==1 then
+            if #cardStackInfo < maxHanCardRow then
+                local cardinfo = {}
+                cardinfo.nCardCount = 1
+                cardinfo.cbCardData = {}
+                for j= 1 , cardIndex[i] do 
+                    local _cardData = {}
+                    _cardData.data=GameLogic:SwitchToCardData(i)
+                    table.insert(cardinfo.cbCardData,#cardinfo.cbCardData + 1,_cardData)
+                end
+                table.insert(cardStackInfo,#cardStackInfo+1,cardinfo)
+            else
+                for j= #cardStackInfo , 1 , -1 do
+                    if cardStackInfo[j].nCardCount < 3 then
+                        cardStackInfo[j].nCardCount = cardStackInfo[j].nCardCount + 1
+                        cardIndex[i]=0
+                        local _cardData = {}
+                        _cardData.data=GameLogic:SwitchToCardData(i)
+                        table.insert(cardStackInfo[j].cbCardData,#cardStackInfo[j].cbCardData+1,_cardData)
+                        break
+                    end
+                end
+            end
+        end
+    end
+    return cardStackInfo
+end
+
 --计算一列胡息
 function GameLogic:CalculateColHuXi(colData)
     colData = clone(colData)

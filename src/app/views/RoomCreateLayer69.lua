@@ -179,6 +179,11 @@ function RoomCreateLayer:onCreate(parameter)
         self:setDefaultCheckBox(items[2])
     end
 
+
+    if self.recordCreateParameter["bZiMoJiaTun"] == 1 or self.recordCreateParameter["bZiMoJiaTun"] == nil then
+        self:setDefaultCheckBox(items[3])
+    end
+
     --胡息
     local items = ccui.Helper:seekWidgetByName(uiListView_parameterList:getItem(4),"ListView_parameter"):getItems()
     Common:addCheckTouchEventListener(items)
@@ -462,6 +467,12 @@ function RoomCreateLayer:onEventCreate(nTableType)
         tableParameter.bStartBanker = 0
     else
         tableParameter.bStartBanker = 1
+    end   
+
+    if items[3]:isBright() then
+        tableParameter.bZiMoJiaTun = 1
+    else
+        tableParameter.bZiMoJiaTun = 0
     end   
        
     tableParameter.bCanHuXi = 15
